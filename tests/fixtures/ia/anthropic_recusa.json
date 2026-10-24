@@ -1,0 +1,15 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "msg_teste",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-sonnet-5",
+  "content": [],
+  "stop_reason": "refusal",
+  "usage": {
+   "input_tokens": 12000,
+   "output_tokens": 0
+  }
+ }
+}

@@ -1,0 +1,10 @@
+{
+  "comando": [
+    "ipmitool",
+    "sel",
+    "elist"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 10.065
+}

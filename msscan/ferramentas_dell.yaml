@@ -1,0 +1,20 @@
+# MSscan — ferramentas oficiais da Dell baixadas automaticamente (CLAUDE.md 20).
+#
+# Atualizável sem mudar o código: uma cópia válida em MSSCAN/config/ferramentas_dell.yaml (no pendrive) tem prioridade.
+# Endereço e SHA-256 SEMPRE copiados da página oficial da Dell ("Driver Details"); só https em dl.dell.com ou
+# downloads.dell.com. Versão 11 ou mais nova (traz os pacotes .deb do racadm). Hash diferente: o arquivo é apagado.
+
+idrac_tools:
+  nome: "Dell iDRAC Tools for Linux"
+  versao: "11.4.1.0"
+  arquivo: "Dell-iDRACTools-Web-LX-11.4.1.0-1685_A00.tar.gz"
+  url: "https://dl.dell.com/FOLDER14347901M/1/Dell-iDRACTools-Web-LX-11.4.1.0-1685_A00.tar.gz"
+  sha256: "5d6a42bc5c4c97c44b3a80431024b3ac4f9fe93a6a290291323210f560f06130"
+  tamanho: 23622127
+  lancamento: "2026-03-27"
+  pagina: "https://www.dell.com/support/home/en-us/drivers/driversdetails?driverid=8wjwf"
+  termos: "https://www.dell.com/aeula"
+  # Conferido em 02/10/2026: URL, SHA-256 e data na página oficial acima; arquivo baixado de dl.dell.com com o mesmo
+  # SHA-256 e o mesmo tamanho; estrutura iDRACTools/racadm/UBUNTU22 e UBUNTU24 (x86_64) com srvadmin-hapi,
+  # srvadmin-idracadm7 e srvadmin-idracadm8 (.deb).
+  verificado: "2026-10-02"

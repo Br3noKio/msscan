@@ -1,0 +1,4 @@
+#!/bin/sh
+# Alt+M no quiosque (matchbox, como root): pede ao MSscan para esconder o navegador integrado.
+# Mesmo pedido do botão "Voltar ao MSscan" da barra do navegador (GET /voltar, sem token: só esconde a janela).
+exec python3 -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8765/voltar", timeout=5)' >/dev/null 2>&1

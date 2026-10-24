@@ -1,0 +1,29 @@
+{
+   "blockdevices": [
+      {
+         "name": "loop0",
+         "tran": null,
+         "type": "loop",
+         "size": "564.5M",
+         "model": null
+      },{
+         "name": "sda",
+         "tran": null,
+         "type": "disk",
+         "size": "1.1T",
+         "model": "PERC H710"
+      },{
+         "name": "sdb",
+         "tran": "usb",
+         "type": "disk",
+         "size": "3.8G",
+         "model": "ProductCode"
+      },{
+         "name": "sr0",
+         "tran": "sata",
+         "type": "rom",
+         "size": "1024M",
+         "model": "TSSTcorp DVD-ROM SU-108BB"
+      }
+   ]
+}

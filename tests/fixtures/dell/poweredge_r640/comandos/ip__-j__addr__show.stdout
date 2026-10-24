@@ -1,0 +1,205 @@
+[
+  {
+    "ifindex": 1,
+    "ifname": "lo",
+    "flags": [
+      "LOOPBACK",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 65536,
+    "qdisc": "noqueue",
+    "operstate": "UNKNOWN",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "loopback",
+    "address": "00:00:00:00:00:00",
+    "broadcast": "00:00:00:00:00:00",
+    "addr_info": [
+      {
+        "family": "inet",
+        "local": "127.0.0.1",
+        "prefixlen": 8,
+        "scope": "host",
+        "label": "lo",
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      },
+      {
+        "family": "inet6",
+        "local": "::1",
+        "prefixlen": 128,
+        "scope": "host",
+        "noprefixroute": true,
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      }
+    ]
+  },
+  {
+    "ifindex": 2,
+    "ifname": "eno3",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "mq",
+    "operstate": "UP",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "ether",
+    "address": "02:00:00:00:00:01",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "enp1s0f0",
+      "enx020000000001"
+    ],
+    "addr_info": [
+      {
+        "family": "inet",
+        "local": "192.0.2.2",
+        "prefixlen": 24,
+        "broadcast": "192.0.2.3",
+        "scope": "global",
+        "dynamic": true,
+        "noprefixroute": true,
+        "label": "eno3",
+        "valid_life_time": 3238,
+        "preferred_life_time": 3238
+      },
+      {
+        "family": "inet6",
+        "local": "2001:db8::3",
+        "prefixlen": 128,
+        "scope": "global",
+        "dynamic": true,
+        "noprefixroute": true,
+        "valid_life_time": 2531,
+        "preferred_life_time": 2531
+      },
+      {
+        "family": "inet6",
+        "local": "2001:db8::4",
+        "prefixlen": 64,
+        "scope": "global",
+        "temporary": true,
+        "dynamic": true,
+        "valid_life_time": 86400,
+        "preferred_life_time": 72000
+      },
+      {
+        "family": "inet6",
+        "local": "2001:db8::5",
+        "prefixlen": 64,
+        "scope": "global",
+        "dynamic": true,
+        "mngtmpaddr": true,
+        "noprefixroute": true,
+        "valid_life_time": 86400,
+        "preferred_life_time": 72000
+      },
+      {
+        "family": "inet6",
+        "local": "2001:db8::6",
+        "prefixlen": 64,
+        "scope": "global",
+        "temporary": true,
+        "dynamic": true,
+        "valid_life_time": 597237,
+        "preferred_life_time": 78329
+      },
+      {
+        "family": "inet6",
+        "local": "2001:db8::7",
+        "prefixlen": 64,
+        "scope": "global",
+        "dynamic": true,
+        "mngtmpaddr": true,
+        "noprefixroute": true,
+        "valid_life_time": 2006054655,
+        "preferred_life_time": 2006054655
+      },
+      {
+        "family": "inet6",
+        "local": "fe80::8",
+        "prefixlen": 64,
+        "scope": "link",
+        "noprefixroute": true,
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      }
+    ]
+  },
+  {
+    "ifindex": 3,
+    "ifname": "eno1np0",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "mq",
+    "operstate": "DOWN",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "ether",
+    "address": "02:00:00:00:00:02",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "enp24s0f0np0",
+      "enx020000000002"
+    ],
+    "addr_info": []
+  },
+  {
+    "ifindex": 4,
+    "ifname": "eno4",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "mq",
+    "operstate": "DOWN",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "ether",
+    "address": "02:00:00:00:00:03",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "enp1s0f1",
+      "enx020000000003"
+    ],
+    "addr_info": []
+  },
+  {
+    "ifindex": 5,
+    "ifname": "eno2np1",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "mq",
+    "operstate": "DOWN",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "ether",
+    "address": "02:00:00:00:00:04",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "enp24s0f1np1",
+      "enx020000000004"
+    ],
+    "addr_info": []
+  }
+]

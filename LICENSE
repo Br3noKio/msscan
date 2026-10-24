@@ -1,0 +1,24 @@
+MSscan — Licença de consulta
+
+Copyright (C) 2026 Breno. Todos os direitos reservados.
+
+O código-fonte e a documentação do MSscan são disponibilizados publicamente apenas para consulta: qualquer pessoa pode
+lê-los para entender e verificar o que o programa faz.
+
+Sem autorização prévia e por escrito do titular, é proibido:
+
+- usar o MSscan, no todo ou em parte, em qualquer equipamento, próprio ou de terceiros;
+- copiar, reproduzir ou gravar o programa ou a imagem ISO;
+- modificar o programa ou criar obras derivadas dele;
+- distribuir, publicar, sublicenciar, vender ou ceder o programa, no todo ou em parte.
+
+As cópias e forks feitos dentro do GitHub, na medida exigida pelos Termos de Serviço do GitHub, servem apenas para
+visualização e não concedem nenhum outro direito.
+
+Componentes de terceiros incluídos ou usados pelo MSscan (Debian, three.js, xterm.js, Firefox ESR, Lucide, fontes e
+outros) continuam sob as suas próprias licenças, listadas em docs/licencas.md.
+
+O MSscan é fornecido "no estado em que se encontra", sem garantia de qualquer tipo. O titular não se responsabiliza por
+danos decorrentes do uso, inclusive de uso não autorizado.
+
+Pedidos de autorização: contate o titular pelo GitHub (https://github.com/Br3noKio).

@@ -1,0 +1,1320 @@
+{
+  "DELETE /redfish/v1/SessionService/Sessions/1234567890ABCDEF1": {
+    "erro": "",
+    "erro_tipo": "",
+    "status": 204
+  },
+  "GET /redfish/v1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/",
+      "@odata.type": "#ServiceRoot.v1_22_0.ServiceRoot",
+      "AccountService": {
+        "@odata.id": "/redfish/v1/AccountService"
+      },
+      "Chassis": {
+        "@odata.id": "/redfish/v1/Chassis"
+      },
+      "EventService": {
+        "@odata.id": "/redfish/v1/EventService"
+      },
+      "Id": "RootService",
+      "Links": {
+        "Sessions": {
+          "@odata.id": "/redfish/v1/SessionService/Sessions"
+        }
+      },
+      "Managers": {
+        "@odata.id": "/redfish/v1/Managers"
+      },
+      "Name": "Root Service",
+      "ProtocolFeaturesSupported": {
+        "ExcerptQuery": true,
+        "ExpandQuery": {
+          "ExpandAll": true,
+          "Levels": true,
+          "Links": true,
+          "MaxLevels": 6,
+          "NoLinks": true
+        },
+        "FilterQuery": false,
+        "OnlyMemberQuery": true,
+        "SelectQuery": false
+      },
+      "RedfishVersion": "1.15.0",
+      "SessionService": {
+        "@odata.id": "/redfish/v1/SessionService"
+      },
+      "Systems": {
+        "@odata.id": "/redfish/v1/Systems"
+      },
+      "Tasks": {
+        "@odata.id": "/redfish/v1/TaskService"
+      },
+      "UUID": "92384634-2938-2342-8820-489239905423"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService",
+      "@odata.type": "#AccountService.v1_19_0.AccountService",
+      "AccountLockoutCounterResetAfter": 30,
+      "AccountLockoutCounterResetEnabled": true,
+      "AccountLockoutDuration": 30,
+      "AccountLockoutThreshold": 5,
+      "Accounts": {
+        "@odata.id": "/redfish/v1/AccountService/Accounts"
+      },
+      "AuthFailureLoggingThreshold": 3,
+      "Description": "Account Service",
+      "Id": "AccountService",
+      "MinPasswordLength": 8,
+      "Name": "Account Service",
+      "Roles": {
+        "@odata.id": "/redfish/v1/AccountService/Roles"
+      },
+      "ServiceEnabled": true,
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Accounts": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Accounts",
+      "@odata.type": "#ManagerAccountCollection.ManagerAccountCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/AccountService/Accounts/1"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Accounts Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Accounts/1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Accounts/1",
+      "@odata.type": "#ManagerAccount.v1_14_2.ManagerAccount",
+      "AccountTypes": [
+        "Redfish"
+      ],
+      "Description": "User Account",
+      "Enabled": true,
+      "Id": "1",
+      "Links": {
+        "Role": {
+          "@odata.id": "/redfish/v1/AccountService/Roles/Administrator"
+        }
+      },
+      "Locked": false,
+      "Name": "User Account",
+      "Password": "REMOVIDO",
+      "PasswordChangeRequired": false,
+      "RoleId": "Administrator",
+      "UserName": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Roles/Administrator": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Roles/Administrator",
+      "@odata.type": "#Role.v1_3_3.Role",
+      "AssignedPrivileges": [
+        "Login",
+        "ConfigureManager",
+        "ConfigureUsers",
+        "ConfigureSelf",
+        "ConfigureComponents"
+      ],
+      "Description": "Admin User Role",
+      "Id": "Administrator",
+      "IsPredefined": true,
+      "Name": "User Role",
+      "OemPrivileges": [
+        "OemClearLog",
+        "OemPowerControl"
+      ],
+      "RoleId": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis",
+      "@odata.type": "#ChassisCollection.ChassisCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Chassis Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U",
+      "@odata.type": "#Chassis.v1_29_0.Chassis",
+      "AssetTag": "Chicago-45Z-2381",
+      "ChassisType": "RackMount",
+      "Drives": {
+        "@odata.id": "/redfish/v1/Chassis/1U/Drives"
+      },
+      "Id": "1U",
+      "IndicatorLED": "Lit",
+      "Links": {
+        "ComputerSystems": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+          }
+        ],
+        "ManagedBy": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ],
+        "ManagersInChassis": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "Model": "3500RX",
+      "Name": "Computer System Chassis",
+      "PartNumber": "224071-J23",
+      "Power": {
+        "@odata.id": "/redfish/v1/Chassis/1U/Power"
+      },
+      "PowerState": "On",
+      "SKU": "8675309",
+      "SerialNumber": "437XR1138R2",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "Thermal": {
+        "@odata.id": "/redfish/v1/Chassis/1U/Thermal"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Drives/32ADF365C6C1B7BD": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Drives/32ADF365C6C1B7BD",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Actions": {
+        "#Drive.SecureErase": {
+          "target": "/redfish/v1/Chassis/1U/Drives/32ADF365C6C1B7BD/Actions/Drive.SecureErase"
+        }
+      },
+      "BlockSizeBytes": 512,
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 899527000064,
+      "EncryptionAbility": "SelfEncryptingDrive",
+      "EncryptionStatus": "Unlocked",
+      "FailurePredicted": false,
+      "HotspareReplacementMode": "Revertible",
+      "HotspareType": "Global",
+      "Id": "32ADF365C6C1B7BD",
+      "Identifiers": [
+        {
+          "DurableName": "32ADF365C6C1B7BD",
+          "DurableNameFormat": "NAA"
+        }
+      ],
+      "IndicatorLED": "Lit",
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "C123",
+      "Name": "Drive Sample",
+      "NegotiatedSpeedGbs": 12,
+      "PartNumber": "C123-1111",
+      "Protocol": "SAS",
+      "Revision": "100A",
+      "RotationSpeedRPM": 15000,
+      "SerialNumber": "1234570",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Drives/35D38F11ACEF7BD3": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Drives/35D38F11ACEF7BD3",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Actions": {
+        "#Drive.SecureErase": {
+          "target": "/redfish/v1/Chassis/1U/Drives/35D38F11ACEF7BD3/Actions/Drive.SecureErase"
+        }
+      },
+      "BlockSizeBytes": 512,
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 899527000064,
+      "EncryptionAbility": "SelfEncryptingDrive",
+      "EncryptionStatus": "Unlocked",
+      "FailurePredicted": false,
+      "HotspareType": "None",
+      "Id": "35D38F11ACEF7BD3",
+      "Identifiers": [
+        {
+          "DurableName": "35D38F11ACEF7BD3",
+          "DurableNameFormat": "NAA"
+        }
+      ],
+      "IndicatorLED": "Lit",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "C123",
+      "Name": "Drive Sample",
+      "NegotiatedSpeedGbs": 12,
+      "PartNumber": "C123-1111",
+      "Protocol": "SAS",
+      "Revision": "100A",
+      "RotationSpeedRPM": 15000,
+      "SerialNumber": "1234567",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Actions": {
+        "#Drive.SecureErase": {
+          "target": "/redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2/Actions/Drive.SecureErase"
+        }
+      },
+      "BlockSizeBytes": 512,
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 899527000064,
+      "EncryptionAbility": "SelfEncryptingDrive",
+      "EncryptionStatus": "Unlocked",
+      "FailurePredicted": false,
+      "HotspareType": "None",
+      "Id": "3D58ECBC375FD9F2",
+      "Identifiers": [
+        {
+          "DurableName": "32ADF365C6C1B7BD",
+          "DurableNameFormat": "NAA"
+        }
+      ],
+      "IndicatorLED": "Lit",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/3"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "C123",
+      "Name": "Drive Sample",
+      "NegotiatedSpeedGbs": 12,
+      "PartNumber": "C123-1111",
+      "Protocol": "SAS",
+      "Revision": "100A",
+      "RotationSpeedRPM": 15000,
+      "SerialNumber": "1234568",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Drives/3F5A8C54207B7233": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Drives/3F5A8C54207B7233",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Actions": {
+        "#Drive.SecureErase": {
+          "target": "/redfish/v1/Chassis/1U/Drives/3F5A8C54207B7233/Actions/Drive.SecureErase"
+        }
+      },
+      "BlockSizeBytes": 512,
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 899527000064,
+      "EncryptionAbility": "SelfEncryptingDrive",
+      "EncryptionStatus": "Unlocked",
+      "FailurePredicted": false,
+      "HotspareType": "None",
+      "Id": "3F5A8C54207B7233",
+      "Identifiers": [
+        {
+          "DurableName": "3F5A8C54207B7233",
+          "DurableNameFormat": "NAA"
+        }
+      ],
+      "IndicatorLED": "Lit",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "C123",
+      "Name": "Drive Sample",
+      "NegotiatedSpeedGbs": 12,
+      "PartNumber": "C123-1111",
+      "Protocol": "SAS",
+      "Revision": "100A",
+      "RotationSpeedRPM": 15000,
+      "SerialNumber": "1234569",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Power": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Power",
+      "@odata.type": "#Power.v1_7_3.Power",
+      "Id": "Power",
+      "Name": "Power",
+      "PowerControl": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Power#/PowerControl/0",
+          "MemberId": "0",
+          "Name": "Server Power Control",
+          "PowerAllocatedWatts": 800,
+          "PowerAvailableWatts": 0,
+          "PowerCapacityWatts": 800,
+          "PowerConsumedWatts": 344,
+          "PowerLimit": {
+            "CorrectionInMs": 50,
+            "LimitException": "LogEventOnly",
+            "LimitInWatts": 500
+          },
+          "PowerMetrics": {
+            "AverageConsumedWatts": 319,
+            "IntervalInMin": 30,
+            "MaxConsumedWatts": 489,
+            "MinConsumedWatts": 271
+          },
+          "PowerRequestedWatts": 800,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "PowerSupplies": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Power#/PowerSupplies/0",
+          "FirmwareVersion": "1.00",
+          "InputRanges": [
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 120,
+              "MinimumVoltage": 100,
+              "OutputWattage": 800
+            },
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 240,
+              "MinimumVoltage": 200,
+              "OutputWattage": 1300
+            }
+          ],
+          "LastPowerOutputWatts": 325,
+          "LineInputVoltage": 120,
+          "LineInputVoltageType": "ACWideRange",
+          "Manufacturer": "ManufacturerName",
+          "MemberId": "0",
+          "Model": "499253-B21",
+          "Name": "Power Supply Bay",
+          "PartNumber": "0000001A3A",
+          "PowerCapacityWatts": 800,
+          "PowerSupplyType": "AC",
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "SerialNumber": "1Z0000001",
+          "SparePartNumber": "0000001A3A",
+          "Status": {
+            "Health": "Warning",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Voltages": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Power#/Voltages/0",
+          "LowerThresholdCritical": 11,
+          "LowerThresholdFatal": 10,
+          "LowerThresholdNonCritical": 11.5,
+          "MaxReadingRange": 20,
+          "MemberId": "0",
+          "MinReadingRange": 0,
+          "Name": "VRM1 Voltage",
+          "PhysicalContext": "VoltageRegulator",
+          "ReadingVolts": 12,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "SensorNumber": 11,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 13,
+          "UpperThresholdFatal": 15,
+          "UpperThresholdNonCritical": 12.5
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Power#/Voltages/1",
+          "LowerThresholdCritical": 4.5,
+          "LowerThresholdNonCritical": 4.75,
+          "MaxReadingRange": 20,
+          "MemberId": "1",
+          "MinReadingRange": 0,
+          "Name": "VRM2 Voltage",
+          "PhysicalContext": "VoltageRegulator",
+          "ReadingVolts": 5,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "SensorNumber": 12,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 7,
+          "UpperThresholdNonCritical": 5.5
+        }
+      ]
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/1U/Thermal": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/1U/Thermal",
+      "@odata.type": "#Thermal.v1_7_3.Thermal",
+      "Fans": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Fans/0",
+          "LowerThresholdFatal": 0,
+          "MaxReadingRange": 5000,
+          "MemberId": "0",
+          "MinReadingRange": 0,
+          "Name": "BaseBoard System Fan",
+          "PhysicalContext": "Backplane",
+          "Reading": 2100,
+          "ReadingUnits": "RPM",
+          "Redundancy": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Redundancy/0"
+            }
+          ],
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Fans/1",
+          "LowerThresholdFatal": 0,
+          "MaxReadingRange": 5000,
+          "MemberId": "1",
+          "MinReadingRange": 0,
+          "Name": "BaseBoard System Fan Backup",
+          "PhysicalContext": "Backplane",
+          "Reading": 2050,
+          "ReadingUnits": "RPM",
+          "Redundancy": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Redundancy/0"
+            }
+          ],
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Id": "Thermal",
+      "Name": "Thermal",
+      "Redundancy": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Redundancy/0",
+          "MaxNumSupported": 2,
+          "MemberId": "0",
+          "MinNumNeeded": 1,
+          "Mode": "N+m",
+          "Name": "BaseBoard System Fans",
+          "RedundancySet": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Fans/0"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Fans/1"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Temperatures": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Temperatures/0",
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "0",
+          "MinReadingRangeTemp": 0,
+          "Name": "CPU1 Temp",
+          "PhysicalContext": "CPU",
+          "ReadingCelsius": 41,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2/Processors/CPU1"
+            }
+          ],
+          "SensorNumber": 5,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 45,
+          "UpperThresholdFatal": 48,
+          "UpperThresholdNonCritical": 42
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Temperatures/1",
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "1",
+          "MinReadingRangeTemp": 0,
+          "Name": "CPU2 Temp",
+          "PhysicalContext": "CPU",
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2/Processors/CPU2"
+            }
+          ],
+          "SensorNumber": 6,
+          "Status": {
+            "State": "Disabled"
+          },
+          "UpperThresholdCritical": 45,
+          "UpperThresholdFatal": 48,
+          "UpperThresholdNonCritical": 42
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Thermal#/Temperatures/2",
+          "LowerThresholdCritical": 5,
+          "LowerThresholdFatal": 0,
+          "LowerThresholdNonCritical": 10,
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "2",
+          "MinReadingRangeTemp": 0,
+          "Name": "Chassis Intake Temp",
+          "PhysicalContext": "Intake",
+          "ReadingCelsius": 25,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/1U"
+            },
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+            }
+          ],
+          "SensorNumber": 9,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 40,
+          "UpperThresholdFatal": 50,
+          "UpperThresholdNonCritical": 30
+        }
+      ]
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers",
+      "@odata.type": "#ManagerCollection.ManagerCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Manager Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC",
+      "@odata.type": "#Manager.v1_25_0.Manager",
+      "Actions": {
+        "#Manager.Reset": {
+          "ResetType@Redfish.AllowableValues": [
+            "ForceRestart",
+            "GracefulRestart"
+          ],
+          "target": "/redfish/v1/Managers/BMC/Actions/Manager.Reset"
+        }
+      },
+      "CommandShell": {
+        "ConnectTypesSupported": [
+          "Telnet",
+          "SSH"
+        ],
+        "MaxConcurrentSessions": 4,
+        "ServiceEnabled": true
+      },
+      "DateTime": "2015-03-13T04:14:33+06:00",
+      "DateTimeLocalOffset": "+06:00",
+      "Description": "Contoso BMC",
+      "EthernetInterfaces": {
+        "@odata.id": "/redfish/v1/Managers/BMC/EthernetInterfaces"
+      },
+      "FirmwareVersion": "1.00",
+      "GraphicalConsole": {
+        "ConnectTypesSupported": [
+          "KVMIP"
+        ],
+        "MaxConcurrentSessions": 2,
+        "ServiceEnabled": true
+      },
+      "Id": "BMC",
+      "Links": {
+        "ManagerForChassis": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U"
+          }
+        ],
+        "ManagerForServers": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+          }
+        ],
+        "ManagerInChassis": {
+          "@odata.id": "/redfish/v1/Chassis/1U"
+        }
+      },
+      "LogServices": {
+        "@odata.id": "/redfish/v1/Managers/BMC/LogServices"
+      },
+      "ManagerType": "BMC",
+      "Model": "Joo Janta 200",
+      "Name": "Manager",
+      "NetworkProtocol": {
+        "@odata.id": "/redfish/v1/Managers/BMC/NetworkProtocol"
+      },
+      "PowerState": "On",
+      "SerialConsole": {
+        "ConnectTypesSupported": [
+          "Telnet",
+          "SSH",
+          "IPMI"
+        ],
+        "MaxConcurrentSessions": 1,
+        "ServiceEnabled": true
+      },
+      "SerialInterfaces": {
+        "@odata.id": "/redfish/v1/Managers/BMC/SerialInterfaces"
+      },
+      "ServiceEntryPointUUID": "92384634-2938-2342-8820-489239905423",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "UUID": "58893887-8974-2487-2389-841168418919",
+      "VirtualMedia": {
+        "@odata.id": "/redfish/v1/Managers/BMC/VirtualMedia"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices",
+      "@odata.type": "#LogServiceCollection.LogServiceCollection",
+      "Description": "Collection of Log Services for this Manager",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Log Service Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices/Log": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log",
+      "@odata.type": "#LogService.v1_9_0.LogService",
+      "Actions": {
+        "#LogService.ClearLog": {
+          "target": "/redfish/v1/Managers/BMC/LogServices/Log/Actions/LogService.ClearLog"
+        }
+      },
+      "DateTime": "2015-03-13T04:14:33+06:00",
+      "DateTimeLocalOffset": "+06:00",
+      "Entries": {
+        "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries"
+      },
+      "Id": "Log",
+      "MaxNumberOfRecords": 1000,
+      "Name": "System Log Service",
+      "OverWritePolicy": "WrapsWhenFull",
+      "ServiceEnabled": true,
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices/Log/Entries": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries",
+      "@odata.type": "#LogEntryCollection.LogEntryCollection",
+      "Description": "Collection of Logs for this System",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries/1",
+          "@odata.type": "#LogEntry.v1_22_0.LogEntry",
+          "Created": "2012-03-07T14:44:00Z",
+          "EntryType": "Event",
+          "Id": "1",
+          "Links": {
+            "OriginOfCondition": {
+              "@odata.id": "/redfish/v1/Chassis/1U/Thermal"
+            }
+          },
+          "Message": "System May be Melting",
+          "MessageArgs": [
+            "88"
+          ],
+          "MessageId": "Event.1.0.TempWayTooHot",
+          "Name": "Log Entry 1",
+          "SensorNumber": 1,
+          "Severity": "Critical"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Log Service Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/SessionService/Sessions/1234567890ABCDEF1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/SessionService/Sessions/1234567890ABCDEF1",
+      "Id": "1234567890ABCDEF1",
+      "Password": "REMOVIDO",
+      "UserName": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems",
+      "@odata.type": "#ComputerSystemCollection.ComputerSystemCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Computer System Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2",
+      "@odata.type": "#ComputerSystem.v1_29_0.ComputerSystem",
+      "Actions": {
+        "#ComputerSystem.Reset": {
+          "ResetType@Redfish.AllowableValues": [
+            "On",
+            "ForceOff",
+            "GracefulShutdown",
+            "GracefulRestart",
+            "ForceRestart",
+            "Nmi",
+            "ForceOn",
+            "PushPowerButton"
+          ],
+          "target": "/redfish/v1/Systems/437XR1138R2/Actions/ComputerSystem.Reset"
+        },
+        "Oem": {
+          "#Contoso.Reset": {
+            "target": "/redfish/v1/Systems/437XR1138R2/Oem/Contoso/Actions/Contoso.Reset"
+          }
+        }
+      },
+      "AssetTag": "Chicago-45Z-2381",
+      "Bios": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/Bios"
+      },
+      "BiosVersion": "P79 v1.33 (02/28/2015)",
+      "Boot": {
+        "BootSourceOverrideEnabled": "Once",
+        "BootSourceOverrideMode": "UEFI",
+        "BootSourceOverrideTarget": "Pxe",
+        "BootSourceOverrideTarget@Redfish.AllowableValues": [
+          "None",
+          "Pxe",
+          "Cd",
+          "Usb",
+          "Hdd",
+          "BiosSetup",
+          "Utilities",
+          "Diags",
+          "SDCard",
+          "UefiTarget"
+        ],
+        "UefiTargetBootSourceOverride": "/0x31/0x33/0x01/0x01"
+      },
+      "Description": "Web Front End node",
+      "EthernetInterfaces": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/EthernetInterfaces"
+      },
+      "HostName": "web483",
+      "HostingRoles": [
+        "ApplicationServer"
+      ],
+      "Id": "437XR1138R2",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Chassis": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U"
+          }
+        ],
+        "ManagedBy": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ]
+      },
+      "LogServices": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/LogServices"
+      },
+      "Manufacturer": "Contoso",
+      "Memory": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/Memory"
+      },
+      "MemorySummary": {
+        "MemoryMirroring": "None",
+        "Status": {
+          "Health": "OK",
+          "HealthRollup": "OK",
+          "State": "Enabled"
+        },
+        "TotalSystemMemoryGiB": 96,
+        "TotalSystemPersistentMemoryGiB": 0
+      },
+      "Model": "3500RX",
+      "Name": "WebFrontEnd483",
+      "Oem": {
+        "Chipwise": {
+          "@odata.type": "#Chipwise.ComputerSystem",
+          "Style": "Executive"
+        },
+        "Contoso": {
+          "@odata.type": "#Contoso.ComputerSystem",
+          "ProductionLocation": {
+            "Country": "USA",
+            "FacilityName": "PacWest Production Facility"
+          }
+        }
+      },
+      "PartNumber": "224071-J23",
+      "PowerState": "On",
+      "ProcessorSummary": {
+        "Count": 2,
+        "Model": "Multi-Core Intel(R) Xeon(R) processor 7xxx Series",
+        "Status": {
+          "Health": "OK",
+          "HealthRollup": "OK",
+          "State": "Enabled"
+        }
+      },
+      "Processors": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/Processors"
+      },
+      "SKU": "8675309",
+      "SerialNumber": "437XR1138R2",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "Storage": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage"
+      },
+      "SystemType": "Physical",
+      "TrustedModules": [
+        {
+          "FirmwareVersion": "1.13b",
+          "InterfaceType": "TPM1_2",
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "UUID": "38947555-7742-3448-3784-823347823834"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage",
+      "@odata.type": "#StorageCollection.StorageCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Storage Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage/1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1",
+      "@odata.type": "#Storage.v1_23_0.Storage",
+      "Actions": {
+        "#Storage.SetEncryptionKey": {
+          "target": "/redfish/v1/Systems/437XR1138R2/Storage/1/Actions/Storage.SetEncryptionKey"
+        }
+      },
+      "Description": "Integrated RAID Controller",
+      "Drives": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Drives/35D38F11ACEF7BD3"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Drives/3F5A8C54207B7233"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Drives/32ADF365C6C1B7BD"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2"
+        }
+      ],
+      "Id": "1",
+      "Name": "Local Storage Controller",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "StorageControllers": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1#/StorageControllers/0",
+          "CacheSummary": {
+            "PersistentCacheSizeMiB": 1024,
+            "Status": {
+              "Health": "OK",
+              "State": "Enabled"
+            },
+            "TotalCacheSizeMiB": 1024
+          },
+          "FirmwareVersion": "1.0.0.7",
+          "Identifiers": [
+            {
+              "DurableName": "345C59DBD970859C",
+              "DurableNameFormat": "NAA"
+            }
+          ],
+          "Manufacturer": "Contoso",
+          "MemberId": "0",
+          "Model": "12Gbs Integrated RAID",
+          "Name": "Contoso Integrated RAID",
+          "PartNumber": "CT18754",
+          "SerialNumber": "2M220100SL",
+          "SpeedGbps": 12,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedControllerProtocols": [
+            "PCIe"
+          ],
+          "SupportedDeviceProtocols": [
+            "SAS",
+            "SATA"
+          ]
+        }
+      ],
+      "Volumes": {
+        "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage/1/Volumes": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes",
+      "@odata.type": "#VolumeCollection.VolumeCollection",
+      "Description": "Storage Volume Collection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/2"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/3"
+        }
+      ],
+      "Members@odata.count": 3,
+      "Name": "Storage Volume Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "Actions": {
+        "#Volume.Initialize": {
+          "InitializeType@Redfish.AllowableValues": [
+            "Fast",
+            "Slow"
+          ],
+          "target": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/1/Actions/Volume.Initialize"
+        }
+      },
+      "CapacityBytes": 899527000064,
+      "Encrypted": false,
+      "Id": "1",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U/Drives/3F5A8C54207B7233"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U/Drives/35D38F11ACEF7BD3"
+          }
+        ]
+      },
+      "Name": "Virtual Disk 1",
+      "RAIDType": "RAID1",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/2",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "Actions": {
+        "#Volume.Initialize": {
+          "InitializeType@Redfish.AllowableValues": [
+            "Fast",
+            "Slow"
+          ],
+          "target": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/2/Actions/Volume.Initialize"
+        }
+      },
+      "CapacityBytes": 107374182400,
+      "Encrypted": false,
+      "Id": "2",
+      "Identifiers": [
+        {
+          "DurableName": "0324c96c-8031-4f5e-886c-50cd90aca854",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2"
+          }
+        ]
+      },
+      "Name": "Virtual Disk 2",
+      "RAIDType": "RAID0",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/3": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/3",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "Actions": {
+        "#Volume.Initialize": {
+          "InitializeType@Redfish.AllowableValues": [
+            "Fast",
+            "Slow"
+          ],
+          "target": "/redfish/v1/Systems/437XR1138R2/Storage/1/Volumes/3/Actions/Volume.Initialize"
+        }
+      },
+      "CapacityBytes": 107374182400,
+      "Encrypted": false,
+      "Id": "3",
+      "Identifiers": [
+        {
+          "DurableName": "eb179a30-6f87-4fdb-8f92-639eb7aaabcb",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/1U/Drives/3D58ECBC375FD9F2"
+          }
+        ]
+      },
+      "Name": "Virtual Disk 3",
+      "RAIDType": "RAID0",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "POST /redfish/v1/SessionService/Sessions": {
+    "erro": "",
+    "erro_tipo": "",
+    "local": "/redfish/v1/SessionService/Sessions/1234567890ABCDEF1",
+    "status": 204
+  }
+}

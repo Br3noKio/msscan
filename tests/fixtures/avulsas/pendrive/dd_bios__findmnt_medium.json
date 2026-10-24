@@ -1,0 +1,11 @@
+{
+   "filesystems": [
+      {
+         "target": "/run/live/medium",
+         "source": "/dev/sda1",
+         "fstype": "iso9660",
+         "options": "ro,noatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8",
+         "label": "SDIAG_BOOT"
+      }
+   ]
+}

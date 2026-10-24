@@ -1,0 +1,12 @@
+{
+  "comando": [
+    "ip",
+    "-j",
+    "-s",
+    "link",
+    "show"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.003
+}

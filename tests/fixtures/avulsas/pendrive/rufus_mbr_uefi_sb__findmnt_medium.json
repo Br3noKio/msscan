@@ -1,0 +1,11 @@
+{
+   "filesystems": [
+      {
+         "target": "/run/live/medium",
+         "source": "/dev/sda1",
+         "fstype": "vfat",
+         "options": "ro,noatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro",
+         "label": "SDIAG_BOOT"
+      }
+   ]
+}

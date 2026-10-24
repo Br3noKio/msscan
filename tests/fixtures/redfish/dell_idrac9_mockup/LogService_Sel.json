@@ -1,0 +1,16 @@
+{
+  "@odata.id": "/redfish/v1/Managers/iDRAC.Embedded.1/LogServices/Sel",
+  "@odata.type": "#LogService.v1_1_1.LogService",
+  "Actions": {
+    "#LogService.ClearLog": {
+      "target": "/redfish/v1/Managers/iDRAC.Embedded.1/LogServices/Sel/Actions/LogService.ClearLog"
+    }
+  },
+  "Entries": {
+    "@odata.id": "/redfish/v1/Managers/iDRAC.Embedded.1/LogServices/Sel/Entries"
+  },
+  "Id": "Sel",
+  "LogEntryType": "SEL",
+  "Name": "Log Service",
+  "ServiceEnabled": true
+}

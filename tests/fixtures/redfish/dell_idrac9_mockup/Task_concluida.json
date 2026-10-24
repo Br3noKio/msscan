@@ -1,0 +1,19 @@
+{
+  "@odata.type": "#Task.v1_4_3.Task",
+  "@odata.id": "/redfish/v1/TaskService/Tasks/JID_000000000001",
+  "Id": "JID_000000000001",
+  "Name": "Firmware Update",
+  "TaskState": "Completed",
+  "PercentComplete": 100,
+  "Messages": [
+    {
+      "Message": "Job completed successfully."
+    }
+  ],
+  "Oem": {
+    "Dell": {
+      "JobState": "Completed",
+      "Message": "Job completed successfully."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "/dev/ipmi0": true,
+  "/run/live/medium/MSSCAN/vendor/MegaCli": false,
+  "/run/live/medium/MSSCAN/vendor/MegaCli64": false,
+  "/run/live/medium/MSSCAN/vendor/arcconf": false,
+  "/run/live/medium/MSSCAN/vendor/hpacucli": false,
+  "/run/live/medium/MSSCAN/vendor/hpssacli": false,
+  "/run/live/medium/MSSCAN/vendor/megacli": false,
+  "/run/live/medium/MSSCAN/vendor/perccli": false,
+  "/run/live/medium/MSSCAN/vendor/perccli2": false,
+  "/run/live/medium/MSSCAN/vendor/perccli64": false,
+  "/run/live/medium/MSSCAN/vendor/racadm": false,
+  "/run/live/medium/MSSCAN/vendor/ssacli": false,
+  "/run/live/medium/MSSCAN/vendor/storcli": false,
+  "/run/live/medium/MSSCAN/vendor/storcli2": false,
+  "/run/live/medium/MSSCAN/vendor/storcli64": false,
+  "/sys/class/net/eno1/device": true,
+  "/sys/class/net/eno2/device": true,
+  "/sys/class/net/eno3/device": true,
+  "/sys/class/net/eno4/device": true
+}

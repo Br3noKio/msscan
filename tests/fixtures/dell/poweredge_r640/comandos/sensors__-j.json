@@ -1,0 +1,9 @@
+{
+  "comando": [
+    "sensors",
+    "-j"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.015
+}

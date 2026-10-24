@@ -1,0 +1,18 @@
+#!/bin/sh
+# Só no build da ISO (PATH do build.sh; CLAUDE.md 24): depois de o live-build montar o /sys do chroot
+# (`mount -t sysfs ... sysfs-live chroot/sys`), cobre chroot/sys/firmware com um tmpfs VAZIO e somente leitura.
+# O chroot fica como numa máquina sem UEFI: sem /sys/firmware/efi, o hook do mdadm no initramfs (Debian #962844) não monta
+# o efivarfs do servidor e os pós-instalação do shim/grub saem sem tocar em nada de EFI.
+/usr/bin/mount "$@" || exit $?
+alvo=""
+for argumento in "$@"; do alvo="$argumento"; done
+case " $* " in
+    *" sysfs-live "*)
+        if [ -d "$alvo/firmware" ]; then
+            /usr/bin/mount -t tmpfs -o ro,nosuid,nodev,noexec,size=4k,mode=0555 msscan-sem-efi "$alvo/firmware" || {
+                echo "ERRO: não foi possível esconder $alvo/firmware do chroot; build interrompido" >&2
+                exit 1
+            }
+        fi
+        ;;
+esac

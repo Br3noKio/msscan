@@ -1,0 +1,10 @@
+#!/bin/sh
+# Hook executado na pasta binary/ (antes de gerar a ISO): GRUB (UEFI) na resolução nativa do monitor.
+# O live-build copia do instalador "gfxmode=800x600"; com "gfxpayload=keep", o kernel herdava 800x600 e,
+# sem driver de vídeo com KMS, a tela ficava esticada/borrada em monitores widescreen.
+set -e
+
+if [ -f boot/grub/config.cfg ]; then
+    sed -i 's/^\([[:space:]]*\)set gfxmode=.*/\1set gfxmode=auto/' boot/grub/config.cfg
+    grep -q 'set gfxpayload=keep' boot/grub/config.cfg || sed -i 's/^\([[:space:]]*\)set gfxmode=auto$/&\n\1set gfxpayload=keep/' boot/grub/config.cfg
+fi

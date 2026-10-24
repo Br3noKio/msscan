@@ -1,0 +1,79 @@
+   1 | 07/15/25 | 21:07:39 -03 | Event Logging Disabled SEL | Log area reset/cleared | Asserted
+   2 | 08/08/25 | 12:45:46 -03 | Power Supply Status | Power Supply AC lost | Asserted
+   3 | 06/08/26 | 10:37:33 -03 | Power Supply Status | Power Supply AC lost | Asserted
+   4 | 08/11/26 | 09:23:26 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   5 | 08/11/26 | 09:23:31 -03 | Physical Security Intrusion | General Chassis intrusion () | Deasserted
+   6 | 08/11/26 | 09:23:58 -03 | Power Supply Status | Power Supply AC lost | Asserted
+   7 | 08/11/26 | 09:24:26 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   8 | 08/11/26 | 09:27:33 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   9 | 08/11/26 | 10:13:34 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   a | 08/11/26 | 10:13:36 -03 | Power Supply Status | Power Supply AC lost | Asserted
+   b | 09/18/26 | 10:20:38 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   c | 09/18/26 | 10:20:39 -03 | Power Supply Status | Power Supply AC lost | Asserted
+   d | 09/18/26 | 10:20:43 -03 | Physical Security Intrusion | General Chassis intrusion () | Deasserted
+   e | 09/18/26 | 10:41:39 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+   f | 09/18/26 | 10:41:40 -03 | Power Supply Status | Power Supply AC lost | Asserted
+  10 | 09/18/26 | 10:45:36 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  11 | 09/18/26 | 10:45:38 -03 | Power Supply Status | Power Supply AC lost | Asserted
+  12 | 09/18/26 | 10:48:35 -03 | Cable / Interconnect Cable SAS A0 | Config Error | Asserted
+  13 | 09/18/26 | 10:48:35 -03 | Cable / Interconnect Cable SAS B0 | Config Error | Asserted
+  14 | 09/18/26 | 10:48:36 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  15 | 09/18/26 | 10:48:38 -03 | Power Supply Status | Power Supply AC lost | Asserted
+  16 | 09/18/26 | 13:45:58 -03 | Processor Status | Presence detected | Deasserted
+  17 | 09/18/26 | 13:46:04 -03 | Processor Status | Presence detected | Deasserted
+  18 | 09/18/26 | 13:46:10 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  19 | 09/18/26 | 13:46:47 -03 | Processor Status | Presence detected | Deasserted
+  1a | 09/18/26 | 13:52:33 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  1b | 09/18/26 | 13:52:38 -03 | Cable / Interconnect Cable SAS A0 | Config Error | Asserted
+  1c | 09/18/26 | 13:52:38 -03 | Cable / Interconnect Cable SAS B0 | Config Error | Asserted
+  1d | 09/18/26 | 13:54:00 -03 | Cable / Interconnect Cable SAS A0 | Config Error | Asserted
+  1e | 09/18/26 | 13:54:00 -03 | Cable / Interconnect Cable SAS B0 | Config Error | Asserted
+  1f | 09/18/26 | 13:54:01 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  20 | 09/20/20 | 02:44:42 -03 | System Firmwares POST Err |  | Asserted
+  21 | 09/20/20 | 02:44:51 -03 | Cable / Interconnect Cable SAS A0 | Config Error | Asserted
+  22 | 09/20/20 | 02:44:51 -03 | Cable / Interconnect Cable SAS B0 | Config Error | Asserted
+  23 | 09/20/20 | 02:44:52 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  24 | 01/03/98 | 18:23:33 -02 | Unknown Additional Info |  | Asserted
+  25 | 01/03/98 | 18:23:33 -02 | Memory ECC Uncorr Err | Uncorrectable ECC (UnCorrectable ECC |  DIMMA2) | Asserted
+  26 | 01/03/98 | 18:23:33 -02 | Critical Interrupt PCIE Fatal Err | Bus Fatal Error ( Slot 1) | Asserted
+  27 | 01/03/98 | 18:23:33 -02 | Critical Interrupt FatalPCIErrOnBus |  | Asserted
+  28 | 01/03/98 | 18:23:33 -02 | Unknown Err Reg Pointer |  | Asserted
+  29 | 01/03/98 | 18:23:33 -02 | Unknown Err Reg Pointer |  | Asserted
+  2a | 01/03/98 | 18:51:24 -02 | Unknown Additional Info |  | Asserted
+  2b | 01/03/98 | 18:51:24 -02 | Critical Interrupt PCIE Fatal Err | Bus Fatal Error ( Slot 1) | Asserted
+  2c | 01/03/98 | 18:51:24 -02 | Critical Interrupt FatalPCIErrOnBus |  | Asserted
+  2d | 01/03/98 | 18:51:24 -02 | Unknown Err Reg Pointer |  | Asserted
+  2e | 01/03/98 | 18:51:24 -02 | Unknown Err Reg Pointer |  | Asserted
+  2f | 01/03/98 | 18:51:25 -02 | Cable / Interconnect Cable SAS A0 | Config Error | Asserted
+  30 | 01/03/98 | 18:51:25 -02 | Cable / Interconnect Cable SAS B0 | Config Error | Asserted
+  31 | 01/03/98 | 18:51:26 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  32 | 09/20/20 | 02:44:52 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  33 | 01/03/98 | 18:55:17 -02 | Unknown Additional Info |  | Asserted
+  34 | 01/03/98 | 18:55:17 -02 | Critical Interrupt PCIE Fatal Err | Bus Fatal Error ( Slot 1) | Asserted
+  35 | 01/03/98 | 18:55:17 -02 | Critical Interrupt FatalPCIErrOnBus |  | Asserted
+  36 | 01/03/98 | 18:55:17 -02 | Unknown Err Reg Pointer |  | Asserted
+  37 | 01/03/98 | 18:55:17 -02 | Unknown Err Reg Pointer |  | Asserted
+  38 | 01/04/98 | 19:52:43 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  39 | 09/20/20 | 02:44:51 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  3a | 09/20/20 | 02:46:02 -03 | System Firmwares POST Err |  | Asserted
+  3b | 09/20/20 | 02:46:58 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  3c | 01/04/98 | 21:28:29 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  3d | 01/04/98 | 21:48:14 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  3e | 01/04/98 | 21:51:51 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  3f | 01/04/98 | 21:54:58 -02 | Drive Slot / Bay #0x9b | Drive Present () | Deasserted
+  40 | 01/04/98 | 21:55:08 -02 | Drive Slot / Bay #0x9a | Drive Present () | Deasserted
+  41 | 01/04/98 | 21:55:18 -02 | Drive Slot / Bay #0x9a | Drive Present () | Asserted
+  42 | 01/04/98 | 21:55:43 -02 | Drive Slot / Bay #0x9a | Drive Present () | Deasserted
+  43 | 01/04/98 | 21:56:03 -02 | Drive Slot / Bay #0x9b | Drive Present () | Asserted
+  44 | 09/20/20 | 02:44:50 -03 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  45 | 09/20/20 | 02:44:52 -03 | Power Supply Status | Power Supply AC lost | Asserted
+  46 | 09/20/20 | 02:44:55 -03 | Physical Security Intrusion | General Chassis intrusion () | Deasserted
+  47 | 01/06/98 | 19:02:49 -02 | Power Supply Status | Power Supply AC lost | Asserted
+  48 | 01/06/98 | 19:07:52 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  49 | 01/06/98 | 19:08:09 -02 | Drive Slot / Bay Drive 0 | Drive Present () | Deasserted
+  4a | 01/06/98 | 19:09:14 -02 | Drive Slot / Bay Drive 0 | Drive Present () | Asserted
+  4b | 01/06/98 | 19:09:32 -02 | Physical Security Intrusion | General Chassis intrusion () | Deasserted
+  4c | 01/06/98 | 19:12:17 -02 | Physical Security Intrusion | General Chassis intrusion () | Asserted
+  4d | 01/06/98 | 19:12:24 -02 | Drive Slot / Bay Drive 0 | Drive Present () | Deasserted
+  4e | 01/06/98 | 19:12:34 -02 | Drive Slot / Bay Drive 0 | Drive Present () | Asserted
+  4f | 01/06/98 | 19:12:37 -02 | Physical Security Intrusion | General Chassis intrusion () | Deasserted

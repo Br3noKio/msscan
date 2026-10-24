@@ -1,0 +1,2359 @@
+{
+  "DELETE /redfish/v1/SessionService/Sessions/1234567890ABCDEF1": {
+    "erro": "",
+    "erro_tipo": "",
+    "status": 204
+  },
+  "GET /redfish/v1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/",
+      "@odata.type": "#ServiceRoot.v1_22_0.ServiceRoot",
+      "AccountService": {
+        "@odata.id": "/redfish/v1/AccountService"
+      },
+      "CertificateService": {
+        "@odata.id": "/redfish/v1/CertificateService"
+      },
+      "Chassis": {
+        "@odata.id": "/redfish/v1/Chassis"
+      },
+      "EventService": {
+        "@odata.id": "/redfish/v1/EventService"
+      },
+      "Id": "RootService",
+      "Links": {
+        "Sessions": {
+          "@odata.id": "/redfish/v1/SessionService/Sessions"
+        }
+      },
+      "Managers": {
+        "@odata.id": "/redfish/v1/Managers"
+      },
+      "Name": "Root Service",
+      "ProtocolFeaturesSupported": {
+        "ExcerptQuery": true,
+        "ExpandQuery": {
+          "ExpandAll": true,
+          "Levels": true,
+          "Links": true,
+          "MaxLevels": 6,
+          "NoLinks": true
+        },
+        "FilterQuery": false,
+        "OnlyMemberQuery": true,
+        "SelectQuery": false
+      },
+      "RedfishVersion": "1.15.0",
+      "Registries": {
+        "@odata.id": "/redfish/v1/Registries"
+      },
+      "SessionService": {
+        "@odata.id": "/redfish/v1/SessionService"
+      },
+      "Systems": {
+        "@odata.id": "/redfish/v1/Systems"
+      },
+      "Tasks": {
+        "@odata.id": "/redfish/v1/TaskService"
+      },
+      "UUID": "6915e2f4-e3bc-443d-9bcd-a0f9648a8bf6",
+      "UpdateService": {
+        "@odata.id": "/redfish/v1/UpdateService"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService",
+      "@odata.type": "#AccountService.v1_19_0.AccountService",
+      "AccountLockoutCounterResetAfter": 30,
+      "AccountLockoutCounterResetEnabled": true,
+      "AccountLockoutDuration": 30,
+      "AccountLockoutThreshold": 5,
+      "Accounts": {
+        "@odata.id": "/redfish/v1/AccountService/Accounts"
+      },
+      "ActiveDirectory": {
+        "AccountProviderType": "ActiveDirectoryService",
+        "Authentication": {
+          "AuthenticationType": "KerberosKeytab",
+          "KerberosKeytab": null
+        },
+        "RemoteRoleMapping": [
+          {
+            "LocalRole": "Administrator",
+            "RemoteGroup": "Administrators"
+          },
+          {
+            "LocalRole": "Operator",
+            "RemoteUser": "DOMAIN\\Bob"
+          },
+          {
+            "LocalRole": "Operator",
+            "RemoteGroup": "PowerUsers"
+          },
+          {
+            "LocalRole": "ReadOnly",
+            "RemoteGroup": "Everybody"
+          }
+        ],
+        "ServiceAddresses": [
+          "ad1.example.org",
+          "ad2.example.org",
+          null,
+          null
+        ],
+        "ServiceEnabled": true
+      },
+      "AdditionalExternalAccountProviders": {
+        "@odata.id": "/redfish/v1/AccountService/ExternalAccountProviders"
+      },
+      "AuthFailureLoggingThreshold": 3,
+      "Description": "Account Service",
+      "Id": "AccountService",
+      "LDAP": {
+        "AccountProviderType": "LDAPService",
+        "Authentication": {
+          "AuthenticationType": "UsernameAndPassword",
+          "Password": "REMOVIDO",
+          "Username": "cn=Manager,dc=example,dc=org"
+        },
+        "LDAPService": {
+          "SearchSettings": {
+            "BaseDistinguishedNames": [
+              "dc=example,dc=org"
+            ],
+            "GroupsAttribute": "memberof",
+            "UsernameAttribute": "uid"
+          }
+        },
+        "RemoteRoleMapping": [
+          {
+            "LocalRole": "Administrator",
+            "RemoteUser": "cn=Manager,dc=example,dc=org"
+          },
+          {
+            "LocalRole": "Administrator",
+            "RemoteGroup": "cn=Admins,ou=Groups,dc=example,dc=org"
+          },
+          {
+            "LocalRole": "Operator",
+            "RemoteGroup": "cn=PowerUsers,ou=Groups,dc=example,dc=org"
+          },
+          {
+            "LocalRole": "ReadOnly",
+            "RemoteGroup": "(cn=*)"
+          }
+        ],
+        "ServiceAddresses": [
+          "ldaps://ldap.example.org:636"
+        ],
+        "ServiceEnabled": false
+      },
+      "LocalAccountAuth": "Enabled",
+      "MinPasswordLength": 8,
+      "Name": "Account Service",
+      "Roles": {
+        "@odata.id": "/redfish/v1/AccountService/Roles"
+      },
+      "ServiceEnabled": true,
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Accounts": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Accounts",
+      "@odata.type": "#ManagerAccountCollection.ManagerAccountCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/AccountService/Accounts/1"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Accounts Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Accounts/1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Accounts/1",
+      "@odata.type": "#ManagerAccount.v1_14_2.ManagerAccount",
+      "AccountTypes": [
+        "Redfish"
+      ],
+      "Certificates": {
+        "@odata.id": "/redfish/v1/AccountService/Accounts/1/Certificates"
+      },
+      "Description": "User Account",
+      "Enabled": true,
+      "Id": "1",
+      "Links": {
+        "Role": {
+          "@odata.id": "/redfish/v1/AccountService/Roles/Administrator"
+        }
+      },
+      "Locked": false,
+      "Name": "User Account",
+      "Password": "REMOVIDO",
+      "PasswordChangeRequired": false,
+      "RoleId": "Administrator",
+      "UserName": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/AccountService/Roles/Administrator": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/AccountService/Roles/Administrator",
+      "@odata.type": "#Role.v1_3_3.Role",
+      "AssignedPrivileges": [
+        "Login",
+        "ConfigureManager",
+        "ConfigureUsers",
+        "ConfigureSelf",
+        "ConfigureComponents"
+      ],
+      "Description": "Admin User Role",
+      "Id": "Administrator",
+      "IsPredefined": true,
+      "Name": "User Role",
+      "OemPrivileges": [
+        "OemClearLog",
+        "OemPowerControl"
+      ],
+      "RoleId": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis",
+      "@odata.type": "#ChassisCollection.ChassisCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Chassis Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower",
+      "@odata.type": "#Chassis.v1_29_0.Chassis",
+      "AssetTag": "Memphis-45Z-2381",
+      "ChassisType": "StandAlone",
+      "DepthMm": 711,
+      "EnvironmentMetrics": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/EnvironmentMetrics"
+      },
+      "HeightMm": 434.5,
+      "Id": "Tower",
+      "IndicatorLED": "Lit",
+      "Links": {
+        "ComputerSystems": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+          }
+        ],
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-1"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-0"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-1"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-3"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-4"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-5"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-6"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-7"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-0"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-1"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-3"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-4"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-5"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-6"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-7"
+          }
+        ],
+        "ManagedBy": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ],
+        "ManagersInChassis": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ]
+      },
+      "Location": {
+        "PostalAddress": {
+          "City": "Memphis",
+          "Country": "US",
+          "HouseNumber": 1100,
+          "Name": "DMTF",
+          "PostalCode": "38138",
+          "Seat": "D326",
+          "Street": "1001 SW 5th Avenue",
+          "Territory": "TN"
+        }
+      },
+      "Manufacturer": "Contoso",
+      "Model": "3500TX",
+      "Name": "Computer System Chassis",
+      "NetworkAdapters": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters"
+      },
+      "PCIeDevices": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices"
+      },
+      "PCIeSlots": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/PCIeSlots"
+      },
+      "PartNumber": "224071-J23",
+      "Power": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/Power"
+      },
+      "Power@Redfish.Deprecated": "Please migrate to use /redfish/v1/Chassis/Tower/PowerSubsystem",
+      "PowerState": "On",
+      "PowerSubsystem": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/PowerSubsystem"
+      },
+      "SKU": "8675309",
+      "Sensors": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/Sensors"
+      },
+      "SerialNumber": "437XR1238R2",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "Thermal": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/Thermal"
+      },
+      "Thermal@Redfish.Deprecated": "Please migrate to use /redfish/v1/Chassis/Tower/ThermalSubsystem",
+      "ThermalSubsystem": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/ThermalSubsystem"
+      },
+      "WeightKg": 42.31,
+      "WidthMm": 217.8
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-0": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-0",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 20266198323167230,
+      "Id": "Disk-1-0",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Scratchpad"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "SAS 18000",
+      "Name": "Disk 1-0",
+      "NegotiatedSpeedGbs": 12,
+      "Protocol": "SAS",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-1",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 20266198323167230,
+      "Id": "Disk-1-1",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "SAS 18000",
+      "Name": "Disk 1-1",
+      "NegotiatedSpeedGbs": 12,
+      "Protocol": "SAS",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-2",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 20266198323167230,
+      "Id": "Disk-1-2",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "SAS 18000",
+      "Name": "Disk 1-2",
+      "NegotiatedSpeedGbs": 12,
+      "Protocol": "SAS",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-3": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-3",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 12,
+      "CapacityBytes": 20266198323167230,
+      "Id": "Disk-1-3",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "HDD",
+      "Model": "SAS 18000",
+      "Name": "Disk 1-3",
+      "NegotiatedSpeedGbs": 12,
+      "Protocol": "SAS",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-4": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-4",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-1-4",
+      "IndicatorLED": "Off",
+      "Name": "Disk 1-4",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-5": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-5",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-1-5",
+      "IndicatorLED": "Off",
+      "Name": "Disk 1-5",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-6": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-6",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-1-6",
+      "IndicatorLED": "Off",
+      "Name": "Disk 1-6",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-1-7": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-7",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-1-7",
+      "IndicatorLED": "Off",
+      "Name": "Disk 1-7",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-0": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-0",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "Disk-2-0",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/AssetCache"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "Name": "Disk 2-0",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-1",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "Disk-2-1",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/AssetCache"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "Name": "Disk 2-1",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-2",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "Disk-2-2",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/RenderVol"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "Name": "Disk 2-2",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-3": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-3",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "Disk-2-3",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/RenderVol"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "Name": "Disk 2-3",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-4": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-4",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-2-4",
+      "IndicatorLED": "Off",
+      "Name": "Disk 2-4",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-5": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-5",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-2-5",
+      "IndicatorLED": "Off",
+      "Name": "Disk 2-5",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-6": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-6",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-2-6",
+      "IndicatorLED": "Off",
+      "Name": "Disk 2-6",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/Disk-2-7": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-7",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Id": "Disk-2-7",
+      "IndicatorLED": "Off",
+      "Name": "Disk 2-7",
+      "Status": {
+        "Health": "OK",
+        "State": "Absent"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/M.2-1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-1",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "M.2-1",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes/Boot"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "Name": "M.2 1",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Drives/M.2-2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-2",
+      "@odata.type": "#Drive.v1_22_0.Drive",
+      "Actions": {
+        "#Drive.FreezePersonality": {
+          "target": "/redfish/v1/Chassis/Tower/Drives/M.2-2/Actions/Drive.FreezePersonality"
+        },
+        "#Drive.GetPersonalityNonce": {
+          "target": "/redfish/v1/Chassis/Tower/Drives/M.2-2/Actions/Drive.GetPersonalityNonce"
+        },
+        "#Drive.RevertPersonalitiesToDefaults": {
+          "target": "/redfish/v1/Chassis/Tower/Drives/M.2-2/Actions/Drive.RevertPersonalitiesToDefaults"
+        },
+        "#Drive.SetPersonalityKey": {
+          "target": "/redfish/v1/Chassis/Tower/Drives/M.2-2/Actions/Drive.SetPersonalityKey"
+        },
+        "#Drive.UnfreezePersonality": {
+          "target": "/redfish/v1/Chassis/Tower/Drives/M.2-2/Actions/Drive.UnfreezePersonality"
+        }
+      },
+      "CapableSpeedGbs": 32,
+      "CapacityBytes": 1125899906842624,
+      "Id": "M.2-2",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Volumes": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes/Boot"
+          }
+        ]
+      },
+      "Manufacturer": "Contoso",
+      "MediaType": "SSD",
+      "Model": "NVMe 1000",
+      "NVMe": {
+        "ActivePersonalities": [
+          {
+            "ChangeAffectsUserData": true,
+            "Default": false,
+            "Frozen": false,
+            "Identifier": 0,
+            "MinimumRequiredResetType": "NVMSubsystemReset",
+            "Pending": false,
+            "UnfreezeAuthenticationModes": [
+              "ProgrammedKey",
+              "PhysicalId"
+            ]
+          },
+          {
+            "ChangeAffectsUserData": true,
+            "Data": "AAFF0000FFFFFFFF",
+            "Default": false,
+            "Frozen": true,
+            "Identifier": 1,
+            "MinimumRequiredResetType": "NVMSubsystemReset",
+            "Pending": false,
+            "UnfreezeAuthenticationModes": [
+              "ProgrammedKey",
+              "PhysicalId"
+            ]
+          },
+          {
+            "ChangeAffectsUserData": false,
+            "Data": "00",
+            "Default": false,
+            "Frozen": false,
+            "Identifier": 245,
+            "MinimumRequiredResetType": "NoReset",
+            "Pending": false,
+            "UnfreezeAuthenticationModes": [
+              "ProgrammedKey",
+              "PhysicalId"
+            ]
+          }
+        ]
+      },
+      "Name": "M.2 2",
+      "NegotiatedSpeedGbs": 32,
+      "Protocol": "NVMe",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "StatusIndicator": "OK"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/NetworkAdapters": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters",
+      "@odata.type": "#NetworkAdapterCollection.NetworkAdapterCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Network Adapter Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/NetworkAdapters/NIC1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1",
+      "@odata.type": "#NetworkAdapter.v1_14_0.NetworkAdapter",
+      "Controllers": [
+        {
+          "ControllerCapabilities": {
+            "DataCenterBridging": {
+              "Capable": true
+            },
+            "NPAR": {
+              "NparCapable": true,
+              "NparEnabled": false
+            },
+            "NPIV": {
+              "MaxDeviceLogins": 4,
+              "MaxPortLogins": 2
+            },
+            "NetworkDeviceFunctionCount": 2,
+            "NetworkPortCount": 2,
+            "VirtualizationOffload": {
+              "SRIOV": {
+                "SRIOVEnabled": true,
+                "SRIOVVEPACapable": true
+              },
+              "VirtualFunction": {
+                "DeviceMaxCount": 256,
+                "MinAssignmentGroupSize": 4,
+                "NetworkPortMaxCount": 128
+              }
+            }
+          },
+          "FirmwarePackageVersion": "7.4.10",
+          "Links": {
+            "NetworkDeviceFunctions": [
+              {
+                "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/NetworkDeviceFunctions/1"
+              }
+            ],
+            "PCIeDevices": [
+              {
+                "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/IntegratedNIC"
+              }
+            ]
+          },
+          "Location": {
+            "PartLocation": {
+              "LocationOrdinalValue": 0,
+              "LocationType": "Slot",
+              "Orientation": "LeftToRight",
+              "Reference": "Rear",
+              "ServiceLabel": "NIC Daughter Card"
+            }
+          },
+          "PCIeInterface": {
+            "LanesInUse": 2,
+            "MaxLanes": 4,
+            "MaxPCIeType": "Gen3",
+            "PCIeType": "Gen2"
+          }
+        }
+      ],
+      "Id": "NIC1",
+      "Manufacturer": "Contoso",
+      "Model": "2PNIC 2000",
+      "Name": "Network Adapter",
+      "NetworkDeviceFunctions": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/NetworkDeviceFunctions"
+      },
+      "PartNumber": "232-4598D7",
+      "Ports": {
+        "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports"
+      },
+      "SKU": "89587433",
+      "SerialNumber": "2M220100SL"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports",
+      "@odata.type": "#PortCollection.PortCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/2"
+        }
+      ],
+      "Members@odata.count": 2,
+      "Name": "Port Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/1",
+      "@odata.type": "#Port.v1_20_0.Port",
+      "CurrentSpeedGbps": 10,
+      "Description": "NIC Port 1",
+      "Enabled": true,
+      "Id": "1",
+      "Location": {
+        "PartLocation": {
+          "LocationOrdinalValue": 1,
+          "LocationType": "Connector",
+          "Orientation": "TopToBottom",
+          "Reference": "Rear",
+          "ServiceLabel": "NIC 1"
+        }
+      },
+      "MaxSpeedGbps": 10,
+      "Name": "NIC Port 1",
+      "PortId": "1",
+      "PortProtocol": "Ethernet",
+      "PortType": "BidirectionalPort",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "Width": 1
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/NetworkAdapters/NIC1/Ports/2",
+      "@odata.type": "#Port.v1_20_0.Port",
+      "CurrentSpeedGbps": 10,
+      "Description": "NIC Port 2",
+      "Enabled": true,
+      "Id": "2",
+      "Location": {
+        "PartLocation": {
+          "LocationOrdinalValue": 2,
+          "LocationType": "Connector",
+          "Orientation": "TopToBottom",
+          "Reference": "Rear",
+          "ServiceLabel": "NIC 1"
+        }
+      },
+      "MaxSpeedGbps": 10,
+      "Name": "NIC Port 2",
+      "PortId": "2",
+      "PortProtocol": "Ethernet",
+      "PortType": "BidirectionalPort",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "Width": 1
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Power": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Power",
+      "@odata.type": "#Power.v1_7_3.Power",
+      "Id": "Power",
+      "Name": "Power",
+      "PowerControl": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/PowerControl/0",
+          "MemberId": "0",
+          "Name": "System Input Power",
+          "PowerAllocatedWatts": 950,
+          "PowerAvailableWatts": 119,
+          "PowerCapacityWatts": 1045,
+          "PowerConsumedWatts": 926,
+          "PowerLimit": {
+            "CorrectionInMs": 50,
+            "LimitException": "LogEventOnly",
+            "LimitInWatts": 1045
+          },
+          "PowerMetrics": {
+            "AverageConsumedWatts": 827,
+            "IntervalInMin": 30,
+            "MaxConsumedWatts": 1030,
+            "MinConsumedWatts": 671
+          },
+          "PowerRequestedWatts": 950,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "PowerSupplies": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/PowerSupplies/0",
+          "FirmwareVersion": "1.00",
+          "InputRanges": [
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 120,
+              "MinimumVoltage": 100,
+              "OutputWattage": 800
+            },
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 240,
+              "MinimumVoltage": 200,
+              "OutputWattage": 1300
+            }
+          ],
+          "LastPowerOutputWatts": 463,
+          "LineInputVoltage": 120,
+          "LineInputVoltageType": "ACWideRange",
+          "Manufacturer": "Contoso Power",
+          "MemberId": "0",
+          "Model": "499253-B21",
+          "Name": "Power Supply Bay 1",
+          "PartNumber": "0000001A3A",
+          "PowerCapacityWatts": 1100,
+          "PowerSupplyType": "AC",
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "SerialNumber": "1Z0000001",
+          "SparePartNumber": "0000001A3A",
+          "Status": {
+            "Health": "Warning",
+            "State": "Enabled"
+          }
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/PowerSupplies/1",
+          "FirmwareVersion": "1.00",
+          "InputRanges": [
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 120,
+              "MinimumVoltage": 100,
+              "OutputWattage": 800
+            },
+            {
+              "InputType": "AC",
+              "MaximumVoltage": 240,
+              "MinimumVoltage": 200,
+              "OutputWattage": 1300
+            }
+          ],
+          "LastPowerOutputWatts": 463,
+          "LineInputVoltage": 120,
+          "LineInputVoltageType": "ACWideRange",
+          "Manufacturer": "Contoso Power",
+          "MemberId": "1",
+          "Model": "499253-B21",
+          "Name": "Power Supply Bay 2",
+          "PartNumber": "0000001A3A",
+          "PowerCapacityWatts": 1100,
+          "PowerSupplyType": "AC",
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "SerialNumber": "1Z0000002",
+          "SparePartNumber": "0000001A3A",
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Redundancy": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/Redundancy/0",
+          "MaxNumSupported": 2,
+          "MemberId": "0",
+          "MinNumNeeded": 1,
+          "Mode": "N+m",
+          "Name": "PowerSupply Redundancy Group 1",
+          "RedundancySet": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Power#/PowerSupplies/0"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Power#/PowerSupplies/1"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Voltages": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/Voltages/0",
+          "LowerThresholdCritical": 11,
+          "LowerThresholdFatal": 10,
+          "LowerThresholdNonCritical": 11.5,
+          "MaxReadingRange": 20,
+          "MemberId": "0",
+          "MinReadingRange": 0,
+          "Name": "VRM1 Voltage",
+          "PhysicalContext": "VoltageRegulator",
+          "ReadingVolts": 12.1,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "SensorNumber": 11,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 13,
+          "UpperThresholdFatal": 15,
+          "UpperThresholdNonCritical": 12.5
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Power#/Voltages/1",
+          "LowerThresholdCritical": 4.5,
+          "LowerThresholdNonCritical": 4.75,
+          "MaxReadingRange": 20,
+          "MemberId": "1",
+          "MinReadingRange": 0,
+          "Name": "VRM2 Voltage",
+          "PhysicalContext": "VoltageRegulator",
+          "ReadingVolts": 4.9,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "SensorNumber": 12,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 7,
+          "UpperThresholdNonCritical": 5.5
+        }
+      ]
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Chassis/Tower/Thermal": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Chassis/Tower/Thermal",
+      "@odata.type": "#Thermal.v1_7_3.Thermal",
+      "Fans": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Fans/0",
+          "LowerThresholdFatal": 0,
+          "MaxReadingRange": 5000,
+          "MemberId": "0",
+          "MinReadingRange": 0,
+          "Name": "BaseBoard System Fan",
+          "PhysicalContext": "Backplane",
+          "Reading": 2100,
+          "ReadingUnits": "RPM",
+          "Redundancy": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Redundancy/0"
+            }
+          ],
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Fans/1",
+          "LowerThresholdFatal": 0,
+          "MaxReadingRange": 5000,
+          "MemberId": "1",
+          "MinReadingRange": 0,
+          "Name": "BaseBoard System Fan Backup",
+          "PhysicalContext": "Backplane",
+          "Reading": 2050,
+          "ReadingUnits": "RPM",
+          "Redundancy": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Redundancy/0"
+            }
+          ],
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Id": "Thermal",
+      "Name": "Thermal",
+      "Redundancy": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Redundancy/0",
+          "MaxNumSupported": 2,
+          "MemberId": "0",
+          "MinNumNeeded": 1,
+          "Mode": "N+m",
+          "Name": "BaseBoard System Fans",
+          "RedundancySet": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Fans/0"
+            },
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Fans/1"
+            }
+          ],
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "Temperatures": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Temperatures/0",
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "0",
+          "MinReadingRangeTemp": 0,
+          "Name": "CPU1 Temp",
+          "PhysicalContext": "CPU",
+          "ReadingCelsius": 41,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2/Processors/CPU1"
+            }
+          ],
+          "SensorNumber": 5,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 45,
+          "UpperThresholdFatal": 48,
+          "UpperThresholdNonCritical": 42
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Temperatures/1",
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "1",
+          "MinReadingRangeTemp": 0,
+          "Name": "CPU2 Temp",
+          "PhysicalContext": "CPU",
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2/Processors/CPU2"
+            }
+          ],
+          "SensorNumber": 6,
+          "Status": {
+            "State": "Disabled"
+          },
+          "UpperThresholdCritical": 45,
+          "UpperThresholdFatal": 48,
+          "UpperThresholdNonCritical": 42
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Thermal#/Temperatures/2",
+          "LowerThresholdCritical": 5,
+          "LowerThresholdFatal": 0,
+          "LowerThresholdNonCritical": 10,
+          "MaxReadingRangeTemp": 60,
+          "MemberId": "2",
+          "MinReadingRangeTemp": 0,
+          "Name": "Chassis Intake Temp",
+          "PhysicalContext": "Intake",
+          "ReadingCelsius": 25,
+          "RelatedItem": [
+            {
+              "@odata.id": "/redfish/v1/Chassis/Tower"
+            },
+            {
+              "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+            }
+          ],
+          "SensorNumber": 9,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "UpperThresholdCritical": 40,
+          "UpperThresholdFatal": 50,
+          "UpperThresholdNonCritical": 30
+        }
+      ]
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers",
+      "@odata.type": "#ManagerCollection.ManagerCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Manager Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC",
+      "@odata.type": "#Manager.v1_25_0.Manager",
+      "Actions": {
+        "#Manager.Reset": {
+          "ResetType@Redfish.AllowableValues": [
+            "ForceRestart",
+            "GracefulRestart"
+          ],
+          "target": "/redfish/v1/Managers/BMC/Actions/Manager.Reset"
+        }
+      },
+      "CommandShell": {
+        "ConnectTypesSupported": [
+          "Telnet",
+          "SSH"
+        ],
+        "MaxConcurrentSessions": 4,
+        "ServiceEnabled": true
+      },
+      "DateTime": "2015-03-13T04:14:33+06:00",
+      "DateTimeLocalOffset": "+06:00",
+      "Description": "Contoso BMC",
+      "EthernetInterfaces": {
+        "@odata.id": "/redfish/v1/Managers/BMC/EthernetInterfaces"
+      },
+      "FirmwareVersion": "1.45.455b66-rev4",
+      "GraphicalConsole": {
+        "ConnectTypesSupported": [
+          "KVMIP"
+        ],
+        "MaxConcurrentSessions": 2,
+        "ServiceEnabled": true
+      },
+      "Id": "BMC",
+      "Links": {
+        "ManagerForChassis": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower"
+          }
+        ],
+        "ManagerForServers": [
+          {
+            "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+          }
+        ],
+        "ManagerInChassis": {
+          "@odata.id": "/redfish/v1/Chassis/Tower"
+        }
+      },
+      "LogServices": {
+        "@odata.id": "/redfish/v1/Managers/BMC/LogServices"
+      },
+      "ManagerType": "BMC",
+      "Model": "Joo Janta 200",
+      "Name": "Manager",
+      "NetworkProtocol": {
+        "@odata.id": "/redfish/v1/Managers/BMC/NetworkProtocol"
+      },
+      "PowerState": "On",
+      "SerialConsole": {
+        "ConnectTypesSupported": [
+          "Telnet",
+          "SSH",
+          "IPMI"
+        ],
+        "MaxConcurrentSessions": 1,
+        "ServiceEnabled": true
+      },
+      "SerialInterfaces": {
+        "@odata.id": "/redfish/v1/Managers/BMC/SerialInterfaces"
+      },
+      "ServiceEntryPointUUID": "92384634-2938-2342-8820-489239905423",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      },
+      "UUID": "58893887-8974-2487-2389-841168418919",
+      "VirtualMedia": {
+        "@odata.id": "/redfish/v1/Managers/BMC/VirtualMedia"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices",
+      "@odata.type": "#LogServiceCollection.LogServiceCollection",
+      "Description": "Collection of Log Services for this Manager",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Log Service Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices/Log": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log",
+      "@odata.type": "#LogService.v1_9_0.LogService",
+      "Actions": {
+        "#LogService.ClearLog": {
+          "target": "/redfish/v1/Managers/BMC/LogServices/Log/Actions/LogService.ClearLog"
+        }
+      },
+      "DateTime": "2015-03-13T04:14:33+06:00",
+      "DateTimeLocalOffset": "+06:00",
+      "Entries": {
+        "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries"
+      },
+      "Id": "Log",
+      "MaxNumberOfRecords": 1000,
+      "Name": "System Log Service",
+      "OverWritePolicy": "WrapsWhenFull",
+      "ServiceEnabled": true,
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Managers/BMC/LogServices/Log/Entries": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries",
+      "@odata.type": "#LogEntryCollection.LogEntryCollection",
+      "Description": "Collection of Logs for this System",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Managers/BMC/LogServices/Log/Entries/1",
+          "@odata.type": "#LogEntry.v1_22_0.LogEntry",
+          "Created": "2012-03-07T14:44:00Z",
+          "EntryType": "Event",
+          "Id": "1",
+          "Links": {
+            "OriginOfCondition": {
+              "@odata.id": "/redfish/v1/Chassis/Tower/Thermal"
+            }
+          },
+          "Message": "System May be Melting",
+          "MessageArgs": [
+            "88"
+          ],
+          "MessageId": "Event.1.0.TempWayTooHot",
+          "Name": "Log Entry 1",
+          "SensorNumber": 1,
+          "Severity": "Critical"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Log Service Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/SessionService/Sessions/1234567890ABCDEF1": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/SessionService/Sessions/1234567890ABCDEF1",
+      "Id": "1234567890ABCDEF1",
+      "Password": "REMOVIDO",
+      "UserName": "Administrator"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems",
+      "@odata.type": "#ComputerSystemCollection.ComputerSystemCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Computer System Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2",
+      "@odata.type": "#ComputerSystem.v1_29_0.ComputerSystem",
+      "Actions": {
+        "#ComputerSystem.Reset": {
+          "ResetType@Redfish.AllowableValues": [
+            "On",
+            "ForceOff",
+            "GracefulShutdown",
+            "GracefulRestart",
+            "ForceRestart",
+            "Nmi",
+            "ForceOn",
+            "PushPowerButton"
+          ],
+          "target": "/redfish/v1/Systems/437XR1238R2/Actions/ComputerSystem.Reset"
+        },
+        "Oem": {
+          "#Contoso.Reset": {
+            "target": "/redfish/v1/Systems/437XR1238R2/Oem/Contoso/Actions/Contoso.Reset"
+          }
+        }
+      },
+      "AssetTag": "Memphis-45Z-2381",
+      "Bios": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Bios"
+      },
+      "BiosVersion": "P79 v1.95 (12/06/2019)",
+      "Boot": {
+        "BootSourceOverrideEnabled": "Disabled",
+        "BootSourceOverrideMode": "UEFI",
+        "BootSourceOverrideTarget": "Hdd",
+        "BootSourceOverrideTarget@Redfish.AllowableValues": [
+          "None",
+          "Pxe",
+          "Cd",
+          "Usb",
+          "Hdd",
+          "BiosSetup",
+          "Utilities",
+          "Diags",
+          "SDCard",
+          "UefiTarget"
+        ],
+        "UefiTargetBootSourceOverride": "/0x31/0x33/0x01/0x01"
+      },
+      "Description": "Development Rendering Server",
+      "EthernetInterfaces": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/EthernetInterfaces"
+      },
+      "GraphicsControllers": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/GraphicsControllers"
+      },
+      "HostName": "devrender2",
+      "HostingRoles": [
+        "ApplicationServer"
+      ],
+      "Id": "437XR1238R2",
+      "IndicatorLED": "Off",
+      "Links": {
+        "Chassis": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower"
+          }
+        ],
+        "ManagedBy": [
+          {
+            "@odata.id": "/redfish/v1/Managers/BMC"
+          }
+        ]
+      },
+      "LogServices": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/LogServices"
+      },
+      "Manufacturer": "Contoso",
+      "Memory": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Memory"
+      },
+      "MemorySummary": {
+        "MemoryMirroring": "None",
+        "Status": {
+          "Health": "OK",
+          "HealthRollup": "OK",
+          "State": "Enabled"
+        },
+        "TotalSystemMemoryGiB": 1024,
+        "TotalSystemPersistentMemoryGiB": 0
+      },
+      "Model": "3500",
+      "Name": "Dev-Render-2",
+      "NetworkInterfaces": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/NetworkInterfaces"
+      },
+      "Oem": {
+        "Chipwise": {
+          "@odata.type": "#Chipwise.ComputerSystem",
+          "Style": "Executive"
+        },
+        "Contoso": {
+          "@odata.type": "#Contoso.ComputerSystem",
+          "ProductionLocation": {
+            "Country": "USA",
+            "FacilityName": "Tennessee Development Facility"
+          }
+        }
+      },
+      "PCIeDevices": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/Slot1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/Slot2"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/Slot3"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/Slot4"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/IntegratedNIC"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/IntegratedNVMe1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/IntegratedNVMe2"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/IntegratedRAID"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/PCIeDevices/EmbeddedNVMeBridge"
+        }
+      ],
+      "PartNumber": "224071-J23",
+      "PowerState": "On",
+      "ProcessorSummary": {
+        "CoreCount": 128,
+        "Count": 8,
+        "LogicalProcessorCount": 256,
+        "Model": "Intel(R) Xeon(R) Gold 5218 2.3GHz",
+        "Status": {
+          "Health": "OK",
+          "HealthRollup": "OK",
+          "State": "Enabled"
+        }
+      },
+      "Processors": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Processors"
+      },
+      "SKU": "8675309",
+      "SecureBoot": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/SecureBoot"
+      },
+      "SerialNumber": "437XR1238R2",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "Storage": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage"
+      },
+      "SubModel": "TX",
+      "SystemType": "Physical",
+      "TrustedModules": [
+        {
+          "FirmwareVersion": "1.13b",
+          "InterfaceType": "TPM1_2",
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          }
+        }
+      ],
+      "USBControllers": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/USBControllers"
+      },
+      "UUID": "38947555-7742-3448-3784-823347823834"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage",
+      "@odata.type": "#StorageCollection.StorageCollection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/HAFiberChannel"
+        }
+      ],
+      "Members@odata.count": 4,
+      "Name": "Storage Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/HAFiberChannel": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/HAFiberChannel",
+      "@odata.type": "#Storage.v1_23_0.Storage",
+      "Description": "Fiber Channel HA Domain",
+      "Id": "HAFiberChannel",
+      "Name": "Fiber Channel HA Domain",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "StorageControllers": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/HAFiberChannel#/StorageControllers/0",
+          "FirmwareVersion": "4.5.44",
+          "Manufacturer": "Contoso",
+          "MemberId": "0",
+          "Model": "SuperFC 5000",
+          "Name": "SuperFC 5000",
+          "PartNumber": "232-4598D7",
+          "SKU": "89587433",
+          "SerialNumber": "2M220100SL",
+          "SpeedGbps": 64,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedDeviceProtocols": [
+            "FC"
+          ]
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/HAFiberChannel#/StorageControllers/1",
+          "FirmwareVersion": "4.5.44",
+          "Manufacturer": "Contoso",
+          "MemberId": "1",
+          "Model": "SuperFC 5000",
+          "Name": "SuperFC 5000",
+          "PartNumber": "232-4598D7",
+          "SKU": "89587433",
+          "SerialNumber": "2M220100SM",
+          "SpeedGbps": 64,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedDeviceProtocols": [
+            "FC"
+          ]
+        }
+      ],
+      "Volumes": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID",
+      "@odata.type": "#Storage.v1_23_0.Storage",
+      "Description": "Contoso SW RAID",
+      "Drives": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-2"
+        }
+      ],
+      "Id": "NVMeSWRAID",
+      "Name": "SW RAID for Integrated NVMe Boot Drives",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "StorageControllers": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID#/StorageControllers/0",
+          "MemberId": "0",
+          "Name": "Contoso SW RAID",
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedDeviceProtocols": [
+            "NVMe"
+          ],
+          "SupportedRAIDTypes": [
+            "RAID0",
+            "RAID1"
+          ]
+        }
+      ],
+      "Volumes": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes",
+      "@odata.type": "#VolumeCollection.VolumeCollection",
+      "Description": "Storage Volume Collection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes/Boot"
+        }
+      ],
+      "Members@odata.count": 1,
+      "Name": "Storage Volume Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes/Boot": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSWRAID/Volumes/Boot",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "CapacityBytes": 1125899906842624,
+      "Encrypted": false,
+      "Id": "Boot",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-1"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/M.2-2"
+          }
+        ]
+      },
+      "Name": "Boot/Application Volume",
+      "RAIDType": "RAID1",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary",
+      "@odata.type": "#Storage.v1_23_0.Storage",
+      "Description": "Contoso HW RAID",
+      "Drives": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-0"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-2"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-3"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-4"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-5"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-6"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-7"
+        }
+      ],
+      "Id": "NVMeSecondary",
+      "Name": "Secondary NVMe Storage",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "StorageControllers": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary#/StorageControllers/0",
+          "MemberId": "0",
+          "Name": "NVMe Bridge",
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedDeviceProtocols": [
+            "NVMe"
+          ],
+          "SupportedRAIDTypes": [
+            "None"
+          ]
+        }
+      ],
+      "Volumes": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes",
+      "@odata.type": "#VolumeCollection.VolumeCollection",
+      "Description": "Storage Volume Collection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/RenderVol"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/AssetCache"
+        }
+      ],
+      "Members@odata.count": 2,
+      "Name": "Storage Volume Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/AssetCache": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/AssetCache",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "CapacityBytes": 2251799813685248,
+      "Encrypted": false,
+      "Id": "AssetCache",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-0"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-1"
+          }
+        ]
+      },
+      "Name": "Local Cache for Assets",
+      "RAIDType": "None",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/RenderVol": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/NVMeSecondary/Volumes/RenderVol",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "CapacityBytes": 2251799813685248,
+      "Encrypted": false,
+      "Id": "RenderVol",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-2-3"
+          }
+        ]
+      },
+      "Name": "Local Render Storage",
+      "RAIDType": "None",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated",
+      "@odata.type": "#Storage.v1_23_0.Storage",
+      "Description": "Contoso HW RAID",
+      "Drives": [
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-0"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-1"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-2"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-3"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-4"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-5"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-6"
+        },
+        {
+          "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-7"
+        }
+      ],
+      "Id": "RAIDIntegrated",
+      "Name": "Integrated RAID for SAS/SATA Drives",
+      "Status": {
+        "Health": "OK",
+        "HealthRollup": "OK",
+        "State": "Enabled"
+      },
+      "StorageControllers": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated#/StorageControllers/0",
+          "AssetTag": "8675309",
+          "ControllerRates": {
+            "ConsistencyCheckRatePercent": 15,
+            "RebuildRatePercent": 30
+          },
+          "FirmwareVersion": "23.13.06.0006",
+          "Manufacturer": "Contoso",
+          "MemberId": "0",
+          "Model": "RAID 16oz can",
+          "Name": "Contoso HW RAID",
+          "PartNumber": "88/476363",
+          "SKU": "7687121",
+          "SerialNumber": "2M220100SL",
+          "SpeedGbps": 12,
+          "Status": {
+            "Health": "OK",
+            "State": "Enabled"
+          },
+          "SupportedControllerProtocols": [
+            "PCIe"
+          ],
+          "SupportedDeviceProtocols": [
+            "SAS",
+            "SATA"
+          ],
+          "SupportedRAIDTypes": [
+            "None",
+            "RAID0",
+            "RAID1",
+            "RAID5",
+            "RAID6",
+            "RAID10",
+            "RAID50",
+            "RAID60"
+          ]
+        }
+      ],
+      "Volumes": {
+        "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes",
+      "@odata.type": "#VolumeCollection.VolumeCollection",
+      "Description": "Storage Volume Collection",
+      "Members": [
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Scratchpad"
+        },
+        {
+          "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary"
+        }
+      ],
+      "Members@odata.count": 2,
+      "Name": "Storage Volume Collection"
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Scratchpad": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Scratchpad",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "CapacityBytes": 20266198323167230,
+      "Encrypted": false,
+      "Id": "Scratchpad",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-0"
+          }
+        ]
+      },
+      "Name": "Scratchpad Volume",
+      "RAIDType": "None",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "GET /redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary": {
+    "corpo": {
+      "@odata.id": "/redfish/v1/Systems/437XR1238R2/Storage/RAIDIntegrated/Volumes/Secondary",
+      "@odata.type": "#Volume.v1_11_0.Volume",
+      "CapacityBytes": 40532396646334460,
+      "Encrypted": false,
+      "Id": "Secondary",
+      "Identifiers": [
+        {
+          "DurableName": "38f1818b-111e-463a-aa19-fa54f792e468",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "Links": {
+        "Drives": [
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-1"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-2"
+          },
+          {
+            "@odata.id": "/redfish/v1/Chassis/Tower/Drives/Disk-1-3"
+          }
+        ]
+      },
+      "Name": "Scratchpad Volume",
+      "RAIDType": "RAID5",
+      "Status": {
+        "Health": "OK",
+        "State": "Enabled"
+      }
+    },
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  },
+  "POST /redfish/v1/SessionService/Sessions": {
+    "erro": "",
+    "erro_tipo": "",
+    "local": "/redfish/v1/SessionService/Sessions/1234567890ABCDEF1",
+    "status": 204
+  }
+}

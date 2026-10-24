@@ -1,0 +1,2839 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MSscan — Dell Inc. PowerEdge R640</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px 16px; background: #f6f8fa; color: #1f2328;
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 980px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin: 0 0 4px; }
+h2 { font-size: 1.2rem; margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #d0d7de; }
+.sub { color: #57606a; margin: 0 0 16px; }
+.cartao { background: #fff; border: 1px solid #d0d7de; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.veredito { font-size: 1.1rem; font-weight: 600; }
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px 24px; }
+.grade div span { display: block; color: #57606a; font-size: .85rem; }
+.comp { border-left: 6px solid var(--cor); }
+.comp h3 { margin: 0 0 4px; font-size: 1.05rem; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.selo { display: inline-block; padding: 1px 10px; border-radius: 999px; font-size: .8rem; font-weight: 600;
+  color: var(--cor); background: var(--fundo); border: 1px solid var(--cor); }
+.fonte { color: #57606a; font-size: .85rem; }
+ul { margin: 6px 0 0; padding-left: 20px; }
+li { margin: 2px 0; }
+.problemas li { color: #1f2328; }
+.explicacao { background: #fff8e1; border-radius: 6px; padding: 8px 12px; margin-top: 8px; }
+.pendente { color: #57606a; font-style: italic; }
+details { margin-top: 8px; }
+summary { cursor: pointer; color: #0969da; }
+table { border-collapse: collapse; width: 100%; font-size: .85rem; }
+th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid #d0d7de; vertical-align: top; }
+.tabela { overflow-x: auto; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85rem; }
+pre { white-space: pre-wrap; word-break: break-word; background: #f6f8fa; padding: 8px; border-radius: 6px; }
+footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center; }
+.ev-ok { color: #1a7f37; font-weight: 600; }
+.ev-falha { color: #cf222e; font-weight: 600; background: #ffebe9; border-radius: 4px; padding: 0 4px; }
+@media print { body { background: #fff; } details { display: none; } .cartao { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>MSscan — Dell Inc. PowerEdge R640</h1>
+<p class="sub">Diagnóstico de 14/10/2026 18:15 · MSscan 1.0.1 · modo de demonstração</p>
+<div class="cartao veredito">Servidor diagnosticado com sucesso (todos os componentes verificados). Resultado: 4 alertas e nenhuma falha.</div>
+
+<div class="cartao grade"><div><span>Fabricante</span>Dell Inc.</div><div><span>Modelo</span>PowerEdge R640</div><div><span>BIOS</span>2.21.2</div><div><span>IPMI</span>2.0 disponível</div><div><span>Redfish</span>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</div><div><span>Controladoras de armazenamento</span>Intel Corporation C620 Series Chipset Family SSATA Controller [RAID mode] (ahci), Intel Corporation C620 Series Chipset Family SATA Controller [RAID mode] (ahci)</div><div><span>Ferramentas do fabricante</span>nenhuma</div></div>
+<div class="cartao"><strong>Rede:</strong> Rede OK: cabo, endereço IP e acesso HTTPS confirmados.</div>
+
+
+<div class="cartao"><strong>Banco de compatibilidade (dica; a detecção prevalece):</strong> Dell PowerEdge R640 — iDRAC9, 14ª geração (14G)<ul><li>Divergência com a detecção: O banco indica Redfish (iDRAC9), mas ele não foi confirmado neste equipamento: Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</li><li>Limitação conhecida: A Redfish Host Interface (SMBIOS tipo 42) pode estar desativada no iDRAC; nesse caso o endereço do Redfish vem do IP do iDRAC (ipmitool lan print 1), que precisa ser alcançável pela rede do MSscan.</li><li>Limitação conhecida: Sem credenciais do iDRAC, RAID de hardware (PERC) só é verificado com perccli64 em vendor/.</li></ul></div>
+<h2>Configuração do servidor</h2>
+<div class="cartao"><p>Configuração: 2 processadores, 2 pentes (16 GB), 2 fontes (1 com energia: sem redundância agora), 1 disco</p><ul><li><strong>Atenção:</strong> CPU2 sem nenhum pente de memória (o primeiro slot dela é o B1). O fabricante pede memória idêntica em cada processador num servidor com 2 processadores (ex.: pente no A1 → pente igual no B1); fora disso o servidor pode não iniciar, travar ao configurar a memória ou operar com memória reduzida.</li><li>CPU1: 2 pente(s) em 2 de 6 canais (funciona; desempenho máximo com um pente por canal).</li><li>Com duas fontes, o fabricante exige a mesma potência máxima e o mesmo tipo de etiqueta (ex.: EPP); misturar fontes de gerações anteriores não é suportado.</li></ul><p class="sub">Regras: Dell EMC PowerEdge R640 Installation and Service Manual (conferido em 01/10/2026).</p></div>
+
+<h2>Onde está o problema</h2>
+<div class="cartao"><svg viewBox="0 -24 1000 658" role="img" aria-label="Mapa do Dell PowerEdge R640 com as áreas com problema destacadas" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font:14px sans-serif"><rect x="0" y="30" width="957" height="550" fill="#161b22" stroke="#6e7681" stroke-width="2" rx="8"/><text x="4" y="-6" fill="#b1bac4">FRENTE ←</text><text x="940" y="-6" fill="#b1bac4" text-anchor="end">→ TRASEIRA</text><rect x="12" y="37" width="129" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Discos (frente)</title></rect><text x="18" y="55" fill="#b1bac4" font-weight="400">Discos</text><rect x="141" y="37" width="49" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Backplane de discos (atrás dos discos)</title></rect><text x="147" y="55" fill="#b1bac4" font-weight="400">BP</text><rect x="282" y="50" width="111" height="505" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Ventoinhas (fileira central)</title></rect><text x="288" y="68" fill="#b1bac4" font-weight="400">Ventoinhas</text><rect x="470" y="120" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU2 (lado esquerdo, visto da frente)</title></rect><text x="476" y="138" fill="#b1bac4" font-weight="400">CPU2</text><rect x="436" y="37" width="177" height="270" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>DIMMs B1–B12 (CPU2)</title></rect><text x="442" y="55" fill="#b1bac4" font-weight="400">DIMMs B</text><rect x="470" y="380" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU1 (lado direito, visto da frente)</title></rect><rect x="626" y="393" width="92" height="135" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Controladora de armazenamento (PERC, ao lado da CPU1)</title></rect><text x="632" y="411" fill="#b1bac4" font-weight="400">PERC</text><rect x="693" y="37" width="252" height="116" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Fonte 2 (PSU2, traseira, na borda)</title></rect><text x="699" y="55" fill="#b1bac4" font-weight="400">PSU2</text><rect x="730" y="276" width="215" height="190" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 2 (traseira, centro)</title></rect><rect x="730" y="466" width="215" height="104" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 1 (traseira, canto direito)</title></rect><rect x="436" y="307" width="177" height="263" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>DIMMs A1–A12 (CPU1)</title></rect><text x="442" y="325" fill="#ffdcd7" font-weight="700">DIMMs A — PROBLEMA</text><rect x="184" y="528" width="442" height="42" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Cabos SAS (controladora → backplane, junto à lateral direita)</title></rect><text x="190" y="546" fill="#ffdcd7" font-weight="700">Cabos SAS — PROBLEMA</text><rect x="693" y="153" width="252" height="117" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Fonte 1 (PSU1, traseira, a de dentro)</title></rect><text x="699" y="171" fill="#ffdcd7" font-weight="700">PSU1 — PROBLEMA</text><rect x="730" y="276" width="215" height="294" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Risers PCIe (traseira)</title></rect><text x="736" y="294" fill="#ffdcd7" font-weight="700">Risers — PROBLEMA</text></svg><p class="sub">vista de cima, frente à esquerda. Área destacada = problema (contorno vermelho grosso e o texto PROBLEMA).</p><table><thead><tr><th>Componente</th><th>Local físico</th><th>Problema</th></tr></thead><tbody><tr><td>Fontes de alimentação</td><td><strong>Fonte 1 (PSU1)</strong><br><small>Fonte 1 (PSU1, traseira, a de dentro)</small></td><td>Status: Presence detected, Power Supply AC lost</td></tr><tr><td>Memória</td><td><strong>DIMM A2 (CPU1)</strong><br><small>DIMMs A1–A12 (CPU1)</small></td><td>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 08/08/25 12:45:46 -03: Power Supply Status — Power Supply AC lost (10x)</td></tr><tr><td>Log do BMC</td><td><strong>Cabo SAS A0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS A0 — Config Error (5x)</td></tr><tr><td>Log do BMC</td><td><strong>Cabo SAS B0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS B0 — Config Error (5x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/18/26 13:45:58 -03: Processor Status — Presence detected (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/20/20 02:44:42 -03: System Firmwares POST Err — (2x)</td></tr><tr><td>Log do BMC</td><td><strong>DIMM A2 (CPU1)</strong><br><small>DIMMs A1–A12 (CPU1)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2)</td></tr><tr><td>Log do BMC</td><td><strong>Slot PCIe 1 (o riser exato depende da configuração)</strong><br><small>Risers PCIe (traseira)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt FatalPCIErrOnBus — (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Unknown Err Reg Pointer — (6x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS A0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS A0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS B0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS B0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Slot PCIe 1 (o riser exato depende da configuração)</strong><br><small>Risers PCIe (traseira)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (3x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt FatalPCIErrOnBus — (3x)</td></tr></tbody></table></div>
+
+<h2>Medido</h2>
+<p class="sub">Dados obtidos diretamente das ferramentas do equipamento. Nenhum dado é estimado: o que não pôde ser verificado aparece como “Não verificado”, com as tentativas feitas.</p>
+<section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Sensores / temperatura<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ipmitool sensor</div><p>35 sensor(es) lido(s); temperatura máxima 39 °C (Temp); 3 sem leitura ignorado(s)</p><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Thermal/Power)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sensor)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;sensores&quot;: [
+    {
+      &quot;nome&quot;: &quot;Temp&quot;,
+      &quot;valor&quot;: 37.0,
+      &quot;valor_bruto&quot;: &quot;37.000&quot;,
+      &quot;unidade&quot;: &quot;degrees C&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 3.0,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: 102.0,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Temp&quot;,
+      &quot;valor&quot;: 39.0,
+      &quot;valor_bruto&quot;: &quot;39.000&quot;,
+      &quot;unidade&quot;: &quot;degrees C&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 3.0,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: 102.0,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Inlet Temp&quot;,
+      &quot;valor&quot;: 22.0,
+      &quot;valor_bruto&quot;: &quot;22.000&quot;,
+      &quot;unidade&quot;: &quot;degrees C&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: -7.0,
+        &quot;lnc&quot;: 3.0,
+        &quot;unc&quot;: 43.0,
+        &quot;ucr&quot;: 47.0,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan1A&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;valor_bruto&quot;: &quot;6960.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan1B&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;valor_bruto&quot;: &quot;6480.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan2A&quot;,
+      &quot;valor&quot;: 6840.0,
+      &quot;valor_bruto&quot;: &quot;6840.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan2B&quot;,
+      &quot;valor&quot;: 6360.0,
+      &quot;valor_bruto&quot;: &quot;6360.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan3A&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;valor_bruto&quot;: &quot;6960.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan3B&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;valor_bruto&quot;: &quot;6480.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Current 1&quot;,
+      &quot;valor&quot;: 0.0,
+      &quot;valor_bruto&quot;: &quot;0.000&quot;,
+      &quot;unidade&quot;: &quot;Amps&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Current 2&quot;,
+      &quot;valor&quot;: 0.8,
+      &quot;valor_bruto&quot;: &quot;0.800&quot;,
+      &quot;unidade&quot;: &quot;Amps&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Voltage 1&quot;,
+      &quot;valor&quot;: 0.0,
+      &quot;valor_bruto&quot;: &quot;0.000&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Voltage 2&quot;,
+      &quot;valor&quot;: 112.0,
+      &quot;valor_bruto&quot;: &quot;112.000&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Pwr Consumption&quot;,
+      &quot;valor&quot;: 96.0,
+      &quot;valor_bruto&quot;: &quot;96.000&quot;,
+      &quot;unidade&quot;: &quot;Watts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: 840.0,
+        &quot;ucr&quot;: 912.0,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;IO Usage&quot;,
+      &quot;valor&quot;: 0.0,
+      &quot;valor_bruto&quot;: &quot;0.000&quot;,
+      &quot;unidade&quot;: &quot;percent&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: 101.0,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;MEM Usage&quot;,
+      &quot;valor&quot;: 6.0,
+      &quot;valor_bruto&quot;: &quot;6.000&quot;,
+      &quot;unidade&quot;: &quot;percent&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: 101.0,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;SYS Usage&quot;,
+      &quot;valor&quot;: 5.0,
+      &quot;valor_bruto&quot;: &quot;5.000&quot;,
+      &quot;unidade&quot;: &quot;percent&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: 101.0,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;CPU Usage&quot;,
+      &quot;valor&quot;: 1.0,
+      &quot;valor_bruto&quot;: &quot;1.000&quot;,
+      &quot;unidade&quot;: &quot;percent&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: 101.0,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan4A&quot;,
+      &quot;valor&quot;: 7080.0,
+      &quot;valor_bruto&quot;: &quot;7080.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan4B&quot;,
+      &quot;valor&quot;: 6720.0,
+      &quot;valor_bruto&quot;: &quot;6720.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan5A&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;valor_bruto&quot;: &quot;6960.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan5B&quot;,
+      &quot;valor&quot;: 6600.0,
+      &quot;valor_bruto&quot;: &quot;6600.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan6A&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;valor_bruto&quot;: &quot;6960.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan6B&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;valor_bruto&quot;: &quot;6480.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan7A&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;valor_bruto&quot;: &quot;6960.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan7B&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;valor_bruto&quot;: &quot;6480.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan8A&quot;,
+      &quot;valor&quot;: 6840.0,
+      &quot;valor_bruto&quot;: &quot;6840.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan8B&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;valor_bruto&quot;: &quot;6480.000&quot;,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 600.0,
+        &quot;lnc&quot;: 960.0,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Exhaust Temp&quot;,
+      &quot;valor&quot;: 28.0,
+      &quot;valor_bruto&quot;: &quot;28.000&quot;,
+      &quot;unidade&quot;: &quot;degrees C&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: 3.0,
+        &quot;lnc&quot;: 8.0,
+        &quot;unc&quot;: 75.0,
+        &quot;ucr&quot;: 80.0,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;VCORE VR&quot;,
+      &quot;valor&quot;: 1.78,
+      &quot;valor_bruto&quot;: &quot;1.780&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;VCORE VR&quot;,
+      &quot;valor&quot;: 1.78,
+      &quot;valor_bruto&quot;: &quot;1.780&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;MEM012 VR&quot;,
+      &quot;valor&quot;: 1.22,
+      &quot;valor_bruto&quot;: &quot;1.220&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;MEM345 VR&quot;,
+      &quot;valor&quot;: 1.22,
+      &quot;valor_bruto&quot;: &quot;1.220&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;MEM012 VR&quot;,
+      &quot;valor&quot;: 1.22,
+      &quot;valor_bruto&quot;: &quot;1.220&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;MEM345 VR&quot;,
+      &quot;valor&quot;: 1.22,
+      &quot;valor_bruto&quot;: &quot;1.220&quot;,
+      &quot;unidade&quot;: &quot;Volts&quot;,
+      &quot;discreto&quot;: false,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;limiares&quot;: {
+        &quot;lnr&quot;: null,
+        &quot;lcr&quot;: null,
+        &quot;lnc&quot;: null,
+        &quot;unc&quot;: null,
+        &quot;ucr&quot;: null,
+        &quot;unr&quot;: null
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    }
+  ],
+  &quot;ignorados_sem_leitura&quot;: 3
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Fontes de alimentação<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: ipmitool sdr type Power Supply</div><p>2 fonte(s) avaliada(s); redundância de energia perdida</p><ul class="problemas"><li>Status (10.1): Power Supply AC lost — sem energia de entrada (redundância de energia perdida)</li></ul><div class="explicacao">Redundância de energia perdida: há fonte sem energia de entrada ou ausente. O servidor continua operando pela(s) outra(s) fonte(s), mas uma nova falha de energia o desligaria. Verifique cabo, tomada e circuito da fonte indicada (ou instale a fonte, se a redundância for necessária).</div><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Power)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Power Supply)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;leituras&quot;: [
+    {
+      &quot;nome&quot;: &quot;Status&quot;,
+      &quot;id_sensor&quot;: &quot;85h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;10.1&quot;,
+      &quot;leitura&quot;: &quot;Presence detected, Power Supply AC lost&quot;,
+      &quot;valor&quot;: null,
+      &quot;unidade&quot;: &quot;&quot;,
+      &quot;estados&quot;: [
+        &quot;Presence detected&quot;,
+        &quot;Power Supply AC lost&quot;
+      ],
+      &quot;avaliacao&quot;: &quot;ALERTA&quot;,
+      &quot;categorias&quot;: [
+        &quot;sem_energia&quot;
+      ]
+    },
+    {
+      &quot;nome&quot;: &quot;Status&quot;,
+      &quot;id_sensor&quot;: &quot;86h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;10.2&quot;,
+      &quot;leitura&quot;: &quot;Presence detected&quot;,
+      &quot;valor&quot;: null,
+      &quot;unidade&quot;: &quot;&quot;,
+      &quot;estados&quot;: [
+        &quot;Presence detected&quot;
+      ],
+      &quot;avaliacao&quot;: &quot;OK&quot;,
+      &quot;categorias&quot;: []
+    }
+  ],
+  &quot;ignoradas_sem_leitura&quot;: [
+    &quot;PS Redundancy (7.1): Disabled&quot;
+  ],
+  &quot;defeito&quot;: false,
+  &quot;redundancia_perdida&quot;: true
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Ventoinhas<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ipmitool sdr type Fan</div><p>17 sensor(es) de ventoinha avaliado(s)</p><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Thermal/Fans)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Fan)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;leituras&quot;: [
+    {
+      &quot;nome&quot;: &quot;Fan1A&quot;,
+      &quot;id_sensor&quot;: &quot;38h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;7800 RPM&quot;,
+      &quot;valor&quot;: 7800.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan1B&quot;,
+      &quot;id_sensor&quot;: &quot;40h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;7320 RPM&quot;,
+      &quot;valor&quot;: 7320.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan2A&quot;,
+      &quot;id_sensor&quot;: &quot;39h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;7440 RPM&quot;,
+      &quot;valor&quot;: 7440.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan2B&quot;,
+      &quot;id_sensor&quot;: &quot;41h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6960 RPM&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan3A&quot;,
+      &quot;id_sensor&quot;: &quot;3Ah&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;7440 RPM&quot;,
+      &quot;valor&quot;: 7440.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan3B&quot;,
+      &quot;id_sensor&quot;: &quot;42h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6480 RPM&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan Redundancy&quot;,
+      &quot;id_sensor&quot;: &quot;78h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;Fully Redundant&quot;,
+      &quot;valor&quot;: null,
+      &quot;unidade&quot;: &quot;&quot;,
+      &quot;estados&quot;: [
+        &quot;Fully Redundant&quot;
+      ],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan4A&quot;,
+      &quot;id_sensor&quot;: &quot;3Bh&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;7080 RPM&quot;,
+      &quot;valor&quot;: 7080.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan4B&quot;,
+      &quot;id_sensor&quot;: &quot;43h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6720 RPM&quot;,
+      &quot;valor&quot;: 6720.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan5A&quot;,
+      &quot;id_sensor&quot;: &quot;3Ch&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6960 RPM&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan5B&quot;,
+      &quot;id_sensor&quot;: &quot;44h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6720 RPM&quot;,
+      &quot;valor&quot;: 6720.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan6A&quot;,
+      &quot;id_sensor&quot;: &quot;3Dh&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6960 RPM&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan6B&quot;,
+      &quot;id_sensor&quot;: &quot;45h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6480 RPM&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan7A&quot;,
+      &quot;id_sensor&quot;: &quot;3Eh&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6960 RPM&quot;,
+      &quot;valor&quot;: 6960.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan7B&quot;,
+      &quot;id_sensor&quot;: &quot;46h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6360 RPM&quot;,
+      &quot;valor&quot;: 6360.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan8A&quot;,
+      &quot;id_sensor&quot;: &quot;3Fh&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6840 RPM&quot;,
+      &quot;valor&quot;: 6840.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Fan8B&quot;,
+      &quot;id_sensor&quot;: &quot;47h&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;entidade&quot;: &quot;7.1&quot;,
+      &quot;leitura&quot;: &quot;6480 RPM&quot;,
+      &quot;valor&quot;: 6480.0,
+      &quot;unidade&quot;: &quot;RPM&quot;,
+      &quot;estados&quot;: [],
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    }
+  ],
+  &quot;ignoradas_sem_leitura&quot;: []
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Processadores<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: dmidecode -t 4 + /proc/cpuinfo + ipmitool sel elist</div><p>2 processador(es): Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; 72 processadores lógicos</p><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, /proc/cpuinfo, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;processadores&quot;: [
+    {
+      &quot;soquete&quot;: &quot;CPU1&quot;,
+      &quot;status&quot;: &quot;Populated, Enabled&quot;,
+      &quot;populado&quot;: true,
+      &quot;habilitado&quot;: true,
+      &quot;modelo&quot;: &quot;Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz&quot;,
+      &quot;fabricante&quot;: &quot;Intel&quot;,
+      &quot;nucleos&quot;: 18,
+      &quot;nucleos_habilitados&quot;: 18,
+      &quot;threads&quot;: 36
+    },
+    {
+      &quot;soquete&quot;: &quot;CPU2&quot;,
+      &quot;status&quot;: &quot;Populated, Enabled&quot;,
+      &quot;populado&quot;: true,
+      &quot;habilitado&quot;: true,
+      &quot;modelo&quot;: &quot;Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz&quot;,
+      &quot;fabricante&quot;: &quot;Intel&quot;,
+      &quot;nucleos&quot;: 18,
+      &quot;nucleos_habilitados&quot;: 18,
+      &quot;threads&quot;: 36
+    }
+  ],
+  &quot;cpuinfo&quot;: {
+    &quot;processadores_logicos&quot;: 72,
+    &quot;soquetes&quot;: 2,
+    &quot;modelos&quot;: [
+      &quot;Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz&quot;
+    ]
+  },
+  &quot;eventos_sel&quot;: [
+    {
+      &quot;texto&quot;: &quot;#16 09/18/26 13:45:58 -03: Processor Status — Presence detected (Deasserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — os 2 processador(es) estão presentes e habilitados agora&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: false
+    },
+    {
+      &quot;texto&quot;: &quot;#17 09/18/26 13:46:04 -03: Processor Status — Presence detected (Deasserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — os 2 processador(es) estão presentes e habilitados agora&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: false
+    },
+    {
+      &quot;texto&quot;: &quot;#19 09/18/26 13:46:47 -03: Processor Status — Presence detected (Deasserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — os 2 processador(es) estão presentes e habilitados agora&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: false
+    }
+  ],
+  &quot;eventos_sel_resumo&quot;: {
+    &quot;atual&quot;: 0,
+    &quot;historico&quot;: 3
+  },
+  &quot;historico&quot;: [
+    &quot;log do BMC #16 09/18/26 13:45:58 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;,
+    &quot;log do BMC #17 09/18/26 13:46:04 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;,
+    &quot;log do BMC #19 09/18/26 13:46:47 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;
+  ]
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Memória<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: dmidecode -t 17 + EDAC + ipmitool sel elist</div><p>2 módulo(s) instalado(s), 16 GB</p><ul class="problemas"><li>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</li></ul><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details><summary>Observações</summary><ul><li>contadores EDAC valem desde a inicialização do sistema</li></ul></details><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, EDAC, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;modulos&quot;: [
+    {
+      &quot;slot&quot;: &quot;A1&quot;,
+      &quot;banco&quot;: null,
+      &quot;instalado&quot;: true,
+      &quot;tamanho_mb&quot;: 8192,
+      &quot;tipo&quot;: &quot;DDR4&quot;,
+      &quot;velocidade&quot;: &quot;2133 MT/s&quot;,
+      &quot;fabricante&quot;: &quot;00CE063200CE&quot;,
+      &quot;part_number&quot;: &quot;SF4721G8CKHH6DFSDS&quot;,
+      &quot;serial&quot;: &quot;REMOVIDO&quot;,
+      &quot;rank&quot;: 2
+    },
+    {
+      &quot;slot&quot;: &quot;A2&quot;,
+      &quot;banco&quot;: null,
+      &quot;instalado&quot;: true,
+      &quot;tamanho_mb&quot;: 8192,
+      &quot;tipo&quot;: &quot;DDR4&quot;,
+      &quot;velocidade&quot;: &quot;2133 MT/s&quot;,
+      &quot;fabricante&quot;: &quot;019400B300CE&quot;,
+      &quot;part_number&quot;: &quot;SF4721G4CKHH6DFSDS&quot;,
+      &quot;serial&quot;: &quot;REMOVIDO&quot;,
+      &quot;rank&quot;: 1
+    }
+  ],
+  &quot;edac&quot;: [
+    {
+      &quot;controlador&quot;: &quot;mc0&quot;,
+      &quot;nome&quot;: &quot;Skylake Socket#0 IMC#0&quot;,
+      &quot;corrigiveis&quot;: 0,
+      &quot;nao_corrigiveis&quot;: 0,
+      &quot;tamanho_mb&quot;: 16384,
+      &quot;modulos&quot;: [
+        {
+          &quot;nome&quot;: &quot;dimm0&quot;,
+          &quot;rotulo&quot;: &quot;CPU_SrcID#0_MC#0_Chan#0_DIMM#0&quot;,
+          &quot;corrigiveis&quot;: 0,
+          &quot;nao_corrigiveis&quot;: 0,
+          &quot;tamanho_mb&quot;: 8192
+        },
+        {
+          &quot;nome&quot;: &quot;dimm2&quot;,
+          &quot;rotulo&quot;: &quot;CPU_SrcID#0_MC#0_Chan#1_DIMM#0&quot;,
+          &quot;corrigiveis&quot;: 0,
+          &quot;nao_corrigiveis&quot;: 0,
+          &quot;tamanho_mb&quot;: 8192
+        }
+      ]
+    },
+    {
+      &quot;controlador&quot;: &quot;mc1&quot;,
+      &quot;nome&quot;: &quot;Skylake Socket#0 IMC#1&quot;,
+      &quot;corrigiveis&quot;: 0,
+      &quot;nao_corrigiveis&quot;: 0,
+      &quot;tamanho_mb&quot;: 0,
+      &quot;modulos&quot;: []
+    },
+    {
+      &quot;controlador&quot;: &quot;mc2&quot;,
+      &quot;nome&quot;: &quot;Skylake Socket#1 IMC#0&quot;,
+      &quot;corrigiveis&quot;: 0,
+      &quot;nao_corrigiveis&quot;: 0,
+      &quot;tamanho_mb&quot;: 0,
+      &quot;modulos&quot;: []
+    },
+    {
+      &quot;controlador&quot;: &quot;mc3&quot;,
+      &quot;nome&quot;: &quot;Skylake Socket#1 IMC#1&quot;,
+      &quot;corrigiveis&quot;: 0,
+      &quot;nao_corrigiveis&quot;: 0,
+      &quot;tamanho_mb&quot;: 0,
+      &quot;modulos&quot;: []
+    }
+  ],
+  &quot;soquetes&quot;: [
+    &quot;A1&quot;,
+    &quot;A2&quot;,
+    &quot;A3&quot;,
+    &quot;A4&quot;,
+    &quot;A5&quot;,
+    &quot;A6&quot;,
+    &quot;A7&quot;,
+    &quot;A8&quot;,
+    &quot;A9&quot;,
+    &quot;A10&quot;,
+    &quot;A11&quot;,
+    &quot;A12&quot;,
+    &quot;B1&quot;,
+    &quot;B2&quot;,
+    &quot;B3&quot;,
+    &quot;B4&quot;,
+    &quot;B5&quot;,
+    &quot;B6&quot;,
+    &quot;B7&quot;,
+    &quot;B8&quot;,
+    &quot;B9&quot;,
+    &quot;B10&quot;,
+    &quot;B11&quot;,
+    &quot;B12&quot;
+  ],
+  &quot;eventos_sel&quot;: [
+    {
+      &quot;texto&quot;: &quot;#25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga)&quot;,
+      &quot;peca&quot;: &quot;o slot A2&quot;,
+      &quot;presente&quot;: true,
+      &quot;critico&quot;: true
+    }
+  ],
+  &quot;eventos_sel_resumo&quot;: {
+    &quot;atual&quot;: 0,
+    &quot;historico&quot;: 1
+  }
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Log do BMC<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: ipmitool sel elist</div><p>79 evento(s) no log; 38 indicam problema (histórico: podem já ter sido resolvidos)</p><ul class="problemas"><li>#47 01/06/98 19:02:49 -02: Power Supply Status — Power Supply AC lost (Asserted) — 10 ocorrências (mostrada a última)</li><li>#2f 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS A0 — Config Error (Asserted) — 5 ocorrências (mostrada a última)</li><li>#30 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS B0 — Config Error (Asserted) — 5 ocorrências (mostrada a última)</li><li>#19 09/18/26 13:46:47 -03: Processor Status — Presence detected (Deasserted) — 3 ocorrências (mostrada a última)</li><li>#3a 09/20/20 02:46:02 -03: System Firmwares POST Err — (sem descrição) (Asserted) — 2 ocorrências (mostrada a última)</li><li>#25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted)</li><li>#34 01/03/98 18:55:17 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (Asserted) — 3 ocorrências (mostrada a última)</li><li>#35 01/03/98 18:55:17 -02: Critical Interrupt FatalPCIErrOnBus — (sem descrição) (Asserted) — 3 ocorrências (mostrada a última)</li><li>#37 01/03/98 18:55:17 -02: Unknown Err Reg Pointer — (sem descrição) (Asserted) — 6 ocorrências (mostrada a última)</li></ul><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (LogServices)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sel elist)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;eventos&quot;: [
+    {
+      &quot;id&quot;: &quot;1&quot;,
+      &quot;data&quot;: &quot;07/15/25&quot;,
+      &quot;hora&quot;: &quot;21:07:39 -03&quot;,
+      &quot;sensor&quot;: &quot;Event Logging Disabled SEL&quot;,
+      &quot;tipo&quot;: &quot;Event Logging Disabled&quot;,
+      &quot;evento&quot;: &quot;Log area reset/cleared&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2&quot;,
+      &quot;data&quot;: &quot;08/08/25&quot;,
+      &quot;hora&quot;: &quot;12:45:46 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3&quot;,
+      &quot;data&quot;: &quot;06/08/26&quot;,
+      &quot;hora&quot;: &quot;10:37:33 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:23:26 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;5&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:23:31 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;6&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:23:58 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;7&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:24:26 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;8&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:27:33 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;9&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;10:13:34 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;10:13:36 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:20:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:20:39 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:20:43 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;e&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:41:39 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;f&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:41:40 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;10&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:45:36 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;11&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:45:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;12&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;13&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;14&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:36 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;15&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;16&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:45:58 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;17&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:46:04 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;18&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:46:10 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;19&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:46:47 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1a&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:33 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1b&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1c&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1d&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1e&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1f&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:01 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;20&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:42 -03&quot;,
+      &quot;sensor&quot;: &quot;System Firmwares POST Err&quot;,
+      &quot;tipo&quot;: &quot;System Firmwares&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;21&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;22&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;23&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:52 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;24&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Additional Info&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;25&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Memory ECC Uncorr Err&quot;,
+      &quot;tipo&quot;: &quot;Memory&quot;,
+      &quot;evento&quot;: &quot;Uncorrectable ECC (UnCorrectable ECC | DIMMA2)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;26&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;27&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;28&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;29&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2a&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Additional Info&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2b&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2c&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2d&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2e&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2f&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;30&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;31&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:26 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;32&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:52 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;33&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Additional Info&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;34&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;35&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;36&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;37&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;38&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;19:52:43 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;39&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3a&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:46:02 -03&quot;,
+      &quot;sensor&quot;: &quot;System Firmwares POST Err&quot;,
+      &quot;tipo&quot;: &quot;System Firmwares&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3b&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:46:58 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3c&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:28:29 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3d&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:48:14 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3e&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:51:51 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3f&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:54:58 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay #0x9b&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;40&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:55:08 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay #0x9a&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;41&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:55:18 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay #0x9a&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;42&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:55:43 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay #0x9a&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;43&quot;,
+      &quot;data&quot;: &quot;01/04/98&quot;,
+      &quot;hora&quot;: &quot;21:56:03 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay #0x9b&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;44&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:50 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;45&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:52 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;46&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:55 -03&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;47&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:02:49 -02&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;48&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:07:52 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;49&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:08:09 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay Drive 0&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4a&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:09:14 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay Drive 0&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4b&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:09:32 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4c&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:12:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4d&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:12:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay Drive 0&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4e&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:12:34 -02&quot;,
+      &quot;sensor&quot;: &quot;Drive Slot / Bay Drive 0&quot;,
+      &quot;tipo&quot;: &quot;Drive Slot / Bay&quot;,
+      &quot;evento&quot;: &quot;Drive Present ()&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;4f&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:12:37 -02&quot;,
+      &quot;sensor&quot;: &quot;Physical Security Intrusion&quot;,
+      &quot;tipo&quot;: &quot;Physical Security&quot;,
+      &quot;evento&quot;: &quot;General Chassis intrusion ()&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    }
+  ],
+  &quot;eventos_problema&quot;: [
+    {
+      &quot;id&quot;: &quot;2&quot;,
+      &quot;data&quot;: &quot;08/08/25&quot;,
+      &quot;hora&quot;: &quot;12:45:46 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3&quot;,
+      &quot;data&quot;: &quot;06/08/26&quot;,
+      &quot;hora&quot;: &quot;10:37:33 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;6&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;09:23:58 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;data&quot;: &quot;08/11/26&quot;,
+      &quot;hora&quot;: &quot;10:13:36 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:20:39 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;f&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:41:40 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;11&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:45:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;12&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;13&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;15&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;16&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:45:58 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;17&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:46:04 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;19&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:46:47 -03&quot;,
+      &quot;sensor&quot;: &quot;Processor Status&quot;,
+      &quot;tipo&quot;: &quot;Processor&quot;,
+      &quot;evento&quot;: &quot;Presence detected&quot;,
+      &quot;direcao&quot;: &quot;Deasserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1b&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1c&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1d&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1e&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;20&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:42 -03&quot;,
+      &quot;sensor&quot;: &quot;System Firmwares POST Err&quot;,
+      &quot;tipo&quot;: &quot;System Firmwares&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;21&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;22&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;25&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Memory ECC Uncorr Err&quot;,
+      &quot;tipo&quot;: &quot;Memory&quot;,
+      &quot;evento&quot;: &quot;Uncorrectable ECC (UnCorrectable ECC | DIMMA2)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;26&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;27&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;28&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;29&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2b&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2c&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2d&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2e&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2f&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;30&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;34&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;35&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;36&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;37&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Unknown Err Reg Pointer&quot;,
+      &quot;tipo&quot;: &quot;&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;3a&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:46:02 -03&quot;,
+      &quot;sensor&quot;: &quot;System Firmwares POST Err&quot;,
+      &quot;tipo&quot;: &quot;System Firmwares&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;45&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:52 -03&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;47&quot;,
+      &quot;data&quot;: &quot;01/06/98&quot;,
+      &quot;hora&quot;: &quot;19:02:49 -02&quot;,
+      &quot;sensor&quot;: &quot;Power Supply Status&quot;,
+      &quot;tipo&quot;: &quot;Power Supply&quot;,
+      &quot;evento&quot;: &quot;Power Supply AC lost&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    }
+  ]
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Componentes internos (backplane, cabos, slots)<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: ipmitool sel elist</div><p>4 peça(s) interna(s) com erro registrado pelo BMC (histórico: podem já ter sido resolvidos)</p><ul class="problemas"><li>Cabo SAS A0 (controladora → backplane): #2f 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS A0 — Config Error (Asserted) — 5 ocorrências (mostrada a última) (histórico — só no log do BMC)</li><li>Cabo SAS B0 (controladora → backplane): #30 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS B0 — Config Error (Asserted) — 5 ocorrências (mostrada a última) (histórico — só no log do BMC)</li><li>Slot PCIe 1 (o riser exato depende da configuração): #34 01/03/98 18:55:17 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (Asserted) — 3 ocorrências (mostrada a última) (histórico — só no log do BMC)</li><li>não foi possível localizar: #35 01/03/98 18:55:17 -02: Critical Interrupt FatalPCIErrOnBus — (sem descrição) (Asserted) — 3 ocorrências (mostrada a última) (histórico — só no log do BMC)</li></ul><div class="explicacao">Erros de peças internas vêm só do log do BMC (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>IPMI (ipmitool sel elist)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;pecas&quot;: [
+    {
+      &quot;nome&quot;: &quot;Cabo SAS A0 (controladora → backplane)&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;ocorrencias&quot;: 5,
+      &quot;ultima&quot;: &quot;01/03/98 18:51:25 -02&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Cabo SAS B0 (controladora → backplane)&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;ocorrencias&quot;: 5,
+      &quot;ultima&quot;: &quot;01/03/98 18:51:25 -02&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;Slot PCIe 1 (o riser exato depende da configuração)&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;ocorrencias&quot;: 3,
+      &quot;ultima&quot;: &quot;01/03/98 18:55:17 -02&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;não foi possível localizar&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;ocorrencias&quot;: 3,
+      &quot;ultima&quot;: &quot;01/03/98 18:55:17 -02&quot;
+    }
+  ],
+  &quot;eventos_problema&quot;: [
+    {
+      &quot;id&quot;: &quot;12&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;13&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;10:48:35 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1b&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1c&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:52:38 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1d&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;1e&quot;,
+      &quot;data&quot;: &quot;09/18/26&quot;,
+      &quot;hora&quot;: &quot;13:54:00 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;21&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;22&quot;,
+      &quot;data&quot;: &quot;09/20/20&quot;,
+      &quot;hora&quot;: &quot;02:44:51 -03&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;26&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;27&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:23:33 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2b&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2c&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:24 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;2f&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS A0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;30&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:51:25 -02&quot;,
+      &quot;sensor&quot;: &quot;Cable / Interconnect Cable SAS B0&quot;,
+      &quot;tipo&quot;: &quot;Cable / Interconnect&quot;,
+      &quot;evento&quot;: &quot;Config Error&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;34&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt PCIE Fatal Err&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;Bus Fatal Error ( Slot 1)&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    },
+    {
+      &quot;id&quot;: &quot;35&quot;,
+      &quot;data&quot;: &quot;01/03/98&quot;,
+      &quot;hora&quot;: &quot;18:55:17 -02&quot;,
+      &quot;sensor&quot;: &quot;Critical Interrupt FatalPCIErrOnBus&quot;,
+      &quot;tipo&quot;: &quot;Critical Interrupt&quot;,
+      &quot;evento&quot;: &quot;&quot;,
+      &quot;direcao&quot;: &quot;Asserted&quot;
+    }
+  ],
+  &quot;eventos_sel&quot;: [
+    {
+      &quot;texto&quot;: &quot;#12 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS A0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#13 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS B0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#1b 09/18/26 13:52:38 -03: Cable / Interconnect Cable SAS A0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#1c 09/18/26 13:52:38 -03: Cable / Interconnect Cable SAS B0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#1d 09/18/26 13:54:00 -03: Cable / Interconnect Cable SAS A0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#1e 09/18/26 13:54:00 -03: Cable / Interconnect Cable SAS B0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#21 09/20/20 02:44:51 -03: Cable / Interconnect Cable SAS A0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#22 09/20/20 02:44:51 -03: Cable / Interconnect Cable SAS B0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#26 01/03/98 18:23:33 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#27 01/03/98 18:23:33 -02: Critical Interrupt FatalPCIErrOnBus — (sem descrição) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#2b 01/03/98 18:51:24 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#2c 01/03/98 18:51:24 -02: Critical Interrupt FatalPCIErrOnBus — (sem descrição) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#2f 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS A0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#30 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS B0 — Config Error (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#34 01/03/98 18:55:17 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    },
+    {
+      &quot;texto&quot;: &quot;#35 01/03/98 18:55:17 -02: Critical Interrupt FatalPCIErrOnBus — (sem descrição) (Asserted)&quot;,
+      &quot;classe&quot;: &quot;historico&quot;,
+      &quot;nota&quot;: &quot;histórico — só no log do BMC; nenhuma leitura atual confirma o problema&quot;,
+      &quot;peca&quot;: null,
+      &quot;presente&quot;: null,
+      &quot;critico&quot;: true
+    }
+  ],
+  &quot;eventos_sel_resumo&quot;: {
+    &quot;atual&quot;: 0,
+    &quot;historico&quot;: 16
+  }
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Discos<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: smartctl</div><p>1 disco(s) verificado(s)</p><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>smartctl</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;discos&quot;: [
+    {
+      &quot;dispositivo&quot;: &quot;/dev/sda&quot;,
+      &quot;tipo&quot;: &quot;sat&quot;,
+      &quot;protocolo&quot;: &quot;ATA&quot;,
+      &quot;modelo&quot;: &quot;VK001920GWSXK&quot;,
+      &quot;serial&quot;: &quot;REMOVIDO&quot;,
+      &quot;firmware&quot;: &quot;HPG3&quot;,
+      &quot;capacidade_bytes&quot;: 1920383410176,
+      &quot;codigo_saida&quot;: 0,
+      &quot;smart_disponivel&quot;: true,
+      &quot;smart_habilitado&quot;: true,
+      &quot;smart_passou&quot;: true,
+      &quot;temperatura&quot;: 24,
+      &quot;horas_ligado&quot;: 40295,
+      &quot;atributos&quot;: [
+        {
+          &quot;id&quot;: 1,
+          &quot;nome&quot;: &quot;Raw_Read_Error_Rate&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 50,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 5,
+          &quot;nome&quot;: &quot;Reallocated_Sector_Ct&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 10,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 9,
+          &quot;nome&quot;: &quot;Power_On_Hours&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 40295
+        },
+        {
+          &quot;id&quot;: 11,
+          &quot;nome&quot;: &quot;Unknown_SSD_Attribute&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 73
+        },
+        {
+          &quot;id&quot;: 12,
+          &quot;nome&quot;: &quot;Power_Cycle_Count&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 82
+        },
+        {
+          &quot;id&quot;: 171,
+          &quot;nome&quot;: &quot;Unknown_Attribute&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 172,
+          &quot;nome&quot;: &quot;Unknown_Attribute&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 173,
+          &quot;nome&quot;: &quot;Unknown_Attribute&quot;,
+          &quot;valor&quot;: 69,
+          &quot;limite&quot;: 10,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 2146
+        },
+        {
+          &quot;id&quot;: 174,
+          &quot;nome&quot;: &quot;Unknown_Attribute&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 73
+        },
+        {
+          &quot;id&quot;: 175,
+          &quot;nome&quot;: &quot;Program_Fail_Count_Chip&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 1,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 180,
+          &quot;nome&quot;: &quot;Unused_Rsvd_Blk_Cnt_Tot&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 1,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 184,
+          &quot;nome&quot;: &quot;End-to-End_Error&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 187,
+          &quot;nome&quot;: &quot;Reported_Uncorrect&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 188,
+          &quot;nome&quot;: &quot;Command_Timeout&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 170
+        },
+        {
+          &quot;id&quot;: 194,
+          &quot;nome&quot;: &quot;Temperature_Celsius&quot;,
+          &quot;valor&quot;: 76,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 163209740312
+        },
+        {
+          &quot;id&quot;: 196,
+          &quot;nome&quot;: &quot;Reallocated_Event_Count&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 1,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 197,
+          &quot;nome&quot;: &quot;Current_Pending_Sector&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 198,
+          &quot;nome&quot;: &quot;Offline_Uncorrectable&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 0
+        },
+        {
+          &quot;id&quot;: 199,
+          &quot;nome&quot;: &quot;UDMA_CRC_Error_Count&quot;,
+          &quot;valor&quot;: 100,
+          &quot;limite&quot;: 0,
+          &quot;falhou_quando&quot;: &quot;&quot;,
+          &quot;bruto&quot;: 4
+        }
+      ],
+      &quot;nvme&quot;: null,
+      &quot;scsi_defeitos_crescidos&quot;: null,
+      &quot;status&quot;: &quot;OK&quot;,
+      &quot;problemas&quot;: [],
+      &quot;observacoes&quot;: [
+        &quot;timeouts de comando: 170 (histórico)&quot;,
+        &quot;erros de CRC na interface (cabo/backplane): 4 (histórico)&quot;
+      ]
+    }
+  ],
+  &quot;ignorados&quot;: []
+}</pre></details></section><section class="cartao comp" style="--cor:#57606a;--fundo:#f6f8fa"><h3>RAID<span class="selo">N/A Não aplicável</span></h3><div class="fonte">Fonte: /proc/mdstat + mdadm --examine --scan</div><p>nenhuma controladora RAID de hardware e nenhum volume RAID de software/chipset encontrado</p><details><summary>Tentativas (6)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Storage)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>fabricante (perccli64/perccli/storcli64/storcli/perccli2/storcli2)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid_sas</td></tr><tr><td>fabricante (MegaCli64/MegaCli/megacli)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid/megaraid_sas</td></tr><tr><td>fabricante (ssacli/hpssacli/hpacucli)</td><td>indisponível</td><td>nenhuma controladora com driver cciss/hpsa/smartpqi</td></tr><tr><td>fabricante (arcconf)</td><td>indisponível</td><td>nenhuma controladora com driver aacraid/smartpqi</td></tr><tr><td>sistema (mdadm)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;arrays&quot;: [],
+  &quot;superblocos&quot;: []
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Placas de rede<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ip -s link + ethtool</div><p>4 porta(s) física(s); 1 com link (eno3 1000 Mb/s Full)</p><details><summary>Observações</summary><ul><li>eno1np0: sem cabo/link</li><li>eno2np1: sem cabo/link</li><li>eno3: 24 pacote(s) descartado(s) (comum; informativo)</li><li>eno4: sem cabo/link</li></ul></details><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (NetworkAdapters)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>sistema (ip, ethtool)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;portas&quot;: [
+    {
+      &quot;nome&quot;: &quot;eno1np0&quot;,
+      &quot;driver&quot;: &quot;i40e&quot;,
+      &quot;link&quot;: false,
+      &quot;estatisticas&quot;: {
+        &quot;estado&quot;: &quot;DOWN&quot;,
+        &quot;rx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;over_errors&quot;: 0,
+          &quot;multicast&quot;: 0
+        },
+        &quot;tx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;carrier_errors&quot;: 0,
+          &quot;collisions&quot;: 0
+        }
+      },
+      &quot;ethtool&quot;: {
+        &quot;link&quot;: false,
+        &quot;velocidade_mbps&quot;: null,
+        &quot;duplex&quot;: null,
+        &quot;autonegociacao&quot;: &quot;off&quot;,
+        &quot;porta&quot;: &quot;Other&quot;,
+        &quot;velocidade_maxima_mbps&quot;: 10000,
+        &quot;modos_suportados&quot;: [
+          &quot;10000baseT/Full&quot;,
+          &quot;1000baseX/Full&quot;,
+          &quot;10000baseSR/Full&quot;,
+          &quot;10000baseLR/Full&quot;
+        ]
+      },
+      &quot;firmware&quot;: {
+        &quot;driver&quot;: &quot;i40e&quot;,
+        &quot;versao_driver&quot;: &quot;6.12.107+deb13-amd64&quot;,
+        &quot;firmware&quot;: &quot;7.10 0x8000519f 19.0.12&quot;,
+        &quot;barramento&quot;: &quot;0000:18:00.0&quot;
+      },
+      &quot;avaliacao&quot;: &quot;nao_verificada&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;eno2np1&quot;,
+      &quot;driver&quot;: &quot;i40e&quot;,
+      &quot;link&quot;: false,
+      &quot;estatisticas&quot;: {
+        &quot;estado&quot;: &quot;DOWN&quot;,
+        &quot;rx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;over_errors&quot;: 0,
+          &quot;multicast&quot;: 0
+        },
+        &quot;tx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;carrier_errors&quot;: 0,
+          &quot;collisions&quot;: 0
+        }
+      },
+      &quot;ethtool&quot;: {
+        &quot;link&quot;: false,
+        &quot;velocidade_mbps&quot;: null,
+        &quot;duplex&quot;: null,
+        &quot;autonegociacao&quot;: &quot;off&quot;,
+        &quot;porta&quot;: &quot;Other&quot;,
+        &quot;velocidade_maxima_mbps&quot;: 10000,
+        &quot;modos_suportados&quot;: [
+          &quot;10000baseT/Full&quot;,
+          &quot;1000baseX/Full&quot;,
+          &quot;10000baseSR/Full&quot;,
+          &quot;10000baseLR/Full&quot;
+        ]
+      },
+      &quot;firmware&quot;: {
+        &quot;driver&quot;: &quot;i40e&quot;,
+        &quot;versao_driver&quot;: &quot;6.12.107+deb13-amd64&quot;,
+        &quot;firmware&quot;: &quot;7.10 0x8000519f 19.0.12&quot;,
+        &quot;barramento&quot;: &quot;0000:18:00.1&quot;
+      },
+      &quot;avaliacao&quot;: &quot;nao_verificada&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;eno3&quot;,
+      &quot;driver&quot;: &quot;igb&quot;,
+      &quot;link&quot;: true,
+      &quot;estatisticas&quot;: {
+        &quot;estado&quot;: &quot;UP&quot;,
+        &quot;rx&quot;: {
+          &quot;bytes&quot;: 560526323,
+          &quot;packets&quot;: 470836,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 24,
+          &quot;over_errors&quot;: 0,
+          &quot;multicast&quot;: 42701
+        },
+        &quot;tx&quot;: {
+          &quot;bytes&quot;: 59631940,
+          &quot;packets&quot;: 133138,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;carrier_errors&quot;: 0,
+          &quot;collisions&quot;: 0
+        }
+      },
+      &quot;ethtool&quot;: {
+        &quot;link&quot;: true,
+        &quot;velocidade_mbps&quot;: 1000,
+        &quot;duplex&quot;: &quot;Full&quot;,
+        &quot;autonegociacao&quot;: &quot;on&quot;,
+        &quot;porta&quot;: &quot;Twisted Pair&quot;,
+        &quot;velocidade_maxima_mbps&quot;: 1000,
+        &quot;modos_suportados&quot;: [
+          &quot;10baseT/Half&quot;,
+          &quot;10baseT/Full&quot;,
+          &quot;100baseT/Half&quot;,
+          &quot;100baseT/Full&quot;,
+          &quot;1000baseT/Full&quot;
+        ]
+      },
+      &quot;firmware&quot;: {
+        &quot;driver&quot;: &quot;igb&quot;,
+        &quot;versao_driver&quot;: &quot;6.12.107+deb13-amd64&quot;,
+        &quot;firmware&quot;: &quot;1.67, 0x80000fa8, 19.0.12&quot;,
+        &quot;barramento&quot;: &quot;0000:01:00.0&quot;
+      },
+      &quot;avaliacao&quot;: &quot;OK&quot;
+    },
+    {
+      &quot;nome&quot;: &quot;eno4&quot;,
+      &quot;driver&quot;: &quot;igb&quot;,
+      &quot;link&quot;: false,
+      &quot;estatisticas&quot;: {
+        &quot;estado&quot;: &quot;DOWN&quot;,
+        &quot;rx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;over_errors&quot;: 0,
+          &quot;multicast&quot;: 0
+        },
+        &quot;tx&quot;: {
+          &quot;bytes&quot;: 0,
+          &quot;packets&quot;: 0,
+          &quot;errors&quot;: 0,
+          &quot;dropped&quot;: 0,
+          &quot;carrier_errors&quot;: 0,
+          &quot;collisions&quot;: 0
+        }
+      },
+      &quot;ethtool&quot;: {
+        &quot;link&quot;: false,
+        &quot;velocidade_mbps&quot;: null,
+        &quot;duplex&quot;: null,
+        &quot;autonegociacao&quot;: &quot;on&quot;,
+        &quot;porta&quot;: &quot;Twisted Pair&quot;,
+        &quot;velocidade_maxima_mbps&quot;: 1000,
+        &quot;modos_suportados&quot;: [
+          &quot;10baseT/Half&quot;,
+          &quot;10baseT/Full&quot;,
+          &quot;100baseT/Half&quot;,
+          &quot;100baseT/Full&quot;,
+          &quot;1000baseT/Full&quot;
+        ]
+      },
+      &quot;firmware&quot;: {
+        &quot;driver&quot;: &quot;igb&quot;,
+        &quot;versao_driver&quot;: &quot;6.12.107+deb13-amd64&quot;,
+        &quot;firmware&quot;: &quot;1.67, 0x80000fa8, 19.0.12&quot;,
+        &quot;barramento&quot;: &quot;0000:01:00.1&quot;
+      },
+      &quot;avaliacao&quot;: &quot;nao_verificada&quot;
+    }
+  ],
+  &quot;ignoradas&quot;: []
+}</pre></details></section>
+
+<h2>Interpretação (IA)</h2><p class="sub">Interpretação gerada por IA a partir dos dados acima (sem identificadores). Não altera nenhum status do diagnóstico; confira as evidências antes de agir. Gerado por: Google Gemini (plano gratuito do AI Studio) [gemini_gratuito] (gemini, modelo gemini-3.5-flash-lite), IA principal.</p><div class="cartao">Servidor funcionando com a redundância de energia perdida (PS1 sem energia de entrada) e com histórico de erro de memória não corrigível no DIMM A2 e de erros nos cabos SAS e no slot PCIe 1 registrados pelo BMC.</div><div class="cartao"><strong>[CRÍTICA] Erro de memória não corrigível no DIMM A2</strong><p>O BMC registrou erro ECC não corrigível no slot A2 (CPU1). Esse tipo de erro pode travar o servidor e corromper dados; a atualização de firmware fica bloqueada enquanto ele constar.</p><ul><li>✓ memoria: <code>Uncorrectable ECC</code></li></ul><p><strong>Plano de solução</strong> — prioridade alta; intervenção física: sim; troca de peça: sim</p><ol><li>Desligar o servidor e reencaixar o pente do slot A2</li><li>Se o erro voltar, trocar o pente</li><li>Rodar o diagnóstico da Dell (F10 → Hardware Diagnostics)</li><li>Exportar e limpar o SEL e refazer o diagnóstico da memória no MSscan</li></ol><p><strong>Ação do catálogo recomendada:</strong> <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL) (disponível no MSscan (com prévia e confirmação do técnico))</p></div><div class="cartao"><strong>[ALTA] Redundância de energia perdida</strong><p>A fonte 1 está sem energia de entrada: se a outra falhar, o servidor desliga.</p><ul><li>✓ fontes: <code>Power Supply AC lost</code></li></ul><p><strong>Plano de solução</strong> — prioridade alta; intervenção física: sim; troca de peça: não</p><ol><li>Conferir o LED da PSU1 (traseira)</li><li>Trocar o cabo de força ou a tomada</li><li>Refazer o diagnóstico das fontes</li></ol></div><div class="cartao"><strong>[MÉDIA] Erros de configuração nos cabos SAS A0/B0</strong><p>O BMC registrou &#x27;Config Error&#x27; nos cabos SAS entre a controladora e o backplane.</p><ul><li>✓ internos: <code>Cable SAS A0</code></li></ul><p><strong>Plano de solução</strong> — prioridade média; intervenção física: sim; troca de peça: não</p><ol><li>Desligar e abrir a tampa</li><li>Reencaixar os cabos SAS A0 e B0</li><li>Refazer o diagnóstico e conferir se o evento se repete</li></ol></div><div class="cartao"><strong>Limitações</strong><ul><li>RAID de hardware não presente: nada a verificar de volumes.</li><li>Os eventos do log do BMC são históricos e podem já ter sido resolvidos.</li></ul></div>
+<h2>Conversa com a IA</h2><p class="sub">Textos como foram enviados (sem identificadores do servidor). Evidências que não existem nos dados aparecem marcadas.</p>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Diagnóstico: Servidor funcionando com a redundância de energia perdida (PS1 sem energia de entrada) e com histórico de erro de memória não corrigível no DIMM A2 e de erros nos cabos SAS e no slot PCIe 1 registrados pelo BMC.<br><br>Principais soluções, em ordem de prioridade:<br>1. Erro de memória não corrigível no DIMM A2 (prioridade alta; severidade critica; provável troca de peça; exige ir até o servidor) <span class="ev-ok">[E1]</span><br>   - Desligar o servidor e reencaixar o pente do slot A2<br>   - Se o erro voltar, trocar o pente<br>   - Rodar o diagnóstico da Dell (F10 → Hardware Diagnostics)<br>   - Exportar e limpar o SEL e refazer o diagnóstico da memória no MSscan<br>2. Redundância de energia perdida (prioridade alta; severidade alta; exige ir até o servidor) <span class="ev-ok">[E2]</span><br>   - Conferir o LED da PSU1 (traseira)<br>   - Trocar o cabo de força ou a tomada<br>   - Refazer o diagnóstico das fontes<br>3. Erros de configuração nos cabos SAS A0/B0 (prioridade media; severidade media; exige ir até o servidor) <span class="ev-ok">[E3]</span><br>   - Desligar e abrir a tampa<br>   - Reencaixar os cabos SAS A0 e B0<br>   - Refazer o diagnóstico e conferir se o evento se repete<br><br>Ficou sem verificação: RAID de hardware não presente: nada a verificar de volumes.; Os eventos do log do BMC são históricos e podem já ter sido resolvidos.<br><br>Pergunte o que quiser sobre esses problemas. Eu só explico e recomendo; não executo nada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>[E3] internos: “Cable SAS A0” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>O que resolvo primeiro?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Primeiro a memória: há erro não corrigível no DIMM A2 <span class="ev-ok">[E1]</span> e ele bloqueia qualquer atualização. Depois a energia da PSU1 <span class="ev-ok">[E2]</span>. Os cabos SAS podem esperar a próxima parada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>Preciso trocar alguma peça?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Talvez o pente do slot A2 <span class="ev-ok">[E1]</span>: reencaixe primeiro; se o erro voltar depois de limpar o SEL, troque. Para a fonte, em geral basta o cabo ou a tomada <span class="ev-ok">[E2]</span>.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>O que ficou sem verificação?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Pelo diagnóstico, nada ficou como não verificado: não há RAID de hardware neste servidor e o Redfish não foi usado (sem credenciais do BMC), então tudo veio do IPMI e do sistema.</p></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>Explique o problema mais grave.</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>O mais grave é o erro ECC não corrigível no DIMM A2 <span class="ev-ok">[E1]</span>: a memória entregou um dado que o ECC não conseguiu corrigir. Isso costuma derrubar o sistema e é sinal de pente com defeito ou mal encaixado.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li></ul></div>
+
+
+
+<h2>Atualizações</h2><p class="sub">Catálogo Dell 26.09.17 (baixado agora de https://downloads.dell.com/catalog/Catalog.xml.gz). Verificação somente informativa: nada é aplicado sem escolha, o plano de atualização e a confirmação ATUALIZAR.</p><div class="cartao">3 componente(s) inventariado(s): 2 com atualização disponível, 0 sem necessidade de atualização (confirmado), 1 em que não foi possível determinar. Somente informativo: nada foi aplicado.<div class="tabela"><table><tr><th>Componente</th><th>Instalada</th><th>Catálogo</th><th>Situação</th></tr><tr><td>BIOS</td><td>2.21.2</td><td>2.28.1</td><td>Atualização disponível (2.28.1, 11/08/2026)</td></tr><tr><td>iDRAC (BMC)</td><td>7.00</td><td>7.00.00.185</td><td>Não foi possível determinar<br><small>a fonte informa só &#x27;7.00&#x27;: não dá para saber se &#x27;7.00.00.185&#x27; é mais nova</small></td></tr><tr><td>Intel(R) Ethernet 10G 4P X710/I350 rNDC (eno1np0, eno2np1, eno3, eno4)</td><td>19.0.12</td><td>25.0.4</td><td>Atualização disponível (25.0.4, 24/01/2026)</td></tr></table></div><p><strong>Avisos</strong></p><ul><li>Redundância de energia perdida (fonte sem energia ou ausente): a aplicação pedirá uma confirmação extra, separada do ATUALIZAR.</li><li>Espaço livre e integridade (SHA-256) dos pacotes são verificados na aplicação (simulada ou real).</li></ul></div>
+
+
+<h2>Registro técnico</h2>
+<div class="cartao"><details><summary>Histórico de comandos (38)</summary><div class="tabela"><table><tr><th>Comando</th><th>Código</th><th>Duração</th><th>Erro</th></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>GET https://downloads.dell.com/</code></td><td>200</td><td>0.0 s</td><td></td></tr><tr><td><code>GET https://api.anthropic.com/</code></td><td>404</td><td>0.0 s</td><td></td></tr><tr><td><code>dmidecode -s system-manufacturer</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s system-product-name</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s bios-version</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s system-sku-number</code></td><td>0</td><td>0.005 s</td><td></td></tr><tr><td><code>dmidecode -t 38</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool mc info</code></td><td>0</td><td>0.102 s</td><td></td></tr><tr><td><code>dmidecode -t 42</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool lan print 1</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool lan print 2</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>lspci -nnk</code></td><td>0</td><td>0.037 s</td><td></td></tr><tr><td><code>sensors -j</code></td><td>0</td><td>0.015 s</td><td></td></tr><tr><td><code>ipmitool lan print 1</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool delloem lan get</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool delloem lan get active</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ipmitool sensor</code></td><td>0</td><td>2.765 s</td><td></td></tr><tr><td><code>ipmitool sdr type Power Supply</code></td><td>0</td><td>1.969 s</td><td></td></tr><tr><td><code>ipmitool sdr type Fan</code></td><td>0</td><td>2.023 s</td><td></td></tr><tr><td><code>dmidecode -t 4</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool sel elist</code></td><td>0</td><td>2.225 s</td><td></td></tr><tr><td><code>dmidecode -t 17</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>smartctl --scan-open -j</code></td><td>0</td><td>0.024 s</td><td></td></tr><tr><td><code>lsblk -J -d -o NAME,TRAN,TYPE,SIZE,MODEL</code></td><td>0</td><td>0.005 s</td><td></td></tr><tr><td><code>smartctl -a -j -d sat /dev/sda</code></td><td>0</td><td>0.025 s</td><td></td></tr><tr><td><code>mdadm --examine --scan</code></td><td>0</td><td>0.012 s</td><td></td></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ip -j -s link show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ethtool eno1np0</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool -i eno1np0</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno2np1</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>ethtool -i eno2np1</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno3</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>ethtool -i eno3</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno4</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool -i eno4</code></td><td>0</td><td>0.002 s</td><td></td></tr></table></div></details></div>
+<footer>Gerado pelo MSscan 1.0.1 em 14/10/2026 18:15</footer>
+</main>
+</body>
+</html>

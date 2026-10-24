@@ -1,0 +1,6 @@
+# MSscan — atalhos do gerenciador de janelas (matchbox-window-manager -kbdconfig).
+# Substitui o /etc/matchbox/kbdconfig padrão (que tem Alt+C/Alt+F4 para fechar a janela e Alt+Tab):
+# no quiosque só existe este atalho.
+#
+# Alt+M: "Voltar ao MSscan" — esconde o navegador integrado (ele continua aberto; downloads seguem).
+<Alt>m=!/usr/local/lib/msscan/voltar

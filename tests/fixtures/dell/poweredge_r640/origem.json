@@ -1,0 +1,18 @@
+{
+  "fabricante": "Dell Inc.",
+  "modelo": "PowerEdge R640",
+  "origem": "real",
+  "coletado_em": "2026-09-24 16:07",
+  "coletado_por": "ServerDiag 0.1.0 --coletar",
+  "anonimizado": true,
+  "observacoes": [
+    "Máquina de desenvolvimento do projeto; BIOS 2.21.2, BMC (iDRAC9) firmware 7.00 via IPMI KCS.",
+    "SMBIOS tipo 42 ausente: Redfish Host Interface não anunciada.",
+    "Controladoras SATA do chipset C620 em modo RAID com driver ahci; sem PERC. Um SSD SATA direto (/dev/sda).",
+    "Problemas REAIS presentes: PS1 com 'Power Supply AC lost' (status ok na coluna), SEL com ECC não corrigível na DIMMA2, PCIe fatal, processador ausente (Deasserted), cabos SAS com Config Error.",
+    "Rede real: 4 portas físicas (i40e ×2, igb ×2); só eno3 com cabo e IP; downloads.dell.com respondeu 200.",
+    "Fonte única de propósito (PS1 'AC lost' esperado).",
+    "Sem arrays mdadm (/proc/mdstat vazio, mdadm --examine --scan vazio) e sem ferramentas de RAID do fabricante.",
+    "Anonimizada com serverdiag.coleta.anonimizar (seriais/asset tags de DIMM, serial e WWN do SSD, MACs inclusive altnames enx*, IPs e UUID do root)."
+  ]
+}

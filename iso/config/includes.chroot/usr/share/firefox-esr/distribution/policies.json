@@ -1,0 +1,54 @@
+{
+  "policies": {
+    "Bookmarks": [
+      {
+        "Title": "⬅ Voltar ao MSscan (Alt+M)",
+        "URL": "http://127.0.0.1:8765/voltar",
+        "Placement": "toolbar"
+      }
+    ],
+    "DisplayBookmarksToolbar": "always",
+    "NoDefaultBookmarks": true,
+    "PasswordManagerEnabled": false,
+    "OfferToSaveLogins": false,
+    "DisableFormHistory": true,
+    "SanitizeOnShutdown": true,
+    "DisableFirefoxAccounts": true,
+    "DisableFirefoxStudies": true,
+    "DisableTelemetry": true,
+    "DisablePocket": true,
+    "DisableDeveloperTools": true,
+    "DisableProfileImport": true,
+    "DisableSetDesktopBackground": true,
+    "DontCheckDefaultBrowser": true,
+    "BlockAboutConfig": true,
+    "BlockAboutProfiles": true,
+    "PromptForDownloadLocation": false,
+    "DNSOverHTTPS": {
+      "Enabled": false,
+      "Locked": true
+    },
+    "ExtensionSettings": {
+      "*": {
+        "installation_mode": "blocked"
+      },
+      "bloqueio@msscan": {
+        "installation_mode": "force_installed",
+        "install_url": "file:///usr/local/share/msscan/bloqueio.xpi"
+      }
+    },
+    "OverrideFirstRunPage": "",
+    "OverridePostUpdatePage": "",
+    "Preferences": {
+      "media.webspeech.synth.enabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "xpinstall.signatures.required": {
+        "Value": false,
+        "Status": "locked"
+      }
+    },
+    "BlockAboutAddons": true
+  }
+}

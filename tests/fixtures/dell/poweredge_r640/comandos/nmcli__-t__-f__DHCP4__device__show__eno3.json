@@ -1,0 +1,14 @@
+{
+  "comando": [
+    "nmcli",
+    "-t",
+    "-f",
+    "DHCP4",
+    "device",
+    "show",
+    "eno3"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.05
+}

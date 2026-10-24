@@ -1,0 +1,21 @@
+#!/bin/sh
+# Hook executado na pasta binary/ (antes de gerar a ISO): menus de boot entram sozinhos na
+# primeira opção ("Live system") depois de 10 s. Sem isso, um reboot remoto (console do iDRAC/iLO)
+# ficaria parado no menu esperando Enter.
+set -e
+
+# syslinux (BIOS legado): "timeout" em décimos de segundo; 0 = esperar para sempre.
+if [ -f isolinux/isolinux.cfg ]; then
+    if grep -q '^timeout ' isolinux/isolinux.cfg; then
+        sed -i 's/^timeout .*/timeout 100/' isolinux/isolinux.cfg
+    else
+        echo 'timeout 100' >>isolinux/isolinux.cfg
+    fi
+fi
+
+# GRUB (UEFI): o config.cfg é lido por todos os menus (grub.cfg faz "source" dele).
+if [ -f boot/grub/config.cfg ]; then
+    sed -i '/^set timeout=/d; /^set timeout_style=/d' boot/grub/config.cfg
+    sed -i 's/^set default=0$/set default=0\nset timeout=10\nset timeout_style=menu/' boot/grub/config.cfg
+    grep -q '^set timeout=10$' boot/grub/config.cfg || printf 'set timeout=10\nset timeout_style=menu\n' >>boot/grub/config.cfg
+fi

@@ -1,0 +1,15 @@
+[Unit]
+Description=MSscan - fonte do console conforme a resolução do monitor
+# Depois da configuração padrão do console (que aplica a fonte 8x16) e antes do MSscan no tty1.
+After=systemd-vconsole-setup.service console-setup.service systemd-udev-settle.service
+Before=msscan.service getty.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/msscan
+ExecStart=/usr/bin/python3 -m msscan.tela.console
+
+[Install]
+WantedBy=multi-user.target

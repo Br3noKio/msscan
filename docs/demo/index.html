@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MSscan — demonstração</title>
+  <link rel="stylesheet" href="estaticos/tema.css">
+  <link rel="stylesheet" href="estaticos/app.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="demo">
+  <div class="faixa-demo" role="note">Demonstração: dados simulados. Nada é executado.</div>
+  <a class="pular" href="#conteudo" data-t="geral.pular_para_o_conteudo"></a>
+
+  <!-- Nova interface (1.0.0): barra superior fina com pílulas (espaços de trabalho, servidor e relógio, situação) -->
+  <header class="barra" id="barra">
+    <div class="barra-esq">
+      <button type="button" class="pilula pilula-botao botao-gaveta" id="gaveta-esq-botao" aria-controls="painel-servidor" aria-expanded="false" data-t-aria-label="barra.visao_do_servidor" data-t-title="barra.visao_do_servidor"><span data-icone="panel-left" aria-hidden="true"></span></button>
+      <span class="pilula marca">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 8.5h7M7 12h10M7 15.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15" cy="15.5" r="1.3" class="logo-led"/></svg>
+        <span class="nome-app" data-t="geral.msscan"></span>
+      </span>
+      <nav class="espacos" data-t-aria-label="geral.telas">
+        <ul role="tablist" id="abas">
+          <li><a role="tab" href="#/inicio" data-tela="inicio" id="aba-inicio"><span class="num" aria-hidden="true">1</span><span data-icone="home" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.inicio"></span></a></li>
+          <li><a role="tab" href="#/diagnostico" data-tela="diagnostico" id="aba-diagnostico"><span class="num" aria-hidden="true">2</span><span data-icone="pulse" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.diagnostico"></span><span class="contador" id="contador-problemas" hidden></span></a></li>
+          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">3</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
+          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">4</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
+          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">5</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
+          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">6</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
+          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">7</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
+          <li class="aba-sem-espaco"><a role="tab" href="#/sobre" data-tela="sobre" id="aba-sobre"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.configuracoes"></span></a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="barra-centro">
+      <span class="pilula pilula-servidor"><span data-icone="server" aria-hidden="true"></span><span class="modelo" id="modelo" data-t-aria-label="geral.servidor" data-t="geral.detectando"></span><span class="separador" aria-hidden="true"></span><time class="relogio" id="relogio"></time></span>
+    </div>
+    <div class="barra-dir">
+      <span class="pilula pilula-status" id="pilula-temp" role="status" hidden></span>
+      <span class="pilula pilula-status" id="pilula-fontes" role="status" hidden></span>
+      <button type="button" class="pilula pilula-botao indicador-rede" id="indicador-rede" data-t-aria-label="geral.rede_verificando_abrir_detalhes_da">
+        <span data-icone="globe" aria-hidden="true"></span><span id="indicador-rede-texto" data-t="geral.rede"></span>
+      </button>
+      <a class="pilula pilula-botao pilula-status" id="pilula-idrac" href="#/inicio" hidden></a>
+      <a class="pilula pilula-botao pilula-status" id="pilula-ia" href="#/ia" hidden></a>
+      <a class="pilula pilula-botao pilula-status pilula-ssh" id="pilula-ssh" href="#/terminal" hidden></a>
+      <div class="menu-energia">
+        <button type="button" class="pilula pilula-botao pilula-energia" id="botao-energia" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-energia" data-t-aria-label="barra.energia" data-t-title="barra.energia"><span data-icone="power" aria-hidden="true"></span></button>
+        <div class="menu" id="menu-energia" role="menu" hidden>
+          <button type="button" role="menuitem" class="item-menu botao-energia" id="botao-reiniciar" data-t-aria-label="geral.reiniciar_o_servidor"><span data-icone="sync" aria-hidden="true"></span><span class="rotulo-energia" data-t="geral.reiniciar"></span></button>
+          <button type="button" role="menuitem" class="item-menu item-perigo botao-energia" id="botao-desligar" data-t-aria-label="geral.desligar_o_servidor"><span data-icone="power" aria-hidden="true"></span><span class="rotulo-energia" data-t="geral.desligar"></span></button>
+        </div>
+      </div>
+      <button type="button" class="pilula pilula-botao botao-gaveta" id="gaveta-dir-botao" aria-controls="painel-rapido" aria-expanded="false" data-t-aria-label="barra.painel_rapido" data-t-title="barra.painel_rapido"><span data-icone="panel-right" aria-hidden="true"></span><span class="contador contador-notif" id="contador-notif" hidden></span></button>
+    </div>
+  </header>
+  <!-- Etapas do fluxo (12b-2): marcadas também nos espaços de trabalho; a lista fica para leitores de tela -->
+  <ol class="etapas visualmente-oculto" id="etapas" data-t-aria-label="geral.etapas"></ol>
+  <!-- 21.2: faixa fixa durante toda a instalação de firmware, em qualquer aba -->
+  <div class="faixa-seguranca" id="faixa-seguranca" hidden>
+    <p class="faixa-seguranca-texto" id="faixa-seguranca-texto" role="status" aria-live="assertive"></p>
+    <p class="faixa-riscos" id="faixa-riscos" hidden><span data-icone="alert" aria-hidden="true"></span><span data-t="faixa_seguranca.instalacao_com_riscos_assumidos"></span></p>
+    <button type="button" class="botao botao-secundario botao-pequeno" id="atu-parar"><span data-icone="stop" aria-hidden="true"></span><span data-t="faixa_seguranca.parar_depois_do_componente_atual"></span></button>
+  </div>
+
+  <!-- 22.5: faixa fixa enquanto o acesso SSH estiver ativo, em qualquer aba -->
+  <div class="faixa-seguranca faixa-ssh" id="faixa-ssh" hidden>
+    <p class="faixa-seguranca-texto" id="faixa-ssh-texto" role="status" aria-live="polite"></p>
+    <button type="button" class="botao botao-perigo botao-pequeno" id="ssh-desativar"><span data-icone="stop" aria-hidden="true"></span><span data-t="faixa_ssh.desativar"></span></button>
+  </div>
+
+  <!-- 28.1: sem internet o MSscan segue; faixa fixa com o motivo real, em qualquer aba, até reconectar sozinho -->
+  <div class="faixa-seguranca faixa-internet" id="faixa-internet" hidden>
+    <p class="faixa-seguranca-texto" id="faixa-internet-texto" role="status" aria-live="polite"></p>
+    <div class="acoes-faixa">
+      <button type="button" class="botao botao-secundario botao-pequeno" id="internet-tentar"><span data-icone="sync" aria-hidden="true"></span><span data-t="faixa_internet.tentar_novamente"></span></button>
+      <button type="button" class="botao botao-secundario botao-pequeno" id="internet-detalhes"><span data-icone="info" aria-hidden="true"></span><span data-t="faixa_internet.detalhes_tecnicos"></span></button>
+    </div>
+  </div>
+
+  <div class="mesa" id="mesa">
+  <!-- Coluna esquerda: visão do servidor (identidade, versões, peças, sensores com barras) -->
+  <aside class="painel painel-lateral" id="painel-servidor" tabindex="-1" aria-labelledby="painel-servidor-titulo">
+    <div class="painel-rolagem">
+      <h2 class="titulo-painel" id="painel-servidor-titulo"><span data-icone="server" aria-hidden="true"></span><span data-t="painel.visao_do_servidor"></span></h2>
+      <div id="visao-servidor"><p class="texto-sec pequeno" data-t="painel.aguardando_deteccao"></p></div>
+    </div>
+  </aside>
+  <main id="conteudo" class="painel painel-central ativo" tabindex="-1">
+    <!-- 1. Rede: bloqueio obrigatório -->
+    <section class="tela" id="tela-rede" role="tabpanel" aria-labelledby="titulo-rede" hidden>
+      <div class="cartao cartao-bloqueio">
+        <h1 id="titulo-rede" class="titulo-cartao"><span data-icone="globe" aria-hidden="true"></span><span data-t="rede.verificacao_de_rede"></span></h1>
+        <p class="texto-sec" id="rede-explicacao" data-t="rede.a_rede_e_obrigatoria_o"></p>
+        <ol class="niveis" id="rede-niveis" data-t-aria-label="rede.niveis_da_verificacao_de_rede"></ol>
+        <div class="aviso aviso-falha" id="rede-problema" role="alert" hidden>
+          <strong id="rede-problema-titulo"></strong>
+          <ul id="rede-problema-detalhes"></ul>
+        </div>
+        <!-- 28.1: nenhuma fonte acertou o relógio e a hora do sistema é impossível: o técnico informa -->
+        <div class="formulario-hora" id="rede-hora" hidden>
+          <label for="rede-hora-texto" data-t="rede.data_e_hora_corretas"></label>
+          <input type="text" id="rede-hora-texto" inputmode="numeric" autocomplete="off" spellcheck="false" data-t-placeholder="rede.formato_data_hora">
+          <button type="button" class="botao botao-primario" id="rede-hora-ajustar"><span data-icone="clock" aria-hidden="true"></span><span data-t="rede.ajustar_relogio"></span></button>
+          <p class="texto-sec pequeno" id="rede-hora-mensagem" role="status" aria-live="polite"></p>
+        </div>
+        <div class="acoes">
+          <button type="button" class="botao botao-primario" id="rede-tentar" hidden><span data-icone="sync" aria-hidden="true"></span><span data-t="rede.tentar_novamente"></span></button>
+          <button type="button" class="botao botao-secundario" id="rede-voltar" hidden><span data-icone="arrow-left" aria-hidden="true"></span><span data-t="rede.voltar"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Início -->
+    <section class="tela" id="tela-inicio" role="tabpanel" aria-labelledby="aba-inicio" hidden>
+      <div class="faixa">
+        <div>
+          <p class="faixa-sub" data-t="inicio.servidor_detectado"></p>
+          <h1 class="faixa-titulo" id="inicio-servidor" data-t="inicio.detectando_o_equipamento"></h1>
+          <p class="faixa-sub" id="inicio-bios"></p>
+          <p class="faixa-sub" id="inicio-config"></p>
+        </div>
+        <button type="button" class="botao botao-primario botao-grande" id="botao-iniciar" disabled>
+          <span data-icone="pulse" aria-hidden="true"></span><span data-t="inicio.iniciar_diagnostico"></span>
+        </button>
+      </div>
+      <div class="aviso aviso-alerta" id="inicio-aviso-pendrive" role="status" hidden></div>
+      <div class="aviso aviso-alerta" id="inicio-aviso-relogio" role="status" hidden></div>
+      <div class="aviso aviso-alerta" id="inicio-config-avisos" role="status" hidden></div>
+      <!-- Sensores ao vivo (nova interface): barras das temperaturas por sensor e da rotação das ventoinhas -->
+      <section class="cartao widget-sensores" id="sensores-vivo" aria-labelledby="sensores-titulo" hidden>
+        <h2 class="cabeca-cartao" id="sensores-titulo"><span data-icone="chart" aria-hidden="true"></span><span data-t="sensores.ao_vivo"></span><span class="sensores-quando" id="sensores-quando" role="status"></span></h2>
+        <div class="cartao-corpo">
+          <div class="grafico-sensores" id="sensores-grafico" aria-hidden="true"></div>
+          <ul class="visualmente-oculto" id="sensores-lista"></ul>
+        </div>
+      </section>
+      <section class="cartao" id="inicio-ia" aria-labelledby="inicio-ia-titulo">
+        <div class="linha-ia">
+          <h2 class="rotulo-linha" id="inicio-ia-titulo"><span data-icone="light-bulb" aria-hidden="true"></span><span data-t="inicio.analise_por_ia_opcional"></span></h2>
+          <span id="inicio-ia-etiqueta" role="status"></span>
+          <span class="texto-sec pequeno linha-ia-detalhe" id="inicio-ia-detalhe"></span>
+          <a class="botao botao-secundario botao-pequeno" href="#/ia/configurar" id="inicio-ia-configurar"><span data-icone="gear" aria-hidden="true"></span><span data-t="inicio.configurar_ia"></span></a>
+        </div>
+      </section>
+      <section class="cartao" id="idrac-cartao" aria-labelledby="idrac-titulo" hidden>
+        <h2 class="cabeca-cartao" id="idrac-titulo"><span data-icone="server" aria-hidden="true"></span><span data-t="inicio.acesso_ao_idrac"></span></h2>
+        <div class="cartao-corpo">
+        <p class="idrac-situacao" id="idrac-situacao" role="status" aria-live="polite"></p>
+        <p class="texto-sec pequeno" id="idrac-dados"></p>
+        <ul class="idrac-mensagens" id="idrac-mensagens" data-t-aria-label="inicio.o_que_fazer"></ul>
+        <p class="texto-sec pequeno"><span data-t="inicio.duas_formas_de_alcancar_o"></span> <strong data-t="inicio.b"></strong> <span data-t="inicio.porta_do_idrac_com_cabo"></span> <strong data-t="inicio.a"></strong> <span data-t="inicio.pacote_idrac_tools_for_linux"></span></p>
+        <div class="acoes">
+          <button type="button" class="botao botao-secundario" id="idrac-tentar"><span data-icone="sync" aria-hidden="true"></span><span data-t="inicio.tentar_de_novo"></span></button>
+          <button type="button" class="botao botao-secundario" id="idrac-ip-fixo" hidden><span data-icone="gear" aria-hidden="true"></span><span data-t="inicio.colocar_um_ip_fixo_no"></span></button>
+          <button type="button" class="botao botao-secundario" id="idrac-credenciais" hidden><span data-icone="shield-check" aria-hidden="true"></span><span data-t="inicio.informar_credenciais_do_idrac"></span></button>
+        </div>
+        </div>
+      </section>
+      <section class="cartao" id="bmc-cartao" aria-labelledby="bmc-titulo" hidden>
+        <h2 class="cabeca-cartao" id="bmc-titulo"><span data-icone="shield-check" aria-hidden="true"></span><span data-t="inicio.acesso_ao_bmc_redfish"></span></h2>
+        <p class="texto-sec" id="bmc-explicacao"></p>
+        <div id="bmc-form" role="group" data-t-aria-label="inicio.credenciais_do_bmc">
+          <p class="texto-sec pequeno" data-t="inicio.usuario_e_senha_do_bmc"></p>
+          <div class="campos-bmc">
+            <label class="campo"><span data-t="inicio.usuario_do_bmc"></span>
+              <input type="text" id="bmc-usuario" autocomplete="off" autocapitalize="off" spellcheck="false">
+            </label>
+            <label class="campo"><span data-t="inicio.senha"></span>
+              <input type="password" id="bmc-senha" autocomplete="new-password">
+            </label>
+          </div>
+          <div class="acoes">
+            <button type="button" class="botao botao-secundario" id="bmc-validar"><span data-icone="shield-check" aria-hidden="true"></span><span data-t="inicio.validar_credenciais"></span></button>
+            <button type="button" class="botao botao-secundario" id="bmc-pular"><span data-icone="skip" aria-hidden="true"></span><span data-t="inicio.pular"></span></button>
+          </div>
+        </div>
+        <p id="bmc-mensagem" role="status" aria-live="polite"></p>
+        <div class="acoes" id="bmc-reabrir-area" hidden>
+          <button type="button" class="botao botao-secundario" id="bmc-reabrir"><span data-icone="shield-check" aria-hidden="true"></span><span data-t="inicio.informar_credenciais_do_bmc"></span></button>
+        </div>
+      </section>
+      <div class="cartao">
+        <h2 class="cabeca-cartao" data-t="inicio.capacidades_detectadas"></h2>
+        <p class="texto-sec pequeno cartao-nota" data-t="inicio.detectar_primeiro_utilizar_depois_so"></p>
+        <ul class="lista" id="inicio-capacidades" data-t-aria-label="inicio.capacidades_detectadas" aria-busy="true">
+          <li class="lista-vazia" data-t="inicio.aguardando_a_deteccao"></li>
+        </ul>
+      </div>
+      <p class="texto-sec pequeno" id="inicio-modo"></p>
+    </section>
+
+    <!-- 3. Diagnóstico -->
+    <section class="tela" id="tela-diagnostico" role="tabpanel" aria-labelledby="aba-diagnostico" hidden>
+      <div id="diag-lista-area">
+        <div class="barra-ferramentas">
+          <label class="busca">
+            <span data-icone="search" aria-hidden="true"></span>
+            <span class="visualmente-oculto" data-t="diagnostico.filtrar_componentes_2"></span>
+            <input type="search" id="busca" data-t-placeholder="diagnostico.filtrar_componentes" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="progresso" id="diag-progresso-area">
+            <div class="progresso-barra" role="progressbar" id="diag-progresso" data-t-aria-label="diagnostico.andamento_do_diagnostico" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span id="diag-progresso-preenchido"></span></div>
+            <span class="pequeno texto-sec" id="diag-progresso-texto" aria-live="polite" data-t="diagnostico.diagnostico_nao_iniciado"></span>
+          </div>
+        </div>
+        <div class="veredito" id="diag-veredito" role="status" hidden></div>
+        <section class="cartao" id="diag-geral" aria-labelledby="diag-geral-titulo" hidden>
+          <h2 class="cabeca-cartao" id="diag-geral-titulo"><span data-icone="pulse" aria-hidden="true"></span><span data-t="diagnostico.visao_geral_do_servidor"></span></h2>
+          <div class="cartao-corpo geral-grade">
+            <div class="geral-indicador" id="diag-geral-indicador" role="status" aria-live="polite"></div>
+            <div>
+              <p class="texto-sec pequeno" id="diag-geral-nota"></p>
+              <div id="diag-geral-modelo">
+                <div class="acoes"><button type="button" class="botao botao-secundario botao-pequeno" id="diag-geral-vista" hidden><span data-icone="screen-full" aria-hidden="true"></span><span data-t="diagnostico.ver_o_mapa_2d"></span></button></div>
+                <p class="aviso aviso-alerta" id="diag-geral-aproximado" role="note" hidden></p>
+                <div id="diag-geral-3d-area" hidden>
+                  <div class="acoes">
+                    <button type="button" class="botao botao-secundario botao-pequeno" id="diag-geral-3d-inicial"><span data-icone="sync" aria-hidden="true"></span><span data-t="diagnostico.vista_inicial"></span></button>
+                      </div>
+                  <p class="texto-sec pequeno"><span data-t="diagnostico.arraste_para_girar_rodinha_para"></span> <kbd>+</kbd> <span data-t="diagnostico.e"></span> <kbd>-</kbd> <span data-t="diagnostico.dao_zoom"></span></p>
+                  <div class="modelo-3d" id="diag-geral-3d"></div>
+                  <div class="aviso aviso-info" id="diag-geral-3d-peca" role="status" aria-live="polite" hidden></div>
+                </div>
+                <p class="texto-sec pequeno" id="diag-geral-3d-aviso" role="status" hidden></p>
+                <div class="mapa-chassi" id="diag-geral-mapa" hidden></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="cartao" id="diag-config" aria-labelledby="diag-config-titulo" hidden>
+          <h2 class="cabeca-cartao" id="diag-config-titulo"><span data-icone="server" aria-hidden="true"></span><span data-t="diagnostico.configuracao_do_servidor"></span></h2>
+          <div class="cartao-corpo">
+            <p id="diag-config-resumo"></p>
+            <ul class="lista-simples" id="diag-config-avisos"></ul>
+            <ul class="lista-simples texto-sec pequeno" id="diag-config-info"></ul>
+            <p class="texto-sec pequeno" id="diag-config-fonte"></p>
+          </div>
+        </section>
+        <div class="cartao" data-longa id="diag-local" hidden>
+          <h2 class="cabeca-cartao"><span data-icone="location" aria-hidden="true"></span><span data-t="diagnostico.onde_esta_o_problema"></span></h2>
+          <div class="cartao-corpo">
+            <p class="texto-sec pequeno" id="diag-mapa-nota"></p>
+            <div class="acoes"><button type="button" class="botao botao-secundario botao-pequeno" id="diag-vista" hidden><span data-icone="screen-full" aria-hidden="true"></span><span data-t="diagnostico.ver_o_mapa_2d"></span></button></div>
+            <p class="aviso aviso-alerta" id="diag-aproximado" role="note" hidden></p>
+            <div id="diag-3d-area" hidden>
+              <div class="acoes">
+                <button type="button" class="botao botao-secundario botao-pequeno" id="diag-3d-inicial"><span data-icone="sync" aria-hidden="true"></span><span data-t="diagnostico.vista_inicial"></span></button>
+                  </div>
+              <p class="texto-sec pequeno"><span data-t="diagnostico.arraste_para_girar_rodinha_para"></span> <kbd>+</kbd> <span data-t="diagnostico.e"></span> <kbd>-</kbd> <span data-t="diagnostico.dao_zoom_verde_ok_amarelo"></span></p>
+              <div class="modelo-3d" id="diag-3d"></div>
+              <div class="aviso aviso-info" id="diag-3d-peca" role="status" aria-live="polite" hidden></div>
+            </div>
+            <p class="texto-sec pequeno" id="diag-3d-aviso" role="status" hidden></p>
+            <div class="mapa-chassi" id="diag-mapa"></div>
+            <ul class="lista-local" id="diag-local-lista"></ul>
+          </div>
+        </div>
+        <div class="cartao" data-longa id="diag-comparacao" hidden>
+          <h2 class="cabeca-cartao" data-t="diagnostico.comparacao_antes_depois"></h2>
+          <p class="texto-sec pequeno cartao-nota" id="diag-comparacao-resumo"></p>
+          <table class="tabela" aria-labelledby="diag-comparacao-resumo">
+            <thead><tr><th scope="col" data-t="diagnostico.componente"></th><th scope="col" data-t="diagnostico.antes"></th><th scope="col" data-t="diagnostico.depois"></th><th scope="col" data-t="diagnostico.tendencia"></th></tr></thead>
+            <tbody id="diag-comparacao-linhas"></tbody>
+          </table>
+        </div>
+        <div class="aviso aviso-info" id="diag-bmc" hidden>
+          <span id="diag-bmc-texto" data-t="diagnostico.credenciais_do_bmc_nao_informadas"></span>
+          <button type="button" class="botao botao-secundario botao-pequeno" id="diag-bmc-informar"><span data-icone="shield-check" aria-hidden="true"></span><span data-t="diagnostico.informar_credenciais_do_bmc"></span></button>
+        </div>
+        <div class="cartao cartao-lista">
+          <div class="lista-cabeca" aria-hidden="true">
+            <span data-t="diagnostico.componente"></span><span data-t="diagnostico.status"></span><span class="col-fonte" data-t="diagnostico.fonte"></span>
+          </div>
+          <ul class="lista lista-componentes" id="diag-componentes" role="listbox" data-t-aria-label="diagnostico.componentes_diagnosticados_setas_para_navegar"></ul>
+        </div>
+        <div class="cartao" id="diag-refazer" hidden>
+          <h2 class="cabeca-cartao" data-t="diagnostico.refazer_diagnostico"></h2>
+          <div class="cartao-corpo">
+            <p class="texto-sec pequeno" data-t="diagnostico.somente_leitura_como_todo_diagnostico"></p>
+            <label class="campo"><span data-t="diagnostico.o_que_refazer"></span>
+              <select id="diag-refazer-escopo"><option value="" data-t="diagnostico.tudo"></option></select>
+            </label>
+            <div class="acoes">
+              <button type="button" class="botao botao-secundario" id="diag-refazer-botao"><span data-icone="sync" aria-hidden="true"></span><span data-t="diagnostico.refazer_diagnostico"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="diag-detalhe-area" hidden>
+        <div class="migalha">
+          <button type="button" class="botao botao-secundario botao-pequeno" id="detalhe-voltar"><span data-icone="arrow-left" aria-hidden="true"></span><span data-t="diagnostico.voltar_esc"></span></button>
+          <h1 class="titulo-detalhe" id="detalhe-titulo" tabindex="-1"></h1>
+          <span id="detalhe-status"></span>
+        </div>
+        <p class="texto-sec" id="detalhe-resumo"></p>
+        <ul class="lista-local" id="detalhe-local" data-t-aria-label="diagnostico.local_fisico_do_problema" hidden></ul>
+        <nav class="abas abas-internas" data-t-aria-label="diagnostico.secoes_do_componente">
+          <ul role="tablist" id="detalhe-abas">
+            <li><button type="button" role="tab" id="aba-dados" aria-controls="painel-dados" data-painel="dados" data-t="diagnostico.dados"></button></li>
+            <li><button type="button" role="tab" id="aba-tentativas" aria-controls="painel-tentativas" data-painel="tentativas"><span data-t="diagnostico.tentativas_de_fallback"></span><span class="contador" id="contador-tentativas"></span></button></li>
+            <li><button type="button" role="tab" id="aba-comandos" aria-controls="painel-comandos" data-painel="comandos"><span data-t="diagnostico.comandos_executados"></span><span class="contador" id="contador-comandos"></span></button></li>
+          </ul>
+        </nav>
+        <div role="tabpanel" id="painel-dados" aria-labelledby="aba-dados" tabindex="0"></div>
+        <div role="tabpanel" id="painel-tentativas" aria-labelledby="aba-tentativas" tabindex="0" hidden></div>
+        <div role="tabpanel" id="painel-comandos" aria-labelledby="aba-comandos" tabindex="0" hidden></div>
+      </div>
+    </section>
+
+    <!-- 4. Relatórios -->
+    <section class="tela" id="tela-relatorios" role="tabpanel" aria-labelledby="aba-relatorios" hidden>
+      <div id="rel-resumo-area">
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="relatorios.relatorio_deste_diagnostico"></h2>
+          <div class="cartao-corpo" id="rel-corpo">
+            <p class="texto-sec" data-t="relatorios.o_relatorio_e_gerado_ao"></p>
+          </div>
+        </div>
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="relatorios.log_tecnico"></h2>
+          <div class="cartao-corpo">
+            <p class="texto-sec" data-t="relatorios.se_algo_falhar_exporte_o"></p>
+            <div class="acoes"><button type="button" class="botao botao-secundario" data-exportar-log><span data-icone="download" aria-hidden="true"></span><span data-t="relatorios.exportar_log_tecnico"></span></button></div>
+            <p class="texto-sec pequeno" data-log-mensagem role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+      <div id="rel-visor-area" hidden>
+        <div class="migalha">
+          <button type="button" class="botao botao-secundario botao-pequeno" id="rel-fechar"><span data-icone="arrow-left" aria-hidden="true"></span><span data-t="relatorios.voltar_esc"></span></button>
+          <h1 class="titulo-detalhe" data-t="relatorios.relatorio_html"></h1>
+        </div>
+        <iframe id="rel-visor" data-t-title="relatorios.relatorio_html_gerado" sandbox></iframe>
+      </div>
+    </section>
+
+    <!-- 5. Análise por IA (estrutura; preenchida na fase da IA) -->
+    <section class="tela" id="tela-ia" role="tabpanel" aria-labelledby="aba-ia" hidden>
+      <div id="ia-analise-area" class="tela">
+      <section class="cartao" aria-labelledby="ia-escolhida-titulo">
+        <div class="linha-ia">
+          <h2 class="rotulo-linha" id="ia-escolhida-titulo"><span data-icone="light-bulb" aria-hidden="true"></span><span data-t="ia.ia_escolhida"></span></h2>
+          <span id="ia-escolhida-etiqueta"></span>
+          <span class="texto-sec pequeno linha-ia-detalhe" id="ia-escolhida-detalhe"></span>
+          <a class="botao botao-secundario botao-pequeno" href="#/ia/configurar" id="ia-abrir-config"><span data-icone="gear" aria-hidden="true"></span><span data-t="ia.configurar_ia"></span></a>
+        </div>
+      </section>
+      <div class="aviso aviso-info" id="ia-indisponivel" hidden><span data-icone="info" aria-hidden="true"></span><span id="ia-indisponivel-texto"></span></div>
+      <div class="cartao">
+        <h2 class="cabeca-cartao" data-t="ia.enviar_os_dados_para_analise"></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec" data-t="ia.opcional_os_dados_que_identificam"></p>
+          <p class="aviso aviso-alerta" id="ia-aviso-treinamento" hidden></p>
+          <details class="saiba-mais">
+            <summary data-t="ia.saiba_mais"></summary>
+            <p data-t="ia.serial_service_tag_uuid_asset"></p>
+            <p id="ia-aviso-treinamento-completo"></p>
+            <p class="pequeno" id="ia-provedores"></p>
+          </details>
+          <fieldset class="pergunta">
+            <legend class="visualmente-oculto" data-t="ia.enviar_para_analise_por_ia"></legend>
+            <label class="opcao"><input type="radio" name="ia-enviar" id="ia-nao" value="nao" checked> <span data-t="ia.nao"></span></label>
+            <label class="opcao"><input type="radio" name="ia-enviar" id="ia-sim" value="sim" disabled> <span data-t="ia.sim"></span></label>
+          </fieldset>
+          <div class="acoes">
+            <button type="button" class="botao botao-secundario" id="ia-ver" disabled><span data-icone="search" aria-hidden="true"></span><span data-t="ia.ver_o_que_sera_enviado"></span></button>
+            <button type="button" class="botao botao-primario" id="ia-solicitar" disabled><span data-icone="light-bulb" aria-hidden="true"></span><span data-t="ia.enviar_para_analise"></span></button>
+            <button type="button" class="botao botao-primario" id="ia-tentar" hidden><span data-icone="sync" aria-hidden="true"></span><span data-t="ia.tentar_novamente"></span></button>
+            <button type="button" class="botao botao-secundario" id="ia-cancelar" hidden><span data-icone="x" aria-hidden="true"></span><span data-t="ia.cancelar_envio"></span></button>
+          </div>
+          <p id="ia-mensagem" role="status" aria-live="polite"></p>
+          <pre class="ia-parcial" id="ia-parcial" data-t-aria-label="ia.analise_sendo_escrita_pela_ia" hidden></pre>
+          <label class="opcao pequeno"><input type="checkbox" class="modo-detalhado"> <span data-t="ia.modo_detalhado_tempo_de_cada"></span></label>
+          <p class="dica pequeno" id="ia-dica-reserva" hidden><span data-icone="info" aria-hidden="true"></span><span data-t="ia.dica_configure_uma_ia_reserva"></span>
+            <a href="#/ia/configurar" data-t="ia.configurar_ia"></a></p>
+          <div id="ia-previa-area" hidden>
+            <p class="texto-sec pequeno" id="ia-removidos"></p>
+            <pre id="ia-previa" tabindex="0" data-t-aria-label="ia.dados_que_serao_enviados_a"></pre>
+          </div>
+        </div>
+      </div>
+      <div id="ia-resultado" hidden>
+        <p class="aviso aviso-info pequeno" id="ia-aviso"></p>
+        <p class="texto-sec pequeno" id="ia-tempos" hidden></p>
+        <div class="grade-2">
+          <div class="cartao"><h2 class="cabeca-cartao" data-t="ia.resumo"></h2><div class="cartao-corpo" id="ia-resumo">—</div></div>
+          <div class="cartao"><h2 class="cabeca-cartao" data-t="ia.limitacoes"></h2><div class="cartao-corpo" id="ia-limitacoes">—</div></div>
+        </div>
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="ia.problemas_apontados"></h2>
+          <table class="tabela">
+            <thead><tr><th scope="col" data-t="ia.problema"></th><th scope="col" data-t="ia.severidade"></th><th scope="col" data-t="ia.evidencia"></th><th scope="col" data-t="ia.plano_de_solucao"></th></tr></thead>
+            <tbody id="ia-problemas"><tr><td colspan="4" class="texto-sec" data-t="ia.nenhuma_analise_solicitada"></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+
+      <!-- Configurar IA (CLAUDE.md 10c): escolha, QR local, chave mascarada, Testar, Salvar no pendrive -->
+      <div id="ia-config-area" class="tela" hidden>
+        <div class="migalha">
+          <button type="button" class="botao botao-secundario botao-pequeno" id="ia-config-voltar"><span data-icone="arrow-left" aria-hidden="true"></span><span data-t="ia.voltar_esc"></span></button>
+          <h1 class="titulo-detalhe" id="ia-config-titulo" tabindex="-1" data-t="ia.configurar_ia"></h1>
+        </div>
+        <div class="aviso aviso-alerta" id="ia-config-local" role="status" hidden></div>
+        <p id="ia-config-mensagem" role="status" aria-live="polite"></p>
+        <section class="cartao" aria-labelledby="ia-escolha-titulo">
+          <h2 class="cabeca-cartao" id="ia-escolha-titulo" data-t="ia.ia_principal_e_reserva"></h2>
+          <div class="cartao-corpo">
+            <p class="texto-sec pequeno" data-t="ia.a_reserva_entra_sozinha_se"></p>
+            <div class="campos-bmc">
+              <label class="campo"><span data-t="ia.ia_principal"></span>
+                <select id="ia-principal"></select>
+              </label>
+              <label class="campo"><span data-t="ia.ia_reserva_opcional"></span>
+                <select id="ia-reserva"></select>
+              </label>
+            </div>
+            <div class="acoes">
+              <button type="button" class="botao botao-secundario" id="ia-salvar-escolha"><span data-icone="download" aria-hidden="true"></span><span data-t="ia.salvar_escolha_no_pendrive"></span></button>
+            </div>
+            <p id="ia-escolha-mensagem" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+        <section class="cartao" id="ia-chave-painel" aria-labelledby="ia-chave-titulo" hidden>
+          <h2 class="cabeca-cartao" id="ia-chave-titulo" tabindex="-1" data-t="ia.chave"></h2>
+          <div class="cartao-corpo ia-chave-corpo">
+            <figure class="qr-area">
+              <svg id="ia-qr" role="img" aria-labelledby="ia-qr-legenda" viewBox="0 0 10 10" shape-rendering="crispEdges"></svg>
+              <figcaption id="ia-qr-legenda" class="pequeno texto-sec"><span data-t="ia.aponte_a_camera_do_celular"></span> <span id="ia-qr-link" class="mono"></span></figcaption>
+            </figure>
+            <div class="ia-chave-form">
+              <ol class="lista-simples pequeno">
+                <li data-t="ia.abra_o_link_pelo_qr"></li>
+                <li data-t="ia.crie_uma_chave_de_api"></li>
+                <li data-t="ia.cole_ou_digite_a_chave"></li>
+                <li data-t="ia.testar_confere_a_chave_sem"></li>
+              </ol>
+              <label class="campo campo-largo"><span data-t="ia.chave_de_api"></span>
+                <input type="password" id="ia-chave" autocomplete="off" autocapitalize="off" spellcheck="false">
+              </label>
+              <p class="texto-sec pequeno" id="ia-chave-atual"></p>
+              <div class="acoes">
+                <button type="button" class="botao botao-secundario" id="ia-testar"><span data-icone="check-circle" aria-hidden="true"></span><span data-t="ia.testar"></span></button>
+                <button type="button" class="botao botao-primario" id="ia-salvar-chave"><span data-icone="download" aria-hidden="true"></span><span data-t="ia.salvar_no_pendrive"></span></button>
+                <button type="button" class="botao botao-secundario" id="ia-chave-fechar"><span data-icone="x" aria-hidden="true"></span><span data-t="ia.fechar"></span></button>
+              </div>
+              <p id="ia-chave-mensagem" role="status" aria-live="polite"></p>
+              <div class="celular" id="ia-celular">
+                <h3 class="subtitulo" data-t="ia.pelo_celular"></h3>
+                <p class="texto-sec pequeno" data-t="ia.o_celular_na_mesma_rede"></p>
+                <details class="saiba-mais pequeno">
+                  <summary data-t="ia.saiba_mais"></summary>
+                  <p data-t="ia.o_celular_abre_uma_pagina"></p>
+                </details>
+                <div class="acoes">
+                  <button type="button" class="botao botao-secundario" id="ia-celular-iniciar"><span data-icone="link" aria-hidden="true"></span><span data-t="ia.receber_a_chave_pelo_celular"></span></button>
+                </div>
+                <div id="ia-celular-area" hidden>
+                  <figure class="qr-area">
+                    <svg id="ia-celular-qr" role="img" aria-labelledby="ia-celular-legenda" viewBox="0 0 10 10" shape-rendering="crispEdges"></svg>
+                    <figcaption id="ia-celular-legenda" class="pequeno texto-sec"><span data-t="ia.aponte_a_camera_do_celular_2"></span> <strong class="codigo" id="ia-celular-codigo"></strong></figcaption>
+                  </figure>
+                  <p id="ia-celular-situacao" role="status" aria-live="polite" tabindex="-1"></p>
+                  <p class="texto-sec pequeno" id="ia-celular-detalhe"></p>
+                  <div class="acoes" id="ia-celular-decisao" hidden>
+                    <button type="button" class="botao botao-secundario" id="ia-celular-aceitar"><span data-icone="check" aria-hidden="true"></span><span data-t="ia.aceitar_a_chave"></span></button>
+                    <button type="button" class="botao botao-secundario" id="ia-celular-recusar"><span data-icone="x" aria-hidden="true"></span><span data-t="ia.recusar"></span></button>
+                  </div>
+                  <div class="acoes">
+                    <button type="button" class="botao botao-secundario botao-pequeno" id="ia-celular-parar"><span data-icone="stop" aria-hidden="true"></span><span data-t="ia.encerrar_o_pareamento"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="cartao" aria-labelledby="ia-gratuitas-titulo">
+          <h2 class="cabeca-cartao" id="ia-gratuitas-titulo" data-t="ia.gratuitas"></h2>
+          <p class="cartao-nota texto-sec pequeno" data-t="ia.sem_custo_com_limites_de"></p>
+          <ul class="lista" id="ia-gratuitas" data-t-aria-label="ia.ias_gratuitas"></ul>
+        </section>
+        <section class="cartao" aria-labelledby="ia-pagas-titulo">
+          <h2 class="cabeca-cartao" id="ia-pagas-titulo" data-t="ia.pagas"></h2>
+          <p class="cartao-nota texto-sec pequeno" data-t="ia.cobradas_por_uso_com_creditos"></p>
+          <ul class="lista" id="ia-pagas" data-t-aria-label="ia.ias_pagas"></ul>
+        </section>
+        <p class="texto-sec pequeno" id="ia-config-rodape"></p>
+      </div>
+    </section>
+
+    <!-- 5b. Chat com a IA (CLAUDE.md 10e): primeira mensagem da IA, sugestões, evidências marcadas -->
+    <section class="tela" id="tela-chat" role="tabpanel" aria-labelledby="aba-chat" hidden>
+      <div class="aviso aviso-info" id="chat-indisponivel" hidden><span data-icone="info" aria-hidden="true"></span><span id="chat-indisponivel-texto"></span></div>
+      <div class="cartao chat" id="chat-area">
+        <h1 class="cabeca-cartao" id="chat-titulo"><span data-icone="question" aria-hidden="true"></span><span data-t="chat.conversa_com_a_ia_sobre"></span></h1>
+        <p class="cartao-nota texto-sec pequeno"><span data-t="chat.a_ia_so_explica_e"></span>
+          <label class="opcao"><input type="checkbox" class="modo-detalhado"> <span data-t="chat.modo_detalhado_tempo_de_cada"></span></label></p>
+        <ol class="chat-mensagens" id="chat-mensagens" role="log" aria-labelledby="chat-titulo" tabindex="0"></ol>
+        <div class="chat-msg chat-ia chat-parcial" id="chat-parcial" aria-hidden="true" hidden><div class="chat-autor pequeno"><strong data-t="chat.ia_escrevendo"></strong></div><div class="chat-texto" id="chat-parcial-texto"></div></div>
+        <p class="chat-digitando texto-sec pequeno" id="chat-digitando" role="status" aria-live="polite"></p>
+        <div class="acoes chat-falha" id="chat-tentar-area" hidden>
+          <button type="button" class="botao botao-secundario" id="chat-tentar"><span data-icone="sync" aria-hidden="true"></span><span data-t="chat.tentar_novamente"></span></button>
+          <p class="dica pequeno" id="chat-dica-reserva" hidden><span data-t="chat.dica_configure_uma_ia_reserva"></span> <a href="#/ia/configurar" data-t="chat.configurar_ia"></a></p>
+        </div>
+        <div class="chat-entrada">
+          <div class="chat-sugestoes" id="chat-sugestoes" role="group" data-t-aria-label="chat.sugestoes_rapidas"></div>
+          <label class="campo campo-largo" for="chat-texto" data-t="chat.sua_pergunta"></label>
+          <textarea id="chat-texto" rows="3" maxlength="4000" aria-describedby="chat-ajuda"></textarea>
+          <p class="texto-sec pequeno" id="chat-ajuda" data-t="chat.enter_envia_shift_enter_quebra"></p>
+          <div class="acoes">
+            <button type="button" class="botao botao-primario" id="chat-enviar" disabled><span data-icone="chevron-right" aria-hidden="true"></span><span data-t="chat.enviar"></span></button>
+            <button type="button" class="botao botao-secundario" id="chat-cancelar" hidden><span data-icone="x" aria-hidden="true"></span><span data-t="chat.cancelar_envio"></span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Atualizações (verificação informativa; instalação com o plano de atualização e ATUALIZAR, CLAUDE.md 18.2) -->
+    <section class="tela" id="tela-atualizacoes" role="tabpanel" aria-labelledby="aba-atualizacoes" hidden>
+      <div class="aviso aviso-info" id="atu-indisponivel" hidden><span data-icone="info" aria-hidden="true"></span><span id="atu-indisponivel-texto"></span></div>
+      <!-- Fluxo guiado (pedido de 01/10/2026, 3d): etapas numeradas e a faixa fixa "Próximo passo". -->
+      <div class="guia-atu" id="atu-guia" role="region" data-t-aria-label="atualizacoes.etapas_da_atualizacao">
+        <ol class="etapas etapas-atu" id="atu-etapas"></ol>
+        <p class="proximo-passo"><strong data-t="atualizacoes.proximo_passo"></strong> <span id="atu-proximo" aria-live="polite"></span>
+          <button type="button" class="botao botao-primario botao-pequeno" id="atu-proximo-botao" hidden></button></p>
+      </div>
+      <div class="cartao" id="atu-pergunta">
+        <h2 class="cabeca-cartao" data-t="atualizacoes.verificar_atualizacoes_de_firmware"></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec" data-t="atualizacoes.compara_o_firmware_instalado_com"></p>
+          <fieldset class="pergunta">
+            <legend class="visualmente-oculto" data-t="atualizacoes.verificar_atualizacoes_de_firmware_2"></legend>
+            <label class="opcao"><input type="radio" name="atu-verificar" id="atu-nao" value="nao" checked> <span data-t="atualizacoes.nao"></span></label>
+            <label class="opcao"><input type="radio" name="atu-verificar" id="atu-sim" value="sim" disabled> <span data-t="atualizacoes.sim"></span></label>
+          </fieldset>
+          <div class="acoes">
+            <button type="button" class="botao botao-primario" id="atu-verificar-botao" disabled><span data-icone="sync" aria-hidden="true"></span><span data-t="atualizacoes.verificar_somente_informativo"></span></button>
+          </div>
+          <p id="atu-mensagem" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <p class="aviso aviso-alerta" id="atu-fora-suporte" role="status" hidden></p>
+      <div class="cartao">
+        <h2 class="cabeca-cartao" data-t="atualizacoes.firmware"></h2>
+        <p class="texto-sec pequeno cartao-nota" id="atu-resumo" data-t="atualizacoes.nenhuma_verificacao_feita"></p>
+        <table class="tabela">
+          <thead><tr><th scope="col"><span class="visualmente-oculto" data-t="atualizacoes.selecionar"></span></th><th scope="col" data-t="atualizacoes.componente"></th><th scope="col" data-t="atualizacoes.instalada"></th><th scope="col" data-t="atualizacoes.catalogo"></th><th scope="col" data-t="atualizacoes.situacao"></th></tr></thead>
+          <tbody id="atu-itens"><tr><td><input type="checkbox" disabled data-t-aria-label="atualizacoes.selecionar_faca_a_verificacao_antes"></td><td colspan="4" class="texto-sec" data-t="atualizacoes.nenhum_item_selecao_padrao_nenhum"></td></tr></tbody>
+        </table>
+        <div class="cartao-corpo">
+          <div class="acoes"><button type="button" class="botao botao-secundario" id="atu-baixar" disabled><span data-icone="download" aria-hidden="true"></span><span data-t="atualizacoes.baixar_e_conferir_os_escolhidos"></span></button></div>
+          <p id="atu-preparo-mensagem" role="status" aria-live="polite"></p>
+          <ul class="lista-local" id="atu-preparo" data-t-aria-label="atualizacoes.pacotes_baixados_e_conferidos"></ul>
+          <div class="aviso aviso-alerta" id="atu-acesso" hidden><span id="atu-acesso-texto"></span>
+            <button type="button" class="botao botao-secundario botao-pequeno" id="atu-acesso-botao"></button></div>
+        </div>
+      </div>
+      <!-- Atualização manual (fase 11, CLAUDE.md 11b): navegador integrado + assistente do pacote -->
+      <div class="cartao" id="man-cartao" hidden>
+        <h2 class="cabeca-cartao" id="man-titulo"><span data-icone="download" aria-hidden="true"></span><span data-t="atualizacoes.atualizacao_manual"></span></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec" id="man-explicacao" data-t="atualizacoes.sem_pacote_no_catalogo_baixe"></p>
+          <div class="acoes">
+            <button type="button" class="botao botao-secundario" id="man-abrir"><span data-icone="link" aria-hidden="true"></span><span data-t="atualizacoes.abrir_pagina_de_drivers_deste"></span></button>
+            <button type="button" class="botao botao-secundario" id="man-fechar" hidden><span data-icone="x" aria-hidden="true"></span><span data-t="atualizacoes.fechar_o_navegador_apaga_login"></span></button>
+            <button type="button" class="botao botao-secundario botao-pequeno" id="man-procurar"><span data-icone="sync" aria-hidden="true"></span><span data-t="atualizacoes.atualizar"></span></button>
+            <button type="button" class="botao botao-secundario botao-pequeno" id="man-pasta-abrir" aria-expanded="false" aria-controls="man-pasta-area"><span data-icone="file-directory" aria-hidden="true"></span><span data-t="atualizacoes.abrir_pasta_de_downloads"></span></button>
+          </div>
+          <div id="man-pasta-area" hidden>
+            <p class="texto-sec pequeno" id="man-pasta-titulo"></p>
+            <div class="tabela-rolagem"><table class="tabela" aria-labelledby="man-pasta-titulo">
+              <thead><tr><th scope="col" data-t="atualizacoes.arquivo"></th><th scope="col" data-t="atualizacoes.tamanho"></th><th scope="col" data-t="atualizacoes.data"></th><th scope="col" data-t="atualizacoes.ja_usado"></th><th scope="col"><span class="visualmente-oculto" data-t="atualizacoes.acoes"></span></th></tr></thead>
+              <tbody id="man-pasta-lista"></tbody>
+            </table></div>
+          </div>
+          <p class="texto-sec pequeno" id="man-ajuda"><span data-t="atualizacoes.no_navegador_volte_com"></span> <strong data-t="atualizacoes.voltar_ao_msscan"></strong> <span data-t="atualizacoes.ou"></span> <kbd data-t="atualizacoes.alt"></kbd>+<kbd data-t="atualizacoes.m"></kbd>.</p>
+          <details class="saiba-mais">
+            <summary data-t="atualizacoes.saiba_mais"></summary>
+            <p><span data-t="atualizacoes.o_download_vai_para"></span> <code id="man-pasta" data-t="atualizacoes.msscan_firmware_manual"></code> <span data-t="atualizacoes.e_o_msscan_abre_o"></span></p>
+          </details>
+          <p id="man-mensagem" role="status" aria-live="polite"></p>
+          <p class="aviso aviso-alerta pequeno" id="man-falhas" hidden></p>
+          <ol class="man-pacotes" id="man-pacotes" data-t-aria-label="atualizacoes.pacotes_baixados"></ol>
+        </div>
+      </div>
+      <div class="cartao" data-longa id="atu-checagens" hidden>
+        <h2 class="cabeca-cartao" data-t="atualizacoes.pre_checagens_o_que_impediria"></h2>
+        <div class="cartao-corpo" id="atu-checagens-corpo"></div>
+      </div>
+      <div class="cartao cartao-perigo">
+        <h2 class="cabeca-cartao" id="atu-titulo-confirmacao" data-t="atualizacoes.instalacao"></h2>
+        <div class="cartao-corpo">
+          <p id="atu-modo-texto" data-t="atualizacoes.instala_de_verdade_grava_firmware"></p>
+          <div class="aviso aviso-alerta" id="atu-trava" hidden><span data-icone="shield-check" aria-hidden="true"></span><span id="atu-trava-texto"></span></div>
+          <p><span data-t="atualizacoes.escolha_os_itens_na_tabela"></span> <strong data-t="atualizacoes.plano_de_atualizacao"></strong> <span data-t="atualizacoes.mostra_a_ordem_o_tempo"></span></p>
+          <div class="acoes">
+            <button type="button" class="botao botao-perigo" id="atu-aplicar" disabled><span data-icone="alert" aria-hidden="true"></span><span data-t="atualizacoes.ver_o_plano_de_atualizacao"></span></button>
+          </div>
+          <p id="atu-aplicacao-mensagem" role="status" aria-live="polite"></p>
+          <div class="aviso aviso-alerta" id="atu-parado" hidden><span data-icone="info" aria-hidden="true"></span>
+            <span id="atu-parado-texto"></span>
+            <div class="acoes"><button type="button" class="botao botao-secundario" id="atu-continuar" data-t="atualizacoes.continuar_de_onde_parou"></button></div></div>
+          <div class="aviso aviso-alerta" id="atu-jobs" hidden><strong data-t="atualizacoes.fila_de_jobs_do_idrac"></strong><div id="atu-jobs-corpo"></div></div>
+          <div class="progresso-geral" id="atu-geral" hidden>
+            <div class="progresso"><div class="progresso-barra" role="progressbar" data-t-aria-label="atualizacoes.progresso_geral" aria-valuemin="0" aria-valuemax="100" id="atu-geral-barra"><span></span></div><strong id="atu-geral-pct"></strong></div>
+            <p class="texto-sec pequeno" id="atu-geral-texto"></p>
+            <div class="aviso aviso-alerta" id="atu-sem-progresso" role="alert" hidden><span data-icone="clock" aria-hidden="true"></span><span id="atu-sem-progresso-texto"></span></div>
+          </div>
+          <ol class="lista-progresso" id="atu-progresso" data-t-aria-label="atualizacoes.progresso_por_componente" hidden></ol>
+          <div id="atu-antes-depois" hidden></div>
+          <details class="detalhes-tecnicos"><summary data-t="comum.detalhes_tecnicos"></summary>
+            <ol class="lista-passos" id="atu-passos" data-t-aria-label="atualizacoes.passos_da_aplicacao"></ol>
+          </details>
+          <div class="acoes"><button type="button" class="botao botao-secundario botao-pequeno" data-exportar-log><span data-icone="download" aria-hidden="true"></span><span data-t="atualizacoes.exportar_log_tecnico"></span></button></div>
+          <p class="texto-sec pequeno" data-log-mensagem role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="cartao" data-longa id="acoes-cartao">
+        <h2 class="cabeca-cartao" id="acoes-titulo" data-t="atualizacoes.acoes_corretivas"></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec" data-t="atualizacoes.correcoes_prontas_do_msscan_o"></p>
+          <details class="saiba-mais">
+            <summary data-t="atualizacoes.saiba_mais"></summary>
+            <p><span data-t="atualizacoes.cada_acao_faz_pre_checagens"></span> <code data-t="atualizacoes.corrigir"></code> <span data-t="atualizacoes.digitado_a_ia_pode_apenas"></span></p>
+          </details>
+          <div class="aviso aviso-info" id="acoes-indisponivel" hidden><span data-icone="info" aria-hidden="true"></span><span id="acoes-indisponivel-texto"></span></div>
+          <fieldset class="pergunta">
+            <legend class="visualmente-oculto" data-t="atualizacoes.executar_alguma_acao_corretiva"></legend>
+            <label class="opcao"><input type="radio" name="acoes-querer" id="acoes-nao" value="nao" checked> <span data-t="atualizacoes.nao"></span></label>
+            <label class="opcao"><input type="radio" name="acoes-querer" id="acoes-sim" value="sim" disabled> <span data-t="atualizacoes.sim"></span></label>
+          </fieldset>
+          <fieldset class="lista-acoes" id="acoes-lista" disabled>
+            <legend data-t="atualizacoes.acao_nenhuma_vem_escolhida_uma"></legend>
+            <div id="acoes-itens"></div>
+          </fieldset>
+          <fieldset class="lista-acoes" id="acoes-ntp" hidden>
+            <legend data-t="atualizacoes.servidor_ntp_escolha_um_ou"></legend>
+            <div id="acoes-ntp-sugestoes"></div>
+            <label class="opcao-acao"><input type="radio" name="acoes-ntp-escolha" id="acoes-ntp-outro" value="">
+              <span data-t="atualizacoes.digitar_outro_s_ate_3"></span></label>
+            <label class="campo"><span data-t="atualizacoes.servidores_ntp_digitados"></span>
+              <input type="text" id="acoes-servidores" autocomplete="off" spellcheck="false" data-t-placeholder="atualizacoes.ex_ntp_empresa_local">
+            </label>
+          </fieldset>
+          <fieldset class="lista-acoes" id="acoes-ip" hidden>
+            <legend data-t="atualizacoes.ip_fixo_para_o_idrac"></legend>
+            <label class="campo"><span data-t="atualizacoes.ip_do_idrac"></span> <input type="text" id="acoes-ip-ip" autocomplete="off" spellcheck="false" inputmode="decimal" data-t-placeholder="atualizacoes.ex_192_168_0_82"></label>
+            <label class="campo"><span data-t="atualizacoes.mascara"></span> <input type="text" id="acoes-ip-mascara" autocomplete="off" spellcheck="false" inputmode="decimal" data-t-placeholder="atualizacoes.ex_255_255_255_0"></label>
+            <label class="campo"><span data-t="atualizacoes.gateway"></span> <input type="text" id="acoes-ip-gateway" autocomplete="off" spellcheck="false" inputmode="decimal" data-t-placeholder="atualizacoes.ex_192_168_0_1"></label>
+          </fieldset>
+          <div class="acoes">
+            <button type="button" class="botao botao-secundario" id="acoes-prechecar" disabled><span data-icone="shield-check" aria-hidden="true"></span><span data-t="atualizacoes.verificar_so_leitura"></span></button>
+          </div>
+          <div id="acoes-prechecagem" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="cartao cartao-perigo" id="acoes-confirmar" hidden>
+        <h2 class="cabeca-cartao" id="acoes-titulo-confirmacao" data-t="atualizacoes.confirmacao_da_acao"></h2>
+        <div class="cartao-corpo">
+          <p id="acoes-modo-texto"></p>
+          <div class="aviso aviso-alerta" id="acoes-trava" hidden><span data-icone="shield-check" aria-hidden="true"></span><span id="acoes-trava-texto"></span></div>
+          <label class="campo"><span data-t="atualizacoes.digite_corrigir_para_confirmar"></span>
+            <input type="text" id="acoes-confirmacao" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="acoes">
+            <button type="button" class="botao botao-perigo" id="acoes-executar" disabled data-t="atualizacoes.executar_a_acao"></button>
+          </div>
+        </div>
+      </div>
+      <div class="cartao" id="acoes-resultado-cartao" hidden>
+        <h2 class="cabeca-cartao" data-t="atualizacoes.resultado_da_acao"></h2>
+        <div class="cartao-corpo">
+          <p id="acoes-mensagem" role="status" aria-live="polite"></p>
+          <div id="acoes-resultado"></div>
+          <div class="acoes" id="acoes-desfazer-acoes" hidden>
+            <button type="button" class="botao botao-secundario" id="acoes-desfazer-ver"><span data-icone="arrow-left" aria-hidden="true"></span><span data-t="atualizacoes.desfazer_ver_a_previa"></span></button>
+          </div>
+          <div id="acoes-desfazer" hidden>
+            <div id="acoes-desfazer-previa" aria-live="polite"></div>
+            <div id="acoes-desfazer-confirmar" hidden>
+              <label class="campo"><span data-t="atualizacoes.digite_desfazer_para_voltar_aos"></span>
+                <input type="text" id="acoes-desfazer-confirmacao" autocomplete="off" spellcheck="false">
+              </label>
+              <div class="acoes">
+                <button type="button" class="botao botao-perigo" id="acoes-desfazer-executar" disabled data-t="atualizacoes.desfazer_a_alteracao"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Atalhos / Sobre -->
+    <!-- Terminal embutido (CLAUDE.md 15.5): só pelo servidor local; a IA nunca tem acesso -->
+    <section class="tela" id="tela-terminal" role="tabpanel" aria-labelledby="aba-terminal" hidden>
+      <p class="aviso aviso-alerta faixa-terminal" role="note"><span data-icone="alert" aria-hidden="true"></span>
+        <strong data-t="terminal.terminal_com_acesso_de_administrador"></strong></p>
+      <div class="barra-ferramentas barra-terminal">
+        <button type="button" class="botao botao-secundario botao-pequeno" id="term-copiar"><span data-icone="copy" aria-hidden="true"></span><span data-t="terminal.copiar_selecao"></span></button>
+        <button type="button" class="botao botao-secundario botao-pequeno" id="term-colar"><span data-icone="paste" aria-hidden="true"></span><span data-t="terminal.colar"></span></button>
+        <button type="button" class="botao botao-secundario botao-pequeno" id="term-fonte-menos" data-t-aria-label="terminal.diminuir_a_fonte_do_terminal"><span data-icone="dash" aria-hidden="true"></span><span data-t="terminal.fonte"></span></button>
+        <button type="button" class="botao botao-secundario botao-pequeno" id="term-fonte-mais" data-t-aria-label="terminal.aumentar_a_fonte_do_terminal"><span data-icone="plus" aria-hidden="true"></span><span data-t="terminal.fonte"></span></button>
+        <button type="button" class="botao botao-secundario botao-pequeno" id="term-novo" hidden><span data-icone="terminal" aria-hidden="true"></span><span data-t="terminal.novo_terminal"></span></button>
+        <span class="texto-sec pequeno"><span data-t="terminal.ctrl_shift_c_copia_ctrl"></span> <kbd data-t="terminal.f6"></kbd> <span data-t="terminal.sai_do_terminal_tab_fica"></span></span>
+      </div>
+      <p class="texto-sec" id="term-mensagem" role="status" aria-live="polite"></p>
+      <div class="cartao" id="term-desligado" hidden>
+        <h2 class="cabeca-cartao" data-t="terminal.terminal_desligado"></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec" data-t="terminal.terminal_desligado_texto"></p>
+          <button type="button" class="botao botao-secundario" id="term-ativar"><span data-icone="terminal" aria-hidden="true"></span><span data-t="terminal.ativar_terminal"></span></button>
+        </div>
+      </div>
+      <div class="terminal-area" id="terminal-area" data-t-aria-label="terminal.terminal"></div>
+      <div class="cartao" id="ssh-cartao">
+        <h2 class="cabeca-cartao" data-t="terminal.acesso_ssh_e_sftp_mobaxterm"></h2>
+        <div class="cartao-corpo">
+          <p class="texto-sec"><span data-t="terminal.desligado_por_padrao_ao_ativar"></span> <code data-t="terminal.tecnico"></code> <span data-t="terminal.com_uma_senha_aleatoria_que"></span>
+            <code data-t="terminal.msscan_config_ssh_authorized_keys"></code><span data-t="terminal.os_logs_ficam_em"></span> <code data-t="terminal.run_live_medium_msscan_logs"></code>.</p>
+          <button type="button" class="botao botao-secundario" id="ssh-ativar"><span data-icone="terminal" aria-hidden="true"></span><span data-t="terminal.ativar_acesso_ssh"></span></button>
+          <dl class="lista-dados" id="ssh-dados" hidden>
+            <dt data-t="terminal.endereco"></dt><dd id="ssh-endereco"></dd>
+            <dt data-t="terminal.usuario"></dt><dd><code data-t="terminal.tecnico"></code></dd>
+            <dt data-t="terminal.senha_desta_sessao"></dt><dd><code id="ssh-senha"></code></dd>
+            <dt data-t="terminal.chaves_publicas_aceitas"></dt><dd id="ssh-chaves"></dd>
+            <dt data-t="terminal.conexoes"></dt><dd id="ssh-conexoes"></dd>
+          </dl>
+          <p class="texto-sec" id="ssh-mensagem" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tela" id="tela-sobre" role="tabpanel" aria-labelledby="aba-sobre" hidden>
+      <div class="cartao" id="tela-cartao">
+        <h2 class="cabeca-cartao" data-t="sobre.tela_e_resolucao"></h2>
+        <div class="cartao-corpo">
+          <p><span data-t="sobre.resolucao_em_uso"></span> <strong id="tela-atual">—</strong> <span class="texto-sec pequeno" id="tela-origem"></span></p>
+          <p><span data-t="sobre.zoom_da_interface"></span> <strong id="tela-zoom">—</strong></p>
+          <p><span data-t="sobre.fluidez_da_tela"></span> <strong id="sobre-fps" data-t="sobre.medindo"></strong></p>
+          <div class="acoes">
+            <button type="button" class="botao botao-secundario" id="tela-zoom-menos" data-t="sobre.diminuir_ctrl"></button>
+            <button type="button" class="botao botao-secundario" id="tela-zoom-auto" data-t="sobre.automatico_ctrl_0"></button>
+            <button type="button" class="botao botao-secundario" id="tela-zoom-mais" data-t="sobre.aumentar_ctrl"></button>
+          </div>
+          <div id="tela-troca" hidden>
+            <label class="campo"><span data-t="sobre.trocar_a_resolucao"></span>
+              <select id="tela-modos"></select>
+            </label>
+            <div class="acoes">
+              <button type="button" class="botao botao-secundario" id="tela-aplicar" data-t="sobre.aplicar_resolucao"></button>
+            </div>
+          </div>
+          <div class="aviso aviso-alerta" id="tela-confirmar" role="alertdialog" aria-labelledby="tela-confirmar-texto" hidden>
+            <span id="tela-confirmar-texto"></span>
+            <div class="acoes">
+              <button type="button" class="botao botao-primario" id="tela-manter" data-t="sobre.manter_esta_resolucao"></button>
+              <button type="button" class="botao botao-secundario" id="tela-voltar" data-t="sobre.voltar_agora"></button>
+            </div>
+          </div>
+          <p class="texto-sec pequeno" id="tela-mensagem" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="grade-2">
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="sobre.atalhos_de_teclado"></h2>
+          <div class="cartao-corpo" id="sobre-atalhos"></div>
+        </div>
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="sobre.sobre"></h2>
+          <div class="cartao-corpo">
+            <p><strong data-t="sobre.msscan"></strong> <span id="sobre-versao"></span> <span data-t="sobre.diagnostico_de_servidores_fisicos_somente"></span></p>
+            <p class="texto-sec pequeno"><span data-t="sobre.interface_local_nada_sai_deste"></span> <code data-t="sobre.msscan_texto_1"></code>).</p>
+            <p class="texto-sec pequeno" data-t="sobre.icones_octicons_mit_paleta_baseada"></p>
+            <details class="licenca">
+              <summary data-t="sobre.licenca_mit_do_three_js"></summary>
+              <pre data-t="sobre.the_mit_license_copyright_2010"></pre>
+            </details>
+            <details class="licenca">
+              <summary data-t="sobre.licenca_mit_dos_octicons_e"></summary>
+              <pre data-t="sobre.mit_license_copyright_c_2026"></pre>
+            </details>
+            <details class="licenca">
+              <summary data-t="sobre.licenca_das_fontes"></summary>
+              <pre data-t="sobre.texto_licenca_fontes"></pre>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tela" id="tela-erro" role="alert" hidden>
+      <div class="cartao cartao-bloqueio">
+        <h1 class="titulo-cartao"><span data-icone="stop" aria-hidden="true"></span><span data-t="erro.erro"></span></h1>
+        <p id="erro-texto"></p>
+        <p class="texto-sec"><span data-t="erro.o_modo_texto_continua_disponivel"></span> <code data-t="erro.msscan_texto_1"></code>).</p>
+      </div>
+    </section>
+  </main>
+  <!-- Coluna direita: painel rápido (rede, iDRAC, IA, SSH) e central de notificações -->
+  <aside class="painel painel-lateral" id="painel-rapido" tabindex="-1" aria-labelledby="painel-rapido-titulo">
+    <div class="painel-rolagem">
+      <h2 class="titulo-painel" id="painel-rapido-titulo"><span data-icone="layout" aria-hidden="true"></span><span data-t="painel.painel_rapido"></span>
+        <button type="button" class="pilula pilula-botao" id="botao-atalhos" data-t-aria-label="geral.atalhos_de_teclado" data-t-title="geral.atalhos_de_teclado"><span data-icone="command-palette" aria-hidden="true"></span></button></h2>
+      <div class="blocos-rapidos" id="blocos-rapidos"></div>
+      <section class="notificacoes" aria-labelledby="notif-titulo">
+        <h2 class="titulo-painel" id="notif-titulo"><span data-icone="bell" aria-hidden="true"></span><span data-t="notificacoes.titulo"></span></h2>
+        <div id="notif-tarefas"></div>
+        <ul class="lista-notificacoes" id="notif-lista" aria-live="off"></ul>
+        <div class="notif-rodape">
+          <span class="texto-sec pequeno" id="notif-contagem"></span>
+          <button type="button" class="botao botao-secundario botao-pequeno" id="notif-silenciar" aria-pressed="false"><span data-icone="bell-off" aria-hidden="true"></span><span data-t="notificacoes.silenciar"></span></button>
+          <button type="button" class="botao botao-secundario botao-pequeno" id="notif-limpar"><span data-icone="brush" aria-hidden="true"></span><span data-t="notificacoes.limpar"></span></button>
+        </div>
+      </section>
+    </div>
+  </aside>
+  </div>
+  <!-- Doca inferior: ações rápidas -->
+  <nav class="doca" id="doca" data-t-aria-label="doca.acoes_rapidas">
+    <button type="button" class="item-doca" id="doca-refazer"><span data-icone="sync" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.refazer_diagnostico"></span></button>
+    <button type="button" class="item-doca" id="doca-relatorio"><span data-icone="file-down" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.exportar_relatorio"></span></button>
+    <button type="button" class="item-doca" id="doca-terminal"><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-doca" data-t="geral.terminal"></span></button>
+    <button type="button" class="item-doca" id="doca-drivers"><span data-icone="external-link" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pagina_de_drivers"></span></button>
+    <button type="button" class="item-doca" id="doca-downloads"><span data-icone="file-directory" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pasta_de_downloads"></span></button>
+    <button type="button" class="item-doca" id="doca-config"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-doca" data-t="barra.configuracoes"></span></button>
+    <span class="doca-versao" id="rodape-versao"></span>
+  </nav>
+  <div class="fundo-gaveta" id="fundo-gaveta" hidden></div>
+
+  <!-- Diálogo de atalhos (?) -->
+  <!-- Tela única "Plano de atualização" (CLAUDE.md 18.2): "Cancelar" com o foco inicial; nada acontece sem ATUALIZAR
+       digitado (o servidor confere tudo de novo). Depois dele, tudo é automático. -->
+  <div class="fundo-dialogo" id="aviso-fundo" hidden>
+    <div class="dialogo dialogo-aviso" role="alertdialog" aria-modal="true" aria-labelledby="aviso-titulo" aria-describedby="aviso-modo" id="aviso-dialogo">
+      <div class="dialogo-cabeca"><h2 id="aviso-titulo" data-t="plano.plano_de_atualizacao"></h2></div>
+      <div class="dialogo-corpo">
+        <p class="aviso aviso-falha aviso-modo" id="aviso-modo"></p>
+        <p class="texto-sec" id="aviso-conferindo" role="status" aria-live="polite"></p>
+        <div id="aviso-conteudo" hidden>
+          <h3 class="subtitulo" data-t="plano.o_que_sera_instalado_nesta"></h3>
+          <ol class="lista-passos" id="aviso-itens"></ol>
+          <p id="aviso-estimativa"></p>
+          <div id="aviso-liberacao" hidden>
+            <h3 class="subtitulo" data-t="plano.liberacao_nesta_fase_gravacao_real"></h3>
+            <ul class="lista-simples" id="aviso-liberacao-lista"></ul>
+          </div>
+          <h3 class="subtitulo" data-t="plano.hardware_conferido_agora"></h3>
+          <ul class="lista-local" id="aviso-hardware"></ul>
+          <h3 class="subtitulo" data-t="plano.mudancas_temporarias_no_idrac_so"></h3>
+          <ul class="lista-simples" id="aviso-temporarias"></ul>
+          <ul class="lista-simples texto-sec" id="aviso-extras"></ul>
+          <div class="aviso aviso-falha" id="aviso-bloqueios" role="alert" hidden></div>
+          <!-- 09/10/2026: bloqueio só por checagem de hardware → o técnico pode assumir os riscos (só nesta instalação) -->
+          <div class="acoes" id="aviso-assumir-area" hidden>
+            <button type="button" class="botao botao-secundario" id="aviso-assumir"><span data-icone="alert" aria-hidden="true"></span><span data-t="plano.continuar_assumindo_os_riscos"></span></button>
+          </div>
+          <div id="aviso-riscos" hidden>
+            <h3 class="subtitulo" id="aviso-riscos-titulo" tabindex="-1" data-t="plano.riscos_titulo"></h3>
+            <p class="aviso aviso-falha" data-t="plano.riscos_explicacao"></p>
+            <ul class="lista-local" id="aviso-riscos-lista"></ul>
+            <label class="campo"><span data-t="plano.digite_assumo_os_riscos"></span>
+              <input type="text" id="atu-confirmacao-riscos" autocomplete="off" spellcheck="false">
+            </label>
+          </div>
+          <div id="aviso-seguir">
+            <h3 class="subtitulo" data-t="plano.avisos"></h3>
+            <ul class="lista-simples" id="aviso-fixos"></ul>
+            <div id="atu-redundancia" hidden>
+              <p class="aviso aviso-alerta"><strong data-t="plano.redundancia_de_energia_perdida"></strong> <span data-t="plano.o_servidor_esta_com_uma"></span></p>
+              <label class="campo"><span data-t="plano.digite_sem_redundancia_para_confirmar"></span>
+                <input type="text" id="atu-confirmacao-redundancia" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+            <div id="aviso-historico" hidden>
+              <p class="aviso aviso-alerta"><strong data-t="plano.evento_critico_antigo_no_log"></strong> <span data-t="plano.nao_foi_confirmado_agora_a"></span></p>
+              <label class="opcao"><input type="checkbox" id="aviso-ciente"> <strong id="aviso-ciente-texto" data-t="plano.estou_ciente_de_que_e"></strong></label>
+            </div>
+            <p class="texto-sec" data-t="plano.depois_do_atualizar_nada_mais"></p>
+            <label class="campo"><span data-t="plano.digite_atualizar_para_confirmar"></span>
+              <input type="text" id="atu-confirmacao" autocomplete="off" spellcheck="false" disabled>
+            </label>
+          </div>
+        </div>
+        <div class="acoes">
+          <button type="button" class="botao botao-secundario" id="aviso-cancelar" data-t="plano.cancelar"></button>
+          <button type="button" class="botao botao-perigo" id="aviso-instalar" disabled data-t="plano.instalar_agora"></button>
+        </div>
+        <p id="aviso-mensagem" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desligar / Reiniciar (CLAUDE.md 15.5): confirmação com "Cancelar" em foco -->
+  <div class="fundo-dialogo" id="energia-fundo" hidden>
+    <div class="dialogo" role="alertdialog" aria-modal="true" aria-labelledby="energia-titulo" aria-describedby="energia-texto">
+      <div class="dialogo-cabeca"><h2 id="energia-titulo" data-t="erro.desligar_o_servidor"></h2></div>
+      <div class="dialogo-corpo">
+        <p id="energia-texto"></p>
+        <div class="acoes">
+          <button type="button" class="botao botao-secundario" id="energia-cancelar" data-t="plano.cancelar"></button>
+          <button type="button" class="botao botao-perigo" id="energia-confirmar" data-t="erro.desligar"></button>
+        </div>
+        <p class="texto-sec" id="energia-mensagem" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+  <div class="fundo-dialogo" id="dialogo-fundo" hidden>
+    <div class="dialogo" role="dialog" aria-modal="true" aria-labelledby="dialogo-titulo" id="dialogo-atalhos">
+      <div class="dialogo-cabeca">
+        <h2 id="dialogo-titulo" data-t="dialogo_atalhos.atalhos_de_teclado"></h2>
+        <button type="button" class="botao-icone" id="dialogo-fechar" data-t-aria-label="dialogo_atalhos.fechar_esc"><span data-icone="x" aria-hidden="true"></span></button>
+      </div>
+      <div class="dialogo-corpo" id="dialogo-atalhos-corpo"></div>
+    </div>
+  </div>
+
+  <div class="visualmente-oculto" id="anuncio" aria-live="polite"></div>
+
+  <script src="estaticos/textos.js"></script>
+  <script src="dados.js"></script>
+  <script src="demo.js"></script>
+  <script src="estaticos/icones.js"></script>
+  <script src="estaticos/modelo3d.js"></script>
+  <script src="estaticos/app.js"></script>
+</body>
+</html>

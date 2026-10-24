@@ -1,0 +1,2 @@
+three.js (https://threejs.org) — MIT License. Copyright © 2010-2019 three.js authors.
+Arquivos copiados do pacote Debian libjs-three 111+dfsg1.

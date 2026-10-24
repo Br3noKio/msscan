@@ -1,0 +1,12 @@
+[Unit]
+Description=MSscan - consoles de texto tty2 a tty6 (somente com msscan.terminal=1)
+ConditionKernelCommandLine=msscan.terminal=1
+After=systemd-logind.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/systemctl --no-block start getty@tty2.service getty@tty3.service getty@tty4.service getty@tty5.service getty@tty6.service
+
+[Install]
+WantedBy=multi-user.target

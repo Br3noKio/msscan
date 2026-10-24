@@ -1,0 +1,104 @@
+# MSscan — pacotes da ISO (Debian 13 trixie).
+# Proprietários (perccli, storcli, ssacli, DUP...) NÃO entram aqui: vão em /vendor no pendrive.
+
+# Aplicação (Python 3 + dependências permitidas; sem pip)
+python3
+python3-requests
+python3-yaml
+python3-packaging
+
+# Diagnóstico de hardware
+dmidecode
+lshw
+pciutils
+ipmitool
+freeipmi-tools
+lm-sensors
+smartmontools
+nvme-cli
+sg3-utils
+lsscsi
+mdadm
+ethtool
+iproute2
+# 21.5: teste de IP livre antes do IP fixo no iDRAC (ping e detecção de endereço duplicado)
+iputils-ping
+iputils-arping
+util-linux
+kmod
+
+# Rede (DHCP automático) e HTTPS
+network-manager
+ca-certificates
+# 28.1: sem systemd-timesyncd: ele sincroniza o kernel e o kernel copia a hora para o relógio do BIOS a cada 11 min.
+# O MSscan acerta só o relógio do sistema (msscan/rede/relogio.py, date -u -s).
+
+# Dados no pendrive (partição MSSCAN, pasta MSSCAN/ no FAT32 do Rufus, Ventoy)
+exfatprogs
+# dmsetup: montar a partição do Ventoy enquanto a ISO dele está em uso (mapeamento linear)
+dmsetup
+
+# Console em português (fonte com √ ▲ ✗, teclado ABNT2)
+console-setup
+keyboard-configuration
+locales
+
+# Sessão live: usuário "user" com login automático nos outros terminais
+user-setup
+sudo
+
+# Firmware de placas de rede e controladoras (área non-free-firmware)
+firmware-linux-nonfree
+firmware-misc-nonfree
+firmware-bnx2
+firmware-bnx2x
+firmware-qlogic
+# 28.1: placas de rede de todas as gerações. tg3 (tigon) e cxgb estão no misc-nonfree; igb/ixgbe/i40e, bnxt_en,
+# mlx4/mlx5 e be2net (Emulex) não carregam arquivo de firmware (vem na própria placa).
+# ice (Intel E810): pacote DDP
+firmware-intel-misc
+# netxen_nic/qlcnic (QLogic 3xxx/82xx)
+firmware-netxen
+# liquidio (Cavium/Marvell)
+firmware-cavium
+# r8169/r8152: adaptadores de rede USB e placas Realtek
+firmware-realtek
+
+# Interface gráfica em quiosque (fase 5, opção C: Xorg + Firefox ESR)
+# modesetting está no xserver-xorg-core; fbdev e vesa são o plano B para vídeo sem KMS.
+xserver-xorg-core
+xserver-xorg-video-fbdev
+xserver-xorg-video-vesa
+xserver-xorg-input-libinput
+xinit
+xauth
+# xrandr: modo do monitor (EDID) com fallback e troca pela interface
+x11-xserver-utils
+# Gerenciador mínimo: sem ele o Firefox --kiosk não ocupa a tela toda (sem tema, o matchbox não sobe)
+matchbox-window-manager
+matchbox-themes-extra
+firefox-esr
+fonts-dejavu-core
+# kbd: chvt e a fonte do console (msscan-fonte)
+kbd
+# Firewall do navegador do quiosque (só 127.0.0.1)
+nftables
+# 22.5: acesso SSH/SFTP ao MSscan, DESLIGADO por padrão (ligado pela aba Terminal ou msscan.ssh=1)
+openssh-server
+# Navegador integrado (fase 11): esconder/mostrar a janela do navegador ("Voltar ao MSscan")
+xdotool
+# Aba Terminal (CLAUDE.md 15.5): xterm.js local (sem CDN), servido pelo MSscan em /estaticos/xterm/
+node-xterm
+# Nova interface (1.0.0): Inter (textos) e JetBrains Mono (dados e números), ambas SIL Open Font License 1.1
+fonts-inter
+fonts-jetbrains-mono
+# Modelo 3D do chassi (CLAUDE.md 18.1): three.js r111 + OrbitControls locais (sem CDN), servidos em /estaticos/three/
+libjs-three
+# WebGL por software (llvmpipe) para o modelo 3D: o vídeo dos servidores (Matrox G200, ASPEED) não tem 3D. Sem isso ou
+# com fps baixo, a interface volta sozinha ao mapa 2D.
+libgl1-mesa-dri
+libegl-mesa0
+# racadm local (CLAUDE.md 19.1 e 20): única biblioteca externa do idracadm7 do "iDRAC Tools for Linux" 11.4.1.0 (conferido
+# no pacote real: NEEDED libargtable2.so.0 e libc; o SSL só é carregado pelo racadm remoto). O pacote da Dell nunca vai na
+# ISO: o técnico copia ou o MSscan baixa de dl.dell.com para MSSCAN/vendor/.
+libargtable2-0

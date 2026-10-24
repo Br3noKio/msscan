@@ -1,0 +1,56 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      4
+    ],
+    "pre_release": false,
+    "svn_revision": "5530",
+    "platform_info": "x86_64-linux-6.12.113+deb13-amd64",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "--scan-open",
+      "-j"
+    ],
+    "exit_status": 0
+  },
+  "devices": [
+    {
+      "name": "/dev/sda",
+      "info_name": "/dev/sda",
+      "type": "scsi",
+      "protocol": "SCSI",
+      "open_error": "DELL or MegaRaid controller, please try adding '-d megaraid,N'"
+    },
+    {
+      "name": "/dev/bus/0",
+      "info_name": "/dev/bus/0 [megaraid_disk_00]",
+      "type": "megaraid,0",
+      "protocol": "SCSI"
+    },
+    {
+      "name": "/dev/bus/0",
+      "info_name": "/dev/bus/0 [megaraid_disk_01]",
+      "type": "megaraid,1",
+      "protocol": "SCSI",
+      "open_error": "INQUIRY failed"
+    },
+    {
+      "name": "/dev/bus/0",
+      "info_name": "/dev/bus/0 [megaraid_disk_02]",
+      "type": "megaraid,2",
+      "protocol": "SCSI"
+    },
+    {
+      "name": "/dev/bus/0",
+      "info_name": "/dev/bus/0 [megaraid_disk_03]",
+      "type": "megaraid,3",
+      "protocol": "SCSI"
+    }
+  ]
+}

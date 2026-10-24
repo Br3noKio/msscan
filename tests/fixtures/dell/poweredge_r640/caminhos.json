@@ -1,0 +1,7 @@
+{
+  "/dev/ipmi0": true,
+  "/sys/class/net/eno1np0/device": true,
+  "/sys/class/net/eno2np1/device": true,
+  "/sys/class/net/eno3/device": true,
+  "/sys/class/net/eno4/device": true
+}

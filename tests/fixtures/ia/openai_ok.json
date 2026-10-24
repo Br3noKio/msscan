@@ -1,0 +1,23 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "chatcmpl-teste",
+  "object": "chat.completion",
+  "model": "llama-3.3-70b-versatile",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\"resumo\": \"Servidor operando com uma fonte sem energia de entrada; restante sem falhas.\", \"problemas\": [{\"titulo\": \"Redundância de energia perdida\", \"severidade\": \"media\", \"evidencias\": [{\"componente\": \"fontes\", \"trecho\": \"Power Supply AC lost\"}], \"explicacao\": \"A PS1 está sem energia de entrada.\", \"acao_recomendada\": \"Verificar cabo e tomada da PS1.\", \"plano\": {\"passos\": [\"Conferir o LED da PS1\", \"Verificar cabo e tomada\", \"Religar e refazer o diagnóstico\"], \"prioridade\": \"alta\", \"intervencao_fisica\": true, \"troca_de_peca\": false, \"acao_catalogo\": \"\"}}, {\"titulo\": \"Eventos antigos no log do BMC\", \"severidade\": \"baixa\", \"evidencias\": [{\"componente\": \"log_bmc\", \"trecho\": \"indicam problema\"}], \"explicacao\": \"Há eventos históricos no SEL.\", \"acao_recomendada\": \"Exportar e limpar o SEL depois de conferir.\", \"plano\": {\"passos\": [\"Conferir se os eventos já foram resolvidos\"], \"prioridade\": \"baixa\", \"intervencao_fisica\": false, \"troca_de_peca\": false, \"acao_catalogo\": \"bmc.sel_exportar_limpar\"}}, {\"titulo\": \"Disco com setores realocados\", \"severidade\": \"alta\", \"evidencias\": [{\"componente\": \"discos\", \"trecho\": \"setores realocados: 812\"}], \"explicacao\": \"Evidência inventada (não existe nos dados).\", \"acao_recomendada\": \"Trocar o disco.\", \"plano\": {\"passos\": [\"Trocar o disco\"], \"prioridade\": \"imediata\", \"intervencao_fisica\": true, \"troca_de_peca\": true, \"acao_catalogo\": \"disco.formatar_tudo\"}}], \"limitacoes\": [\"RAID de hardware não verificado.\"]}\n```"
+    },
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 12000,
+   "completion_tokens": 900,
+   "total_tokens": 12900
+  }
+ }
+}

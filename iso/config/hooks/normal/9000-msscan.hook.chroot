@@ -1,0 +1,66 @@
+#!/bin/sh
+# Hook executado DENTRO do chroot durante o "lb build".
+set -e
+
+# MSscan no tty1, depois da rede.
+systemctl enable msscan.service
+# Desmontagem limpa dos dados no pendrive ao desligar (sync, somente leitura, umount).
+systemctl enable msscan-pendrive.service
+# Fonte do console com tamanho conforme a resolução (legível em monitores grandes e pequenos).
+systemctl enable msscan-fonte.service
+systemctl mask getty@tty1.service
+# 1.0.0: tty2 a tty6 só com msscan.terminal=1 (logind.conf.d/10-msscan.conf desliga os consoles automáticos).
+systemctl enable msscan-consoles.service
+
+# network-online.target só espera a rede se o wait-online estiver habilitado.
+systemctl enable NetworkManager.service
+systemctl enable NetworkManager-wait-online.service || true
+
+# 28.1: relógio acertado pelo MSscan antes de qualquer HTTPS (msscan/rede/relogio.py), só o do sistema. Nada de
+# systemd-timesyncd (o kernel copiaria a hora para o relógio do BIOS); se vier por dependência, fica mascarado.
+systemctl mask systemd-timesyncd.service || true
+
+# 22.5: SSH desligado por padrão (o MSscan liga só quando o técnico pede) e SEM chaves de servidor na ISO: elas são
+# geradas a cada ativação (ssh-keygen -A), então nenhuma cópia da ISO compartilha chave privada.
+systemctl disable ssh.service ssh.socket || true
+rm -f /etc/ssh/ssh_host_*
+
+# Fonte do console com √ ▲ ✗ (as fontes do console não têm ✓ nem ⚠).
+sed -i \
+    -e 's/^CODESET=.*/CODESET="Uni2"/' \
+    -e 's/^FONTFACE=.*/FONTFACE="Terminus"/' \
+    -e 's/^FONTSIZE=.*/FONTSIZE="8x16"/' \
+    /etc/default/console-setup
+
+# Diagnóstico é somente leitura: NÃO montar arrays RAID de software/Intel RST automaticamente.
+# Montar um array degradado pode iniciar reconstrução/sincronização (escrita nos discos do cliente).
+mkdir -p /etc/mdadm
+if [ -f /etc/mdadm/mdadm.conf ]; then
+    sed -i '/^AUTO /d' /etc/mdadm/mdadm.conf
+fi
+echo "AUTO -all" >> /etc/mdadm/mdadm.conf
+if [ -f /etc/default/mdadm ]; then
+    sed -i -e 's/^INITRDSTART=.*/INITRDSTART='"'"'none'"'"'/' -e 's/^AUTOSCAN=.*/AUTOSCAN=false/' /etc/default/mdadm
+fi
+update-initramfs -u -k all || true
+
+# Usuário sem privilégios do navegador do quiosque (sem senha, sem shell, sem home).
+# O firewall /etc/msscan/quiosque.nft restringe a rede dele a 127.0.0.1/::1.
+if ! id msscan-ui >/dev/null 2>&1; then
+    useradd --system --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin msscan-ui
+fi
+
+# Usuário sem privilégios do navegador integrado (fase 11): perfil temporário em /tmp, apagado ao fechar.
+# O firewall só deixa este usuário falar com o proxy do MSscan (domínios oficiais) e com a interface.
+if ! id msscan-web >/dev/null 2>&1; then
+    useradd --system --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin msscan-web
+fi
+
+# Extensão do navegador integrado que mostra "Site bloqueado pelo MSscan: <domínio>" (CLAUDE.md 15.1), gerada da mesma
+# lista de domínios do proxy e instalada à força pela política do Firefox (distribution/policies.json).
+mkdir -p /usr/local/share/msscan
+cd /opt/msscan && PYTHONDONTWRITEBYTECODE=1 python3 -m msscan.navegador.navegador /usr/local/share/msscan/bloqueio.xpi && cd /
+chmod 0644 /usr/local/share/msscan/bloqueio.xpi
+
+# Nenhum bytecode gerado durante o build.
+find /opt/msscan -name '__pycache__' -type d -prune -exec rm -rf {} +

@@ -1,0 +1,139 @@
+# MSscan — banco de compatibilidade: Dell.
+#
+# O banco é DICA; a detecção é a verdade. Divergências vão para o relatório.
+# Para atualização de firmware o banco só RESTRINGE (bloqueios), nunca libera.
+# Adicionar um modelo = acrescentar um item em "modelos" (sem mexer no código).
+#
+# "match": expressão regular comparada com o modelo INTEIRO do dmidecode
+# (system-product-name), sem diferenciar maiúsculas; a comparação é exata.
+
+fabricante: Dell
+match_fabricante: "^Dell( Inc\\.?)?$"
+
+modelos:
+  - match: "PowerEdge R640"
+    nome: "Dell PowerEdge R640"
+    geracao: "14ª geração (14G)"
+    bmc: "iDRAC9"
+    ipmi: "2.0"
+    redfish: true
+    smart: "discos atrás da PERC: smartctl -d megaraid,N; HBA/AHCI: direto"
+    controladoras:
+      - "PERC H330"
+      - "PERC H730P"
+      - "PERC H740P"
+      - "HBA330"
+      - "BOSS-S1"
+    ferramentas:
+      - perccli64
+    sensores: "BMC (Redfish e IPMI); o kernel expõe poucos sensores (coretemp, fontes via ACPI)"
+    comandos: {}
+    limitacoes:
+      - "A Redfish Host Interface (SMBIOS tipo 42) pode estar desativada no iDRAC; nesse caso o endereço do Redfish vem do IP do iDRAC (ipmitool lan print 1), que precisa ser alcançável pela rede do MSscan."
+      - "Sem credenciais do iDRAC, RAID de hardware (PERC) só é verificado com perccli64 em vendor/."
+    atualizacao:
+      metodo_preferido: redfish
+      fallbacks: [dup_linux, perccli]
+      ordem_recomendada: []   # a confirmar na documentação da Dell antes da fase 8
+      observacoes:
+        - "Ordem de aplicação a confirmar na documentação oficial da Dell (fase 8)."
+      bloqueios: []
+    # Regras de montagem (pedido de 01/10/2026), conferidas no "Dell EMC PowerEdge R640 Installation and Service Manual"
+    # em 01/10/2026: "System memory guidelines" (24 slots, 12 por processador, 6 canais por processador; canal N = slots
+    # N e N+6, alça branca primeiro), "General memory module installation guidelines" ("For single-processor systems,
+    # sockets A1 to A12 are available"; "In a dual-processor configuration, the memory configuration for each processor
+    # must be identical" — ex.: A1 na CPU1 → B1 na CPU2; fora das regras "your system might not boot, stop responding
+    # during memory configuration, or operate with reduced memory"), "Mode-specific guidelines" (ordem com 2 CPUs: A1,
+    # B1, A2, B2...) e "Power supply units" (configurações listadas com duas fontes iguais; "If two PSUs are used, they
+    # must be of the same maximum output power"; o manual não diz que uma fonte só é não suportada).
+    montagem:
+      fonte: "Dell EMC PowerEdge R640 Installation and Service Manual (conferido em 01/10/2026)"
+      processadores: {maximo: 2, single_suportado: true}
+      memoria:
+        slots_por_cpu: 12
+        canais_por_cpu: 6
+        banco_por_cpu: {A: 1, B: 2}
+        canal_do_slot: {1: 0, 7: 0, 2: 1, 8: 1, 3: 2, 9: 2, 4: 3, 10: 3, 5: 4, 11: 4, 6: 5, 12: 5}
+        primeiro_slot: {1: A1, 2: B1}
+        identica_entre_cpus: true
+      fontes:
+        maximo: 2
+        uma_suportada: true
+        nota: "O manual lista as configurações com duas fontes iguais (redundância 1+1 configurada no BIOS)."
+        iguais: "Com duas fontes, o fabricante exige a mesma potência máxima e o mesmo tipo de etiqueta (ex.: EPP); misturar fontes de gerações anteriores não é suportado."
+    # Mapa do chassi (CLAUDE.md 15.3), vista de cima com a frente à esquerda, desenhado sobre a foto oficial "Inside
+    # the system with 2 PCIe expansion risers" (Dell EMC PowerEdge R640 Technical Guide, figura 8; conferido em
+    # 30/09/2026): discos e backplane na frente, 8 ventoinhas, CPU2 (lado esquerdo visto da frente) e CPU1 com a PERC
+    # e o Riser 1 (lado direito), fontes empilhadas atrás no lado esquerdo (PSU1 a de dentro: "1" impresso nela; PSU2 a
+    # da borda), Riser 2 no centro da traseira e Riser 1 no canto. DIMMs A1–A12 são da CPU1 e B1–B12 da CPU2
+    # (Installation and Service Manual, "General memory module installation guidelines"). A numeração de cada
+    # ventoinha e de cada slot de DIMM no desenho NÃO é mostrada: só a área.
+    # Modelo 3D (CLAUDE.md 18.1), gerado pelo msscan/modelo3d.py sobre as áreas do mapa acima (mesma foto oficial).
+    # Ordem física dos soquetes de memória: tabela "System board jumpers and connectors" do Installation and Service Manual
+    # do R640 (conferida em 01/10/2026): item 38 "A6, A12, A5, A11, A4, A10, A7, A1, A8, A2, A9, A3" (CPU1) e item 9
+    # "B6, B12, ..., B3" (CPU2); canais "Slots A1 and A7" ... "A6 and A12" (abas brancas A1–A6, pretas A7–A12). O sentido
+    # da lista (da lateral esquerda para a direita, vista da frente) e as dimensões vêm da foto/especificação, sem conferir
+    # numa tampa real: MOCKUP(rodada final). Risers 1A (slots 1 e 2, CPU1) e 2A (slot 3, CPU2) da tabela "Expansion card
+    # installation guidelines". Baias: até 10 x 2,5" na frente (configuração do servidor não lida: baias sem estado).
+    modelo3d:
+      fonte: "Dell EMC PowerEdge R640 Installation and Service Manual (system board, memória, risers) e Technical Guide (foto interna)"
+      dimensoes_mm: {altura: 42.8, largura: 434.0, profundidade: 733.8}
+      chassi_mapa: {x: 0, y: 30, w: 957, h: 550}
+      dimm_ordem:
+        cpu2: [B6, B12, B5, B11, B4, B10, CPU, B7, B1, B8, B2, B9, B3]
+        cpu1: [A6, A12, A5, A11, A4, A10, CPU, A7, A1, A8, A2, A9, A3]
+      ventoinhas: 8
+      baias: 10
+      risers: {riser1: [1, 2], riser2: [3]}
+    mapa:
+      vista: "vista de cima, frente à esquerda"
+      largura: 1000
+      altura: 610
+      rotulos: {frente: "FRENTE", traseira: "TRASEIRA"}
+      areas:
+        - {id: discos, nome: "Discos (frente)", curto: "Discos", x: 12, y: 37, w: 129, h: 533}
+        - {id: backplane, nome: "Backplane de discos (atrás dos discos)", curto: "BP", x: 141, y: 37, w: 49, h: 533}
+        - {id: ventoinhas, nome: "Ventoinhas (fileira central)", curto: "Ventoinhas", x: 282, y: 50, w: 111, h: 505}
+        - {id: cpu2, nome: "CPU2 (lado esquerdo, visto da frente)", curto: "CPU2", x: 470, y: 120, w: 110, h: 110}
+        - {id: dimm_cpu2, nome: "DIMMs B1–B12 (CPU2)", curto: "DIMMs B", x: 436, y: 37, w: 177, h: 270}
+        - {id: cpu1, nome: "CPU1 (lado direito, visto da frente)", curto: "CPU1", x: 470, y: 380, w: 110, h: 110}
+        - {id: dimm_cpu1, nome: "DIMMs A1–A12 (CPU1)", curto: "DIMMs A", x: 436, y: 307, w: 177, h: 263}
+        - {id: controladora, nome: "Controladora de armazenamento (PERC, ao lado da CPU1)", curto: "PERC", x: 626, y: 393, w: 92, h: 135}
+        - {id: cabos_sas, nome: "Cabos SAS (controladora → backplane, junto à lateral direita)", curto: "Cabos SAS", x: 184, y: 528, w: 442, h: 42}
+        - {id: psu2, nome: "Fonte 2 (PSU2, traseira, na borda)", curto: "PSU2", x: 693, y: 37, w: 252, h: 116}
+        - {id: psu1, nome: "Fonte 1 (PSU1, traseira, a de dentro)", curto: "PSU1", x: 693, y: 153, w: 252, h: 117}
+        - {id: riser2, nome: "Riser 2 (traseira, centro)", curto: "Riser 2", x: 730, y: 276, w: 215, h: 190}
+        - {id: riser1, nome: "Riser 1 (traseira, canto direito)", curto: "Riser 1", x: 730, y: 466, w: 215, h: 104}
+        - {id: risers, nome: "Risers PCIe (traseira)", curto: "Risers", x: 730, y: 276, w: 215, h: 294}
+        - {id: frente, nome: "Painel frontal", curto: "Frente", x: 0, y: 30, w: 12, h: 550}
+        - {id: traseira, nome: "Traseira", curto: "Traseira", x: 945, y: 30, w: 12, h: 550}
+        - {id: chassi, nome: "Chassi / tampa", curto: "Chassi / tampa", x: 0, y: 30, w: 957, h: 550}
+
+  - match: "PowerEdge R410"
+    nome: "Dell PowerEdge R410"
+    geracao: "11ª geração (11G)"
+    bmc: "iDRAC6"
+    ipmi: "2.0"
+    redfish: false
+    smart: "discos atrás da PERC H700/6i: smartctl -d megaraid,N; SAS 6/iR e H200: direto (mpt2sas)"
+    controladoras:
+      - "PERC H700"
+      - "PERC 6/i"
+      - "PERC H200"
+      - "SAS 6/iR"
+      - "PERC S100"
+      - "PERC S300"
+    ferramentas:
+      - MegaCli64
+    sensores: "BMC por IPMI"
+    comandos: {}
+    limitacoes:
+      - "iDRAC6 não tem Redfish: o diagnóstico usa IPMI, ferramentas do fabricante e o sistema operacional."
+      - "Modelo fora do suporte da Dell: pode não haver firmware novo no catálogo."
+    atualizacao:
+      metodo_preferido: dup_linux
+      fallbacks: []
+      ordem_recomendada: []
+      observacoes:
+        - "Sem Redfish: atualização automática só por DUP para Linux, a confirmar na fase 11 (compatibilidade dos DUPs com o Debian 13)."
+      bloqueios: []

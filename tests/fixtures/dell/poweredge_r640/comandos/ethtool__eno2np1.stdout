@@ -1,0 +1,27 @@
+Settings for eno2np1:
+	Supported ports: [  ]
+	Supported link modes:   10000baseT/Full
+	                        1000baseX/Full
+	                        10000baseSR/Full
+	                        10000baseLR/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10000baseT/Full
+	                        1000baseX/Full
+	                        10000baseSR/Full
+	                        10000baseLR/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Auto-negotiation: off
+	Port: Other
+	PHYAD: 0
+	Transceiver: internal
+	Supports Wake-on: g
+	Wake-on: g
+        Current message level: 0x00000007 (7)
+                               drv probe link
+	Link detected: no

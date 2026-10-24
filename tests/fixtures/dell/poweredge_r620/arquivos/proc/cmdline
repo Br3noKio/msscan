@@ -1,0 +1,1 @@
+BOOT_IMAGE=/live/vmlinuz-6.12.113+deb13-amd64 boot=live components quiet locales=pt_BR.UTF-8 keyboard-layouts=br timezone=America/Sao_Paulo findiso=

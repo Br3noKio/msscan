@@ -1,0 +1,8 @@
+{
+  "comando": [
+    "dmesg"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.018
+}

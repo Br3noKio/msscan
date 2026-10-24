@@ -1,0 +1,80 @@
+{
+   "blockdevices": [
+      {
+         "name": "/dev/fd0",
+         "pkname": null,
+         "type": "disk",
+         "tran": null,
+         "rm": true,
+         "ro": false,
+         "fstype": null,
+         "label": null,
+         "pttype": null,
+         "parttype": null,
+         "mountpoint": null
+      },{
+         "name": "/dev/loop0",
+         "pkname": null,
+         "type": "loop",
+         "tran": null,
+         "rm": false,
+         "ro": true,
+         "fstype": "squashfs",
+         "label": null,
+         "pttype": null,
+         "parttype": null,
+         "mountpoint": "/run/live/rootfs/filesystem.squashfs"
+      },{
+         "name": "/dev/sda",
+         "pkname": null,
+         "type": "disk",
+         "tran": "usb",
+         "rm": false,
+         "ro": false,
+         "fstype": "iso9660",
+         "label": "SDIAG_BOOT",
+         "pttype": "dos",
+         "parttype": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sda1",
+               "pkname": "/dev/sda",
+               "type": "part",
+               "tran": null,
+               "rm": false,
+               "ro": false,
+               "fstype": "iso9660",
+               "label": "SDIAG_BOOT",
+               "pttype": "dos",
+               "parttype": "0x0",
+               "mountpoint": "/run/live/medium"
+            },{
+               "name": "/dev/sda2",
+               "pkname": "/dev/sda",
+               "type": "part",
+               "tran": null,
+               "rm": false,
+               "ro": false,
+               "fstype": "vfat",
+               "label": null,
+               "pttype": "dos",
+               "parttype": "0xef",
+               "mountpoint": null
+            }
+         ]
+      },{
+         "name": "/dev/sr0",
+         "pkname": null,
+         "type": "rom",
+         "tran": "ata",
+         "rm": true,
+         "ro": true,
+         "fstype": null,
+         "label": null,
+         "pttype": null,
+         "parttype": null,
+         "mountpoint": null
+      }
+   ]
+}

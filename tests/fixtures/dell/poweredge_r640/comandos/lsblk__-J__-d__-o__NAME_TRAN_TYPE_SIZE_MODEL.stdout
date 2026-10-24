@@ -1,0 +1,11 @@
+{
+   "blockdevices": [
+      {
+         "name": "sda",
+         "tran": "sata",
+         "type": "disk",
+         "size": "1.7T",
+         "model": "VK001920GWSXK"
+      }
+   ]
+}

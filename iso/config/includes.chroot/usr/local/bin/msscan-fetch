@@ -1,0 +1,3 @@
+#!/bin/sh
+# msscan-fetch: resumo da máquina (rack em texto + dados), só leituras (dmidecode, /proc, lsblk, ipmitool mc info).
+cd "${MSSCAN_DIR:-/opt/msscan}" && exec python3 -m msscan.interface.fetch "$@"

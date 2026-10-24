@@ -1,0 +1,9 @@
+{
+  "comando": [
+    "lspci",
+    "-nnk"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.044
+}

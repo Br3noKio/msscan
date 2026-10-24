@@ -1,0 +1,12 @@
+{
+  "comando": [
+    "lsblk",
+    "-J",
+    "-d",
+    "-o",
+    "NAME,TRAN,TYPE,SIZE,MODEL"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.008
+}

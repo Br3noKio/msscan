@@ -1,0 +1,11 @@
+{
+  "comando": [
+    "ipmitool",
+    "sdr",
+    "type",
+    "Power Supply"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 1.421
+}

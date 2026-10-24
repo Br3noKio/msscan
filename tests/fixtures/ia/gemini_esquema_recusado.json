@@ -1,0 +1,10 @@
+{
+ "status": 400,
+ "corpo": {
+  "error": {
+   "code": 400,
+   "message": "Invalid JSON payload received. Unknown name \"responseJsonSchema\" at 'generation_config': Cannot find field.",
+   "status": "INVALID_ARGUMENT"
+  }
+ }
+}

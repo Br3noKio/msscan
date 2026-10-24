@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Nunca versionar: chaves, senhas, ferramentas proprietárias e firmware
+*.key
+/config/
+vendor/
+/vendor/
+firmware/
+estado/
+relatorios/
+*.tar.gz
+iso/trabalho/
+iso/*.iso
+iso/*.iso.sha256
+
+# Graphify (grafo local do código; nunca versionar)
+graphify-out/

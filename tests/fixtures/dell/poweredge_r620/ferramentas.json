@@ -1,0 +1,20 @@
+{
+  "MegaCli": false,
+  "MegaCli64": false,
+  "arcconf": false,
+  "ethtool": true,
+  "hpacucli": false,
+  "hpssacli": false,
+  "ip": true,
+  "mdadm": true,
+  "megacli": false,
+  "perccli": false,
+  "perccli2": false,
+  "perccli64": false,
+  "racadm": false,
+  "smartctl": true,
+  "ssacli": false,
+  "storcli": false,
+  "storcli2": false,
+  "storcli64": false
+}

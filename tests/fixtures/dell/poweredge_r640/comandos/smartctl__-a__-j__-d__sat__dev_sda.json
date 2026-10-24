@@ -1,0 +1,13 @@
+{
+  "comando": [
+    "smartctl",
+    "-a",
+    "-j",
+    "-d",
+    "sat",
+    "/dev/sda"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.025
+}

@@ -1,0 +1,7 @@
+{
+  "fabricante": "DMTF (mockup público)",
+  "modelo": "public-rackmount1",
+  "data": "2026-09-28",
+  "observacoes": "Arquivos originais do DMTF Redfish-Publications (mockups/public-rackmount1: UpdateService, TaskService, TaskService/Tasks, TaskService/Tasks/545), baixados sem alteração. Dados fictícios da DMTF (BSD-3, Copyright DMTF). Este UpdateService NÃO tem MultipartHttpPushUri (só HttpPushUri).",
+  "anonimizado": true
+}

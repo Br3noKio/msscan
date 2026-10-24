@@ -1,0 +1,11 @@
+{
+  "fabricante": "Dell Inc.",
+  "modelo": "PowerEdge R620",
+  "origem": "real",
+  "coletado_em": "2026-10-19 17:04",
+  "coletado_por": "MSscan 1.0.8 --coletar",
+  "anonimizado": true,
+  "observacoes": [
+    "Saídas brutas: contêm seriais, WWN, MAC e IP. Anonimize antes de versionar."
+  ]
+}

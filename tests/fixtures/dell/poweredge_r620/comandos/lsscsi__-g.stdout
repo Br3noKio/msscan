@@ -1,0 +1,3 @@
+[0:2:0:0]    disk    DELL     PERC H710        3.13  /dev/sda   /dev/sg0 
+[5:0:0:0]    cd/dvd  TSSTcorp DVD-ROM SU-108BB D150  /dev/sr0   /dev/sg1 
+[7:0:0:0]    disk    VendorCo ProductCode      2.00  /dev/sdb   /dev/sg2 

@@ -1,0 +1,33 @@
+#!/bin/sh
+# Cliente da sessão X do MSscan: chamado pelo xinit (como root, com DISPLAY definido)
+# a partir do msscan-iniciar, que já preparou o perfil do navegador em $1/firefox.
+#
+# 1. matchbox-window-manager: sem gerenciador de janelas o Firefox --kiosk NÃO ocupa a tela
+#    toda (testado: 921x691 numa tela de 1024x768); com ele, tela cheia e sem barra de título.
+#    Atalhos só os do MSscan (/etc/msscan/matchbox-kbdconfig): Alt+M volta do navegador integrado; sem
+#    Alt+F4/Alt+C (fechar janela) nem Alt+Tab do arquivo padrão do matchbox.
+# 2. Firefox ESR em quiosque como o usuário sem privilégios msscan-ui (rede restrita a
+#    127.0.0.1 pelo /etc/msscan/quiosque.nft). Se for fechado, abre de novo (até 5 vezes);
+#    depois disso a sessão X termina e o msscan-iniciar abre a interface de novo.
+
+RUN="${1:-/run/msscan}"
+PERFIL="$RUN/firefox"
+USUARIO="${MSSCAN_USUARIO_UI:-msscan-ui}"
+DIR="${MSSCAN_DIR:-/opt/msscan}"
+
+# Resolução do monitor (EDID) com fallback; resultado em $RUN/tela.json para a interface mostrar.
+# Antes do gerenciador e do navegador, para eles já abrirem no tamanho certo. Nunca impede a sessão.
+(cd "$DIR" && python3 -m msscan.tela.resolucao --auto --estado "$RUN/tela.json") >"$RUN/tela.log" 2>&1 || true
+
+matchbox-window-manager -use_titlebar no -use_cursor yes -kbdconfig /etc/msscan/matchbox-kbdconfig &
+sleep 1
+
+tentativa=0
+while [ "$tentativa" -lt 5 ]; do
+    tentativa=$((tentativa + 1))
+    runuser -u "$USUARIO" -- env -i \
+        DISPLAY="$DISPLAY" XAUTHORITY="$PERFIL/.Xauthority" HOME="$PERFIL" \
+        LANG="${LANG:-C.UTF-8}" PATH=/usr/bin:/bin \
+        firefox-esr --kiosk --no-remote --profile "$PERFIL"
+    sleep 2
+done

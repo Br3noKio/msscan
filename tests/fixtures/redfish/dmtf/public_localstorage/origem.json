@@ -1,0 +1,7 @@
+{
+  "fabricante": "DMTF (mockup público)",
+  "modelo": "public-localstorage",
+  "data": "2026-09-25",
+  "observacoes": "Respostas do DMTF Redfish Mockup Server (Redfish-Publications/mockups/public-localstorage), gravadas pelo ExecutorGravador. Dados fictícios da DMTF (BSD-3, Copyright DMTF). O mockup aceita qualquer senha e ecoa o corpo do login no GET da sessão: o ServerDiag troca \"Password\" por REMOVIDO em toda resposta.",
+  "anonimizado": true
+}

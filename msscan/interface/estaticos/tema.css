@@ -1,0 +1,83 @@
+/*
+ * MSscan — tema (ÚNICO arquivo com cores da interface).
+ *
+ * Paleta baseada no Primer (sistema de design do GitHub, licença MIT,
+ * https://primer.style), tema escuro, com os azuis da empresa.
+ * Outros arquivos usam só as variáveis --ms-* abaixo; nunca cores literais.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Fundos (do mais escuro ao mais claro) */
+  --ms-preto-0: #010409;
+  --ms-preto-1: #0d1117;
+  --ms-preto-2: #161b22;
+
+  /* Bordas */
+  --ms-borda: #30363d;
+  --ms-borda-suave: #21262d;
+
+  /* Texto */
+  --ms-texto: #e6edf3;
+  --ms-texto-sec: #b1bac4; /* 30/09/2026: #8b949e (5,9:1) era pouco legível em monitor de servidor; agora >= 7:1 */
+
+  /* Azuis da empresa */
+  --ms-azul-0: #0a1a33;
+  --ms-azul-1: #0d2d62;
+  --ms-azul-2: #1760d2; /* botão primário: texto claro a 4,88:1 (WCAG AA) */
+  --ms-azul-link: #58a6ff;
+
+  /* Status (sempre acompanhados de ícone e texto, nunca só a cor) */
+  --ms-ok: #3fb950;
+  --ms-alerta: #d29922;
+  --ms-falha: #f85149;
+
+  /* Gradientes */
+  --ms-grad-preto: linear-gradient(180deg, #010409, #0d1117);
+  --ms-grad-azul: linear-gradient(135deg, #0a1a33, #0d2d62 55%, #1760d2); /* texto a >= 4,88:1 em todo o gradiente */
+
+  /* Derivadas (transparências das cores acima, para fundos de etiquetas e hover) */
+  --ms-ok-fundo: rgba(63, 185, 80, 0.1);
+  --ms-alerta-fundo: rgba(210, 153, 34, 0.1);
+  --ms-falha-fundo: rgba(248, 81, 73, 0.1); /* 10%: texto de status a >= 4,5:1 sobre o fundo */
+  --ms-neutro-fundo: rgba(139, 148, 158, 0.15);
+  --ms-opacidade-desabilitado: 0.65; /* texto de botão/aba desabilitado ainda a >= 4,5:1 */
+  --ms-azul-fundo: rgba(31, 111, 235, 0.15);
+  --ms-hover: rgba(177, 186, 196, 0.12);
+  --ms-sombra: rgba(1, 4, 9, 0.85);
+
+  /* Visual Hyprland (CLAUDE.md 15.4): painéis levemente translúcidos (cor sólida, sem blur) sobre o fundo com
+     brilho azul fixo; borda de destaque em gradiente azul no painel ativo. Nada disso é animado. */
+  --ms-painel: rgba(22, 27, 34, 0.88);
+  --ms-grad-fundo: radial-gradient(ellipse at 15% 0%, rgba(23, 96, 210, 0.16), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(13, 45, 98, 0.35), transparent 60%), #0d1117;
+  --ms-grad-borda: linear-gradient(135deg, #1760d2, #58a6ff 50%, #0d2d62);
+  --ms-mascara: linear-gradient(#000 0 0); /* máscara da borda (recorta o miolo); não é cor exibida */
+
+  /* Nova interface (1.0.0, pedido de 09/10/2026): estética Hyprland em tema de datacenter. Painéis em vidro escuro sobre
+     o papel de parede JÁ DESFOCADO (imagem pronta, sem backdrop-filter); borda em gradiente azul a 45° no painel ativo.
+     O contraste do texto sobre o vidro é conferido contra o pixel mais claro do fundo desfocado (tests/test_contraste.py). */
+  --ms-fundo: url("fundo.jpg");
+  --ms-fundo-desfocado: url("fundo-desfocado.jpg");
+  --ms-escurecer: linear-gradient(rgba(1, 4, 9, 0.35), rgba(1, 4, 9, 0.6));
+  --ms-vidro: rgba(13, 17, 23, 0.8);
+  --ms-vidro-cartao: rgba(22, 27, 34, 0.66);
+  --ms-vidro-pilula: rgba(13, 17, 23, 0.9);
+  --ms-borda-painel: rgba(88, 166, 255, 0.16);
+  --ms-borda-ativa: linear-gradient(45deg, #1f6feb, #58a6ff);
+  --ms-sombra-painel: 0 8px 28px rgba(1, 4, 9, 0.5);
+  --ms-veu: rgba(1, 4, 9, 0.55); /* atrás da gaveta aberta (sem texto) */
+  --ms-grafico-temp: linear-gradient(0deg, #1760d2, #58a6ff);
+  --ms-grafico-vent: linear-gradient(0deg, #0d2d62, #79c0ff);
+  --ms-grafico-alerta: linear-gradient(0deg, #9e6a03, #d29922);
+  --ms-grafico-falha: linear-gradient(0deg, #8e1519, #f85149);
+  --ms-fonte: "Inter", system-ui, -apple-system, "Segoe UI", "Noto Sans", "DejaVu Sans", "Liberation Sans", Arial, sans-serif;
+  --ms-fonte-mono: "JetBrains Mono", ui-monospace, "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace;
+
+  /* Foco sempre visível */
+  --ms-foco: #1f6feb;
+
+  /* QR Code: sempre escuro sobre claro (a câmera do celular lê mal o QR invertido) */
+  --ms-qr-escuro: #010409;
+  --ms-qr-claro: #ffffff;
+}

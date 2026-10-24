@@ -1,0 +1,7 @@
+{
+  "fabricante": "DMTF (mockup público)",
+  "modelo": "public-telemetry",
+  "data": "2026-09-28",
+  "observacoes": "Managers/1/NetworkProtocol/index.json do DMTF Redfish-Publications (mockups/public-telemetry), baixado sem alteração: único mockup público consultado com o objeto NTP (ProtocolEnabled, NTPServers). Dados fictícios da DMTF (BSD-3, Copyright DMTF).",
+  "anonimizado": true
+}

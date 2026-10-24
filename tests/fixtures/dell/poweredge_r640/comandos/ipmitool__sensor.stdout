@@ -1,0 +1,231 @@
+Temp             | 37.000     | degrees C  | ok    | na        | 3.000     | na        | na        | 102.000   | na        
+Temp             | 39.000     | degrees C  | ok    | na        | 3.000     | na        | na        | 102.000   | na        
+Inlet Temp       | 22.000     | degrees C  | ok    | na        | -7.000    | 3.000     | 43.000    | 47.000    | na        
+DIMM PG          | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+NDC PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+PS1 PG FAIL      | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+PS2 PG FAIL      | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+BP0 PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+BP1 PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+1.8V SW PG       | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+2.5V SW PG       | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+5V SW PG         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+PVNN SW PG       | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VSB11 SW PG      | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VSBM SW PG       | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+3.3V B PG        | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VDDQ PG   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VPP PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VTT PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VDDQ PG   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VPP PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VTT PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VCCIO PG         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VCORE PG         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+FIVR PG          | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VDDQ PG   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VPP PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM012 VTT PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VDDQ PG   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VPP PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MEM345 VTT PG    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VCCIO PG         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VCORE PG         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+FIVR PG          | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Fan1A            | 6960.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan1B            | 6480.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan2A            | 6840.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan2B            | 6360.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan3A            | 6960.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan3B            | 6480.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Presence         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x2        | discrete   | 0x0280| na        | na        | na        | na        | na        | na        
+Intrusion Cable  | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VGA Cable Pres   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x2        | discrete   | 0x0280| na        | na        | na        | na        | na        | na        
+BP0 Presence     | 0x2        | discrete   | 0x0280| na        | na        | na        | na        | na        | na        
+BP1 Presence     | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Power Cable      | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Signal Cable     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Power JBP1       | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Signal Cable     | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Power JBP2       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Presence         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Current 1        | 0.000      | Amps       | ok    | na        | na        | na        | na        | na        | na        
+Current 2        | 0.800      | Amps       | ok    | na        | na        | na        | na        | na        | na        
+Voltage 1        | 0.000      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+Voltage 2        | 112.000    | Volts      | ok    | na        | na        | na        | na        | na        | na        
+Riser Config Err | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+OS Watchdog      | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+SEL              | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Intrusion        | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+Power Optimized  | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Pwr Consumption  | 96.000     | Watts      | ok    | na        | na        | na        | 840.000   | 912.000   | na        
+PS Redundancy    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Fan Redundancy   | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Redundancy       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+SD1              | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+SD2              | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+SD               | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+IO Usage         | 0.000      | percent    | ok    | na        | na        | na        | 101.000   | na        | na        
+MEM Usage        | 6.000      | percent    | ok    | na        | na        | na        | 101.000   | na        | na        
+SYS Usage        | 5.000      | percent    | ok    | na        | na        | na        | 101.000   | na        | na        
+CPU Usage        | 1.000      | percent    | ok    | na        | na        | na        | 101.000   | na        | na        
+Status           | 0x80       | discrete   | 0x8080| na        | na        | na        | na        | na        | na        
+Status           | 0x80       | discrete   | 0x8080| na        | na        | na        | na        | na        | na        
+Status           | 0x9        | discrete   | 0x0980| na        | na        | na        | na        | na        | na        
+Status           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+ROMB Battery     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCIe Slot1       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCIe Slot2       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCIe Slot3       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Drive 0          | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Cable PCIe A0    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe B0    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe A1    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe B1    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe A2    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe B2    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS A0     | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Cable SAS B0     | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Cable SAS A1     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS B1     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS A2     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS B2     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe A0    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable PCIe B0    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+ECC Corr Err     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+ECC Uncorr Err   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCI Parity Err   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCI System Err   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+SBE Log Disabled | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Unknown          | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+CPU Machine Chk  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Memory Spared    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Memory Mirrored  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+PCIE Fatal Err   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Chipset Err      | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Err Reg Pointer  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Mem ECC Warning  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+POST Err         | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Hdwr version err | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Non Fatal PCI Er | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Fatal IO Error   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+MSR Info Log     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+TXT Status       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+iDPT Mem Fail    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Additional Info  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+CPU TDP          | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+QPIRC Warning    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+QPIRC Warning    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Link Warning     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Link Warning     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Link Error       | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+MRC Warning      | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+MRC Warning      | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Chassis Mismatch | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+FatalPCIErrOnBus | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NonFatalPCIErBus | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Fatal PCI SSD Er | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NonFatalSSDEr    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+CPUMachineCheck  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+FatalPCIErARI    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NonFatalPCIErARI | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+FatalPCIExpEr    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NonFatalPCIExpEr | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS A0     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Cable SAS B0     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Fan4A            | 7080.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan4B            | 6720.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan5A            | 6960.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan5B            | 6600.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan6A            | 6960.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan6B            | 6480.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan7A            | 6960.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan7B            | 6480.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan8A            | 6840.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Fan8B            | 6480.000   | RPM        | ok    | na        | 600.000   | 960.000   | na        | na        | na        
+Unresp sensor    | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+CP Left Pres     | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+CP Right Pres    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+3.3V A PG        | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VSA PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+VSA PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+TPM Presence     | 0x2        | discrete   | 0x0280| na        | na        | na        | na        | na        | na        
+Riser 1 Presence | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Riser 2 Presence | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Front LED Panel  | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+OS Watchdog Time | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Fan1A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan1B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan2A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan2B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan3A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan3B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan4A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan4B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan5A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan5B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan6A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan6B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan7A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan7B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan8A Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+Fan8B Status     | 0x5        | discrete   | 0x0580| na        | na        | na        | na        | na        | na        
+NVDIMM Warning   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NVDIMM Error     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+NVDIMM Info      | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Dedicated NIC    | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+Presence         | 0x2        | discrete   | 0x0280| na        | na        | na        | na        | na        | na        
+NVDIMM Battery   | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Exhaust Temp     | 28.000     | degrees C  | ok    | na        | 3.000     | 8.000     | 75.000    | 80.000    | na        
+LT/Flex Addr     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+QPI Link Err     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+TPM Presence     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+CPU Link Info    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Chipset Info     | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Memory Config    | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+POST Pkg Repair  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+Pfault Fail Safe | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+BP2 PG           | 0x1        | discrete   | 0x0180| na        | na        | na        | na        | na        | na        
+MMIOChipset Info | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+DIMM Media Info  | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+DIMMThermal Info | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+CPU Internal Err | na         | discrete   | na    | na        | na        | na        | na        | na        | na        
+GPU1 Temp        | na         |            | na    | na        | na        | na        | na        | na        | na        
+GPU2 Temp        | na         |            | na    | na        | na        | na        | na        | na        | na        
+GPU3 Temp        | na         |            | na    | na        | na        | na        | na        | na        | na        
+A1               | 0x40       | discrete   | 0x4080| na        | na        | na        | na        | na        | na        
+A2               | 0x40       | discrete   | 0x4080| na        | na        | na        | na        | na        | na        
+A3               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A4               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A5               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A6               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A7               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A8               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A9               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A10              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A11              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+A12              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B1               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B2               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B3               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B4               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B5               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B6               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B7               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B8               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B9               | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B10              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B11              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+B12              | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+Therm Config Err | 0x0        | discrete   | 0x0080| na        | na        | na        | na        | na        | na        
+VCORE VR         | 1.780      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+VCORE VR         | 1.780      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+MEM012 VR        | 1.220      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+MEM345 VR        | 1.220      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+MEM012 VR        | 1.220      | Volts      | ok    | na        | na        | na        | na        | na        | na        
+MEM345 VR        | 1.220      | Volts      | ok    | na        | na        | na        | na        | na        | na        

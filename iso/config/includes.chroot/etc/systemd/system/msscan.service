@@ -1,0 +1,26 @@
+[Unit]
+Description=MSscan - diagnóstico de servidores
+Wants=network-online.target
+After=network-online.target systemd-modules-load.service systemd-udev-settle.service
+# tty1 é exclusivo do MSscan (getty@tty1 é mascarado no hook).
+Conflicts=getty@tty1.service
+After=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/msscan-iniciar
+StandardInput=tty
+StandardOutput=tty
+StandardError=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=no
+Environment=LANG=C.UTF-8 PYTHONIOENCODING=utf-8 PYTHONDONTWRITEBYTECODE=1 TERM=linux
+Restart=no
+# Revisão de 13/10/2026 (M2): o backend ignora o SIGTERM durante a gravação de firmware; o systemd espera até 45 min antes
+# do SIGKILL (uma gravação local leva até cerca de 15 min). Fora da gravação, o backend encerra na hora.
+TimeoutStopSec=45min
+
+[Install]
+WantedBy=multi-user.target

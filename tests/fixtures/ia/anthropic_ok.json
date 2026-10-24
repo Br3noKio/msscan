@@ -1,0 +1,20 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "msg_teste",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-sonnet-5",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"resumo\": \"Servidor operando com uma fonte sem energia de entrada; restante sem falhas.\", \"problemas\": [{\"titulo\": \"Redundância de energia perdida\", \"severidade\": \"media\", \"evidencias\": [{\"componente\": \"fontes\", \"trecho\": \"Power Supply AC lost\"}], \"explicacao\": \"A PS1 está sem energia de entrada.\", \"acao_recomendada\": \"Verificar cabo e tomada da PS1.\", \"plano\": {\"passos\": [\"Conferir o LED da PS1\", \"Verificar cabo e tomada\", \"Religar e refazer o diagnóstico\"], \"prioridade\": \"alta\", \"intervencao_fisica\": true, \"troca_de_peca\": false, \"acao_catalogo\": \"\"}}, {\"titulo\": \"Eventos antigos no log do BMC\", \"severidade\": \"baixa\", \"evidencias\": [{\"componente\": \"log_bmc\", \"trecho\": \"indicam problema\"}], \"explicacao\": \"Há eventos históricos no SEL.\", \"acao_recomendada\": \"Exportar e limpar o SEL depois de conferir.\", \"plano\": {\"passos\": [\"Conferir se os eventos já foram resolvidos\"], \"prioridade\": \"baixa\", \"intervencao_fisica\": false, \"troca_de_peca\": false, \"acao_catalogo\": \"bmc.sel_exportar_limpar\"}}, {\"titulo\": \"Disco com setores realocados\", \"severidade\": \"alta\", \"evidencias\": [{\"componente\": \"discos\", \"trecho\": \"setores realocados: 812\"}], \"explicacao\": \"Evidência inventada (não existe nos dados).\", \"acao_recomendada\": \"Trocar o disco.\", \"plano\": {\"passos\": [\"Trocar o disco\"], \"prioridade\": \"imediata\", \"intervencao_fisica\": true, \"troca_de_peca\": true, \"acao_catalogo\": \"disco.formatar_tudo\"}}], \"limitacoes\": [\"RAID de hardware não verificado.\"]}"
+   }
+  ],
+  "stop_reason": "end_turn",
+  "usage": {
+   "input_tokens": 12000,
+   "output_tokens": 900
+  }
+ }
+}

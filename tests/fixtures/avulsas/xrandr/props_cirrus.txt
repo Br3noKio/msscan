@@ -1,0 +1,16 @@
+Screen 0: minimum 320 x 200, current 1024 x 768, maximum 2044 x 1024
+VGA-1 connected primary 1024x768+0+0 (normal left inverted right x axis y axis) 0mm x 0mm
+	link-status: Good 
+		supported: Good, Bad
+	CONNECTOR_ID: 36 
+		supported: 36
+	non-desktop: 0 
+		range: (0, 1)
+   1024x768      60.00*+
+   1360x768      60.02  
+   1280x800      59.81    59.91  
+   1280x768      59.87    59.99  
+   1280x720      60.00  
+   800x600       60.32    56.25  
+   848x480       60.00  
+   640x480       59.94

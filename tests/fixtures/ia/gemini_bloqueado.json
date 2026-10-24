@@ -1,0 +1,11 @@
+{
+ "status": 200,
+ "corpo": {
+  "promptFeedback": {
+   "blockReason": "SAFETY"
+  },
+  "usageMetadata": {
+   "promptTokenCount": 12000
+  }
+ }
+}

@@ -1,0 +1,48 @@
+{
+  "/sys/class/net": [
+    "eno1",
+    "eno2",
+    "eno3",
+    "eno4",
+    "lo"
+  ],
+  "/sys/devices/system/edac/mc": [
+    "mc0",
+    "mc1",
+    "power",
+    "subsystem",
+    "uevent"
+  ],
+  "/sys/devices/system/edac/mc/mc0": [
+    "ce_count",
+    "ce_noinfo_count",
+    "csrow0",
+    "dimm0",
+    "dimm3",
+    "max_location",
+    "mc_name",
+    "power",
+    "reset_counters",
+    "seconds_since_reset",
+    "size_mb",
+    "ue_count",
+    "ue_noinfo_count",
+    "uevent"
+  ],
+  "/sys/devices/system/edac/mc/mc1": [
+    "ce_count",
+    "ce_noinfo_count",
+    "csrow0",
+    "dimm0",
+    "dimm3",
+    "max_location",
+    "mc_name",
+    "power",
+    "reset_counters",
+    "seconds_since_reset",
+    "size_mb",
+    "ue_count",
+    "ue_noinfo_count",
+    "uevent"
+  ]
+}

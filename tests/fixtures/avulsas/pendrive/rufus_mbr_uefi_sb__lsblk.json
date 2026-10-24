@@ -1,0 +1,56 @@
+{
+   "blockdevices": [
+      {
+         "name": "/dev/loop0",
+         "pkname": null,
+         "type": "loop",
+         "tran": null,
+         "rm": false,
+         "ro": true,
+         "fstype": "squashfs",
+         "label": null,
+         "pttype": null,
+         "parttype": null,
+         "mountpoint": "/run/live/rootfs/filesystem.squashfs"
+      },{
+         "name": "/dev/sda",
+         "pkname": null,
+         "type": "disk",
+         "tran": "usb",
+         "rm": false,
+         "ro": false,
+         "fstype": null,
+         "label": null,
+         "pttype": "dos",
+         "parttype": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sda1",
+               "pkname": "/dev/sda",
+               "type": "part",
+               "tran": null,
+               "rm": false,
+               "ro": false,
+               "fstype": "vfat",
+               "label": "SDIAG_BOOT",
+               "pttype": "dos",
+               "parttype": "0xc",
+               "mountpoint": "/run/live/medium"
+            }
+         ]
+      },{
+         "name": "/dev/sr0",
+         "pkname": null,
+         "type": "rom",
+         "tran": "sata",
+         "rm": true,
+         "ro": true,
+         "fstype": null,
+         "label": null,
+         "pttype": null,
+         "parttype": null,
+         "mountpoint": null
+      }
+   ]
+}

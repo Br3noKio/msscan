@@ -1,0 +1,15 @@
+Fan1A            | 30h | ok  |  7.1 | 3360 RPM
+Fan2A            | 32h | ok  |  7.1 | 3360 RPM
+Fan3A            | 34h | ok  |  7.1 | 3240 RPM
+Fan4A            | 36h | ok  |  7.1 | 3240 RPM
+Fan5A            | 38h | ok  |  7.1 | 3240 RPM
+Fan6A            | 3Ah | ok  |  7.1 | 3360 RPM
+Fan Redundancy   | 75h | ok  |  7.1 | Fully Redundant
+Fan7A            | 3Ch | ok  |  7.1 | 3360 RPM
+Fan1B            | 31h | ok  |  7.1 | 3120 RPM
+Fan2B            | 33h | ok  |  7.1 | 3240 RPM
+Fan3B            | 35h | ok  |  7.1 | 3120 RPM
+Fan4B            | 37h | ok  |  7.1 | 3000 RPM
+Fan5B            | 39h | ok  |  7.1 | 3120 RPM
+Fan6B            | 3Bh | ok  |  7.1 | 3120 RPM
+Fan7B            | 3Dh | ok  |  7.1 | 3120 RPM

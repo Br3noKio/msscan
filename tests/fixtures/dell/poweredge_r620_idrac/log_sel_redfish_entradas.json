@@ -1,0 +1,455 @@
+{
+ "origem": "relatório real do MSscan 1.0.8 no R620 (iDRAC7 2.65.65.65), 19/10/2026 17:03, com credenciais: entradas já interpretadas de Managers/iDRAC.Embedded.1/Logs/Sel (um único GET, sem nextLink seguido)",
+ "entradas": [
+  {
+   "id": "1024",
+   "data": "2026-10-19T15:47:39-05:00",
+   "severidade": "OK",
+   "mensagem": "The power supplies are redundant.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1023",
+   "data": "2026-10-19T14:39:17-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1022",
+   "data": "2026-10-19T14:28:30-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1021",
+   "data": "2026-10-19T13:38:43-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1020",
+   "data": "2026-10-19T13:28:58-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1019",
+   "data": "2026-10-19T13:19:07-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1018",
+   "data": "2026-10-19T12:48:52-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1017",
+   "data": "2026-10-19T12:29:20-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1016",
+   "data": "2026-10-19T12:19:30-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1015",
+   "data": "2026-10-19T12:08:43-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1014",
+   "data": "2026-10-19T11:58:58-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1013",
+   "data": "2026-10-19T11:39:33-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1012",
+   "data": "2026-10-19T11:29:43-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1011",
+   "data": "2026-10-19T08:49:22-05:00",
+   "severidade": "Warning",
+   "mensagem": "The PERC1 battery is low.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1010",
+   "data": "2026-10-19T08:39:32-05:00",
+   "severidade": "OK",
+   "mensagem": "The power supplies are redundant.",
+   "codigo": "0ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1009",
+   "data": "2026-10-16T10:03:05-05:00",
+   "severidade": "Critical",
+   "mensagem": "Power supply redundancy is lost.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1008",
+   "data": "2026-10-16T10:02:53-05:00",
+   "severidade": "Critical",
+   "mensagem": "The power input for power supply 2 is lost.",
+   "codigo": "3ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1007",
+   "data": "2026-10-16T08:15:43-05:00",
+   "severidade": "Critical",
+   "mensagem": "Power supply redundancy is lost.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1006",
+   "data": "2026-10-16T08:15:35-05:00",
+   "severidade": "Critical",
+   "mensagem": "The power input for power supply 1 is lost.",
+   "codigo": "3ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1005",
+   "data": "2026-10-16T08:07:06-05:00",
+   "severidade": "Critical",
+   "mensagem": "The system board PS1 PG Fail voltage is outside of range.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1004",
+   "data": "2026-10-15T09:22:20-05:00",
+   "severidade": "Critical",
+   "mensagem": "The system board PS1 PG Fail voltage is outside of range.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1003",
+   "data": "2026-10-15T10:18:53-05:00",
+   "severidade": "OK",
+   "mensagem": "The chassis is closed while the power is off.",
+   "codigo": "802ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1002",
+   "data": "2026-10-15T10:18:47-05:00",
+   "severidade": "Critical",
+   "mensagem": "The chassis is open while the power is off.",
+   "codigo": "802ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1001",
+   "data": "2026-09-24T16:16:30-05:00",
+   "severidade": "Critical",
+   "mensagem": "Drive 0 is removed from disk drive bay 1.",
+   "codigo": "a010",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "1000",
+   "data": "2026-09-24T16:16:25-05:00",
+   "severidade": "OK",
+   "mensagem": "The system board Consumption current is within range.",
+   "codigo": "57840",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "999",
+   "data": "2026-09-24T16:16:25-05:00",
+   "severidade": "Warning",
+   "mensagem": "The system board Consumption current is greater than the upper warning threshold.",
+   "codigo": "59846",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "998",
+   "data": "2026-09-24T16:15:54-05:00",
+   "severidade": "Critical",
+   "mensagem": "Drive 1 is removed from disk drive bay 1.",
+   "codigo": "a011",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "997",
+   "data": "2026-09-24T16:15:21-05:00",
+   "severidade": "Critical",
+   "mensagem": "The system board Consumption current is greater than the upper critical threshold.",
+   "codigo": "595646",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "996",
+   "data": "2026-09-24T16:15:21-05:00",
+   "severidade": "Warning",
+   "mensagem": "The system board Consumption current is greater than the upper warning threshold.",
+   "codigo": "575640",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "995",
+   "data": "2026-09-24T16:11:31-05:00",
+   "severidade": "Critical",
+   "mensagem": "The power input for power supply 2 is lost.",
+   "codigo": "3ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "994",
+   "data": "2026-09-24T16:11:24-05:00",
+   "severidade": "Critical",
+   "mensagem": "Power supply redundancy is lost.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "993",
+   "data": "2026-09-24T16:10:44-05:00",
+   "severidade": "Critical",
+   "mensagem": "The chassis is open while the power is off.",
+   "codigo": "802ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "992",
+   "data": "2026-09-24T17:02:12-05:00",
+   "severidade": "Critical",
+   "mensagem": "The chassis is open while the power is off.",
+   "codigo": "802ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "991",
+   "data": "2025-03-10T15:06:51-05:00",
+   "severidade": "OK",
+   "mensagem": "The chassis is closed while the power is on.",
+   "codigo": "801ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "990",
+   "data": "2025-03-10T16:06:37-05:00",
+   "severidade": "Critical",
+   "mensagem": "Power supply redundancy is lost.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "989",
+   "data": "2025-03-10T16:06:27-05:00",
+   "severidade": "Critical",
+   "mensagem": "The chassis is open while the power is off.",
+   "codigo": "802ff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "988",
+   "data": "2025-03-10T16:06:23-05:00",
+   "severidade": "Critical",
+   "mensagem": "The power input for power supply 1 is lost.",
+   "codigo": "3ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "987",
+   "data": "2018-09-19T05:24:48-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "986",
+   "data": "2018-09-19T05:23:43-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "985",
+   "data": "2018-09-19T04:55:31-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "984",
+   "data": "2018-09-19T04:54:31-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "983",
+   "data": "2018-09-19T04:34:54-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "982",
+   "data": "2018-09-19T04:33:54-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "981",
+   "data": "2018-09-19T04:15:27-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "980",
+   "data": "2018-09-19T04:14:27-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "979",
+   "data": "2018-09-19T03:56:00-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "978",
+   "data": "2018-09-19T03:54:55-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "977",
+   "data": "2018-09-19T02:27:09-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "976",
+   "data": "2018-09-19T02:24:58-05:00",
+   "severidade": "Critical",
+   "mensagem": "The PERC1 battery has failed.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  },
+  {
+   "id": "975",
+   "data": "2018-09-19T02:05:27-05:00",
+   "severidade": "OK",
+   "mensagem": "The PERC1 battery is operating normally.",
+   "codigo": "1ffff",
+   "resolvida": null,
+   "completa": true
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Hook executado na pasta binary/ (antes de gerar a ISO): opção "Verificar integridade do pendrive"
+# também no menu do BIOS legado (syslinux). No UEFI (GRUB) ela já existe em "Utilities".
+# Serve para diagnosticar cópia corrompida (ex.: "Can not mount /dev/loop0 ... filesystem.squashfs").
+set -e
+
+if [ -f isolinux/utilities.cfg ]; then
+    cat >>isolinux/utilities.cfg <<'FIM'
+
+label verificar-integridade
+	menu label ^Verificar integridade do pendrive
+	linux /live/vmlinuz
+	initrd /live/initrd.img
+	append boot=live components verify-checksums
+FIM
+fi

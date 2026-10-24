@@ -1,0 +1,11 @@
+{
+  "comando": [
+    "ipmitool",
+    "lan",
+    "print",
+    "1"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.202
+}

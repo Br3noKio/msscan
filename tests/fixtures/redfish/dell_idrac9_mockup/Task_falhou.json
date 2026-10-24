@@ -1,0 +1,19 @@
+{
+  "@odata.type": "#Task.v1_4_3.Task",
+  "@odata.id": "/redfish/v1/TaskService/Tasks/JID_000000000001",
+  "Id": "JID_000000000001",
+  "Name": "Firmware Update",
+  "TaskState": "Exception",
+  "PercentComplete": 100,
+  "Messages": [
+    {
+      "Message": "Unable to verify Update Package signature."
+    }
+  ],
+  "Oem": {
+    "Dell": {
+      "JobState": "Failed",
+      "Message": "Unable to verify Update Package signature."
+    }
+  }
+}

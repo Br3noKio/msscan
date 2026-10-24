@@ -1,0 +1,17 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "chatcmpl-teste",
+  "model": "llama3.1",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"resumo\": \"Servidor operando com uma fonte sem energia de entrada; restante sem falhas.\", \"problema"
+    },
+    "finish_reason": "length"
+   }
+  ]
+ }
+}

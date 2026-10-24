@@ -1,0 +1,14 @@
+{
+   "loopdevices": [
+      {
+         "name": "/dev/loop0",
+         "sizelimit": 0,
+         "offset": 0,
+         "autoclear": false,
+         "ro": true,
+         "back-file": "/run/live/medium/live/filesystem.squashfs",
+         "dio": false,
+         "log-sec": 512
+      }
+   ]
+}

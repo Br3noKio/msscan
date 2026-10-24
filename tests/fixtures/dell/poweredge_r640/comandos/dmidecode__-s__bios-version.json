@@ -1,0 +1,10 @@
+{
+  "comando": [
+    "dmidecode",
+    "-s",
+    "bios-version"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.002
+}

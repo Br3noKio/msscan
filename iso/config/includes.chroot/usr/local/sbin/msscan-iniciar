@@ -1,0 +1,201 @@
+#!/bin/sh
+# Inicia o MSscan no boot (msscan.service, tty1).
+#
+# Padrão: interface gráfica em quiosque no vt7 (Xorg + matchbox + Firefox ESR). O backend
+# (python3 main.py --ui) roda como root e escuta só em 127.0.0.1; o navegador roda como
+# msscan-ui, com a rede restrita a 127.0.0.1 pelo firewall /etc/msscan/quiosque.nft.
+#
+# SEM MODO TEXTO (pedido do usuário, 16/10/2026: o R620 caiu no modo texto; "sempre vá para a interface"). Até 90 s por
+# tentativa; não abriu → tenta com o vídeo seguinte (autodetecção do Xorg, fbdev, vesa) e recomeça a lista, sem fim;
+# caiu depois de aberta → abre de novo no mesmo vídeo. Os logs de cada tentativa vão para o pendrive
+# (MSSCAN/logs/interface_<data>/) quando nenhum vídeo abre, e junto do relatório (interface_falhou/) quando a interface abre.
+# O main.py em modo texto continua existindo só como ferramenta de linha de comando (SSH, desenvolvimento), nunca no boot.
+#
+# As variáveis MSSCAN_* existem só para os testes automáticos (stubs); no boot valem os padrões.
+
+DIR="${MSSCAN_DIR:-/opt/msscan}"
+RUN="${MSSCAN_RUN:-/run/msscan}"
+ESPERA_UI="${MSSCAN_ESPERA_UI:-90}"
+PYTHON="${MSSCAN_PYTHON:-python3}"
+XINIT="${MSSCAN_XINIT:-xinit}"
+XAUTH="${MSSCAN_XAUTH:-xauth}"
+NFT="${MSSCAN_NFT:-nft}"
+SESSAO_X="${MSSCAN_SESSAO_X:-/usr/local/lib/msscan/sessao-x}"
+REGRA_NFT="${MSSCAN_REGRA_NFT:-/etc/msscan/quiosque.nft}"
+PREFS_FIREFOX="${MSSCAN_PREFS_FIREFOX:-/usr/local/share/msscan/firefox-user.js}"
+USUARIO_UI="${MSSCAN_USUARIO_UI:-msscan-ui}"
+TELA="${MSSCAN_DISPLAY:-:0}"
+TRAVA_X="${MSSCAN_XLOCK_DIR:-/tmp}/.X${TELA#:}-lock"
+VIDEOS="${MSSCAN_VIDEOS:-padrao fbdev vesa}"
+VIDEO_DIR="${MSSCAN_VIDEO_DIR:-/etc/X11/msscan}"
+MAX_TENTATIVAS="${MSSCAN_MAX_TENTATIVAS:-0}"  # 0 = sem limite (no boot); só os testes limitam
+FALHAS="${MSSCAN_FALHAS:-/run/msscan-interface}"
+XORG_LOG="${MSSCAN_XORG_LOG:-/var/log/Xorg.0.log}"
+
+cd "$DIR" || exit 1
+
+# Ctrl+C, Ctrl+\ e Ctrl+Z no tty1 não derrubam este script (a queda dele faria o systemd encerrar o backend, até no meio de
+# uma gravação; revisão de 13/10/2026, M2). Um tratador vazio, e não '', para os programas iniciados daqui continuarem
+# recebendo o Ctrl+C normalmente.
+trap ':' INT QUIT TSTP
+
+vivo() {
+    kill -0 "$1" 2>/dev/null
+}
+
+# Encerra processos (TERM, e KILL se não saírem em 3 s).
+encerrar() {
+    for pid in "$@"; do kill "$pid" 2>/dev/null; done
+    for _ in 1 2 3 4 5 6; do
+        algum=0
+        for pid in "$@"; do vivo "$pid" && algum=1; done
+        [ "$algum" = 0 ] && return 0
+        sleep 0.5
+    done
+    for pid in "$@"; do kill -9 "$pid" 2>/dev/null; done
+}
+
+# Encerra a sessão gráfica inteira. Se o xinit morrer ainda esperando o X subir, o servidor X
+# fica órfão (visto no ensaio com Xvfb): por isso ele é encerrado também pelo PID da trava.
+encerrar_sessao() {
+    servidor_x=""
+    [ -r "$TRAVA_X" ] && servidor_x=$(tr -dc '0-9' <"$TRAVA_X")
+    encerrar "$@" $servidor_x
+}
+
+# Segundos desde o boot (/proc/uptime), nunca o relógio de parede: o MSscan acerta o relógio do sistema (meses, no caso
+# do R530) durante esta espera, e o limite medido pela hora estouraria e mataria a interface (QEMU, 14/10/2026).
+agora() { cut -d. -f1 /proc/uptime; }
+
+# Guarda os logs de uma tentativa que falhou (o $RUN é apagado na próxima). O main.py copia esta pasta para junto do
+# relatório (interface_falhou/) ou, se nenhum vídeo abrir, para MSSCAN/logs/ (msscan.interface.falhas). $1: nome da tentativa; $2: motivo.
+guardar_falha() {
+    # Teto (RAM): a interface caindo sem parar não enche a memória; as primeiras tentativas são as que explicam.
+    [ "$(find "$FALHAS" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)" -ge 30 ] && return 0
+    destino="$FALHAS/$(date +%H%M%S)_$1"
+    mkdir -p "$destino" 2>/dev/null || return 0
+    echo "$2" >"$destino/motivo.txt"
+    for arquivo in "$RUN"/*.log "$XORG_LOG"; do
+        [ -r "$arquivo" ] && cp "$arquivo" "$destino/" 2>/dev/null
+    done
+    # Vídeo: driver do kernel e mensagens do DRM/framebuffer (nenhum dado do cliente).
+    { lspci -nnk 2>/dev/null | grep -A3 -iE "vga|display"; dmesg 2>/dev/null | grep -iE "drm|mgag200|ast|fb[0-9]|vesa|efifb|simple-framebuffer"; } \
+        >"$destino/video.txt" 2>/dev/null
+}
+
+# Uma tentativa da interface. $1: vídeo ("padrao" = autodetecção do Xorg; "fbdev"/"vesa" = driver forçado, plano B
+# para vídeo de servidor em que o modesetting falha). Devolve 1 se não subiu, 0 se subiu e depois caiu.
+interface() {
+    video="$1"
+    LIMITE=$(( $(agora) + ESPERA_UI ))
+    # Trava de um X que ficou de uma tentativa anterior (só se o processo não existir mais).
+    if [ -r "$TRAVA_X" ] && ! vivo "$(tr -dc '0-9' <"$TRAVA_X")"; then
+        rm -f "$TRAVA_X"
+    fi
+    rm -rf "$RUN"
+    mkdir -p "$RUN" || { MOTIVO="Não foi possível criar $RUN."; return 1; }
+    chmod 755 "$RUN"
+
+    # DISPLAY/XAUTHORITY: o backend lista e troca a resolução (xrandr) pela tela Sobre.
+    DISPLAY="$TELA" XAUTHORITY="$RUN/Xauthority" \
+        $PYTHON "$DIR/main.py" --ui --ui-arquivo-url "$RUN/url" --ui-arquivo-pronto "$RUN/pronto" --ui-firewall-pareamento --ui-navegador \
+        --ui-arquivo-tela "$RUN/tela.json" >"$RUN/ui.log" 2>&1 &
+    BACKEND=$!
+
+    while [ ! -s "$RUN/url" ]; do
+        if ! vivo "$BACKEND" || [ "$(agora)" -ge "$LIMITE" ]; then
+            encerrar "$BACKEND"
+            MOTIVO="O MSscan não respondeu à interface (veja ui.log)."
+            return 1
+        fi
+        sleep 0.5
+    done
+
+    # Perfil do navegador: preferências + página inicial com o token (fora da linha de comando,
+    # que qualquer usuário veria no ps). Só o root e o msscan-ui leem.
+    PERFIL="$RUN/firefox"
+    mkdir -p "$PERFIL"
+    cp "$PREFS_FIREFOX" "$PERFIL/user.js"
+    printf 'user_pref("browser.startup.homepage", "%s");\n' "$(cat "$RUN/url")" >>"$PERFIL/user.js"
+
+    # Autorização do X: cookie aleatório; cópia para o usuário do navegador.
+    COOKIE=$($PYTHON -c 'import secrets; print(secrets.token_hex(16))')
+    : >"$RUN/Xauthority"
+    chmod 600 "$RUN/Xauthority"
+    $XAUTH -q -f "$RUN/Xauthority" add "$TELA" . "$COOKIE" 2>/dev/null
+    cp "$RUN/Xauthority" "$PERFIL/.Xauthority"
+    chown -R "$USUARIO_UI" "$PERFIL" 2>/dev/null
+    chmod 700 "$PERFIL"
+
+    # Plano B de vídeo: só a pasta do driver forçado (no lugar de /etc/X11/xorg.conf.d).
+    opcoes_video=""
+    [ "$video" != padrao ] && opcoes_video="-configdir $VIDEO_DIR/$video"
+    # O xinit (que espera o X aceitar conexões) e o matchbox rodam como root: precisam do cookie.
+    XAUTHORITY="$RUN/Xauthority" $XINIT "$SESSAO_X" "$RUN" -- "$TELA" vt7 -nolisten tcp -auth "$RUN/Xauthority" $opcoes_video \
+        >"$RUN/xorg-sessao.log" 2>&1 &
+    SESSAO=$!
+
+    while [ ! -e "$RUN/pronto" ]; do
+        if ! vivo "$SESSAO" || ! vivo "$BACKEND" || [ "$(agora)" -ge "$LIMITE" ]; then
+            encerrar_sessao "$SESSAO" "$BACKEND"
+            MOTIVO="A tela gráfica não abriu em ${ESPERA_UI} s (vídeo: $video; veja xorg-sessao.log e Xorg.0.log)."
+            return 1
+        fi
+        sleep 0.5
+    done
+
+    # Interface no ar.
+    while vivo "$SESSAO" && vivo "$BACKEND"; do
+        sleep 1
+    done
+    # Gravação de firmware ou ação no BMC em andamento (marcador do backend): NUNCA encerrar o backend no meio dela —
+    # interromper pode inutilizar o componente. Espera ele terminar (a interface pode ter caído; o backend segue).
+    if [ -e "$RUN/gravando" ] && vivo "$BACKEND"; then
+        echo "MSscan: a interface caiu durante uma gravação de firmware. NÃO desligue: aguardando o fim da gravação..." >/dev/tty1 2>/dev/null
+    fi
+    while [ -e "$RUN/gravando" ] && vivo "$BACKEND"; do
+        sleep 2
+    done
+    encerrar_sessao "$SESSAO" "$BACKEND"
+    MOTIVO="A interface gráfica foi encerrada (vídeo: $video)."
+    return 0
+}
+
+tentativas=0
+# Limite só para os testes automáticos; no boot (0) tenta para sempre.
+mais_uma() {
+    tentativas=$((tentativas + 1))
+    [ "$MAX_TENTATIVAS" = 0 ] || [ "$tentativas" -le "$MAX_TENTATIVAS" ] || exit 1
+}
+
+rm -rf "$FALHAS"
+mkdir -p "$FALHAS"
+# Sem o firewall, o navegador poderia falar com a internet: a interface não abre sem ele (proteção, nunca removida).
+# Falha aqui é defeito da imagem: tenta de novo a cada 5 s, com o motivo na tela.
+until $NFT -f "$REGRA_NFT" >"$FALHAS/nft.log" 2>&1; do
+    mais_uma
+    echo "MSscan: não foi possível aplicar o firewall do navegador ($REGRA_NFT); tentando de novo em 5 s..."
+    sleep 5
+done
+if ! command -v "$XINIT" >/dev/null 2>&1; then
+    echo "MSscan: o Xorg (xinit) não está nesta imagem; a interface não pode abrir. Grave a ISO de novo."
+fi
+
+while :; do
+    for video in $VIDEOS; do
+        echo "MSscan: iniciando a interface gráfica (vídeo: $video; até ${ESPERA_UI} s)..."
+        mais_uma
+        while interface "$video"; do
+            guardar_falha "queda_$video" "$MOTIVO"
+            echo "MSscan: $MOTIVO Abrindo de novo..."
+            mais_uma
+            sleep 2
+        done
+        guardar_falha "inicio_$video" "$MOTIVO"
+        echo "MSscan: $MOTIVO Tentando de novo..."
+    done
+    # Nenhum vídeo abriu: registros no pendrive (para o técnico mandar) e recomeça a lista.
+    $PYTHON -m msscan.interface.falhas "$FALHAS" 2>/dev/null
+    rm -rf "$FALHAS"/*/
+    sleep 2
+done

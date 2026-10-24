@@ -1,0 +1,19 @@
+{
+ "status": 200,
+ "corpo": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"resumo\": \"Servidor operando com uma fonte sem energia de entrada; restante sem falhas.\", \"problemas\": [{\"titulo\": \"Redundância de energia perdida\", \"severidade\": \"media\", \"evidencias\": [{\"componente"
+      }
+     ],
+     "role": "model"
+    },
+    "finishReason": "MAX_TOKENS"
+   }
+  ],
+  "modelVersion": "gemini-3.8-flash"
+ }
+}

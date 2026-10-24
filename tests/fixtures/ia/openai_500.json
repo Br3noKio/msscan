@@ -1,0 +1,9 @@
+{
+ "status": 500,
+ "corpo": {
+  "error": {
+   "message": "Internal server error",
+   "type": "server_error"
+  }
+ }
+}

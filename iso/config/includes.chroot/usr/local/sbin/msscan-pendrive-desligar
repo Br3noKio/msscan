@@ -1,0 +1,31 @@
+#!/bin/sh
+# Desligamento: deixa os dados do MSscan consistentes no pendrive (msscan-pendrive.service).
+#
+# - pendrive de boot (/run/live/medium, FAT32/exFAT no modo ISO do Rufus): não dá para desmontar
+#   (o sistema live roda de dentro dele); volta para somente leitura, o que limpa o "dirty bit" do FAT;
+# - partição MSSCAN e partição do Ventoy: desmontadas; o mapeamento do Ventoy é removido.
+# Nunca formata, nunca desmonta à força (umount -l): se algo estiver em uso, fica somente leitura.
+#
+# As variáveis MSSCAN_* existem só para os testes automáticos (stubs).
+
+MIDIA="${MSSCAN_MIDIA:-/run/live/medium}"
+PONTOS="${MSSCAN_PONTOS:-/mnt/msscan /mnt/msscan-ventoy}"
+MOUNT="${MSSCAN_MOUNT:-mount}"
+UMOUNT="${MSSCAN_UMOUNT:-umount}"
+MOUNTPOINT="${MSSCAN_MOUNTPOINT:-mountpoint}"
+DMSETUP="${MSSCAN_DMSETUP:-dmsetup}"
+
+sync
+
+for ponto in $PONTOS; do
+    if $MOUNTPOINT -q "$ponto" 2>/dev/null; then
+        $UMOUNT "$ponto" 2>/dev/null || $MOUNT -o remount,ro "$ponto" 2>/dev/null
+    fi
+done
+$DMSETUP remove msscan-ventoy >/dev/null 2>&1
+
+if $MOUNTPOINT -q "$MIDIA" 2>/dev/null; then
+    $MOUNT -o remount,ro "$MIDIA" 2>/dev/null
+fi
+sync
+exit 0

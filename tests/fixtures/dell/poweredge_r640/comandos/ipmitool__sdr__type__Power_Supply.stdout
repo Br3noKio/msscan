@@ -1,0 +1,3 @@
+PS Redundancy    | 77h | ns  |  7.1 | Disabled
+Status           | 85h | ok  | 10.1 | Presence detected, Power Supply AC lost
+Status           | 86h | ok  | 10.2 | Presence detected

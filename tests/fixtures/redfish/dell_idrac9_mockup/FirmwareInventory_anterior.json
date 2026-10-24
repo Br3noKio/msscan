@@ -1,0 +1,12 @@
+{
+  "@odata.id": "/redfish/v1/UpdateService/FirmwareInventory/Previous-25237-21.5.9",
+  "Id": "Previous-25237-21.5.9",
+  "Name": "Intel(R) Ethernet 10G X710 rNDC",
+  "SoftwareId": "25237",
+  "Version": "21.5.9",
+  "Updateable": true,
+  "Status": {
+    "Health": "OK",
+    "State": "Enabled"
+  }
+}

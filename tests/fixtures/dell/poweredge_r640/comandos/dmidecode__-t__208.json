@@ -1,0 +1,10 @@
+{
+  "comando": [
+    "dmidecode",
+    "-t",
+    "208"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.002
+}

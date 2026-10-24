@@ -1,0 +1,11 @@
+{
+  "comando": [
+    "ipmitool",
+    "sdr",
+    "type",
+    "Fan"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 2.023
+}

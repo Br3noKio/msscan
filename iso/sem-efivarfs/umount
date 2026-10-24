@@ -1,0 +1,12 @@
+#!/bin/sh
+# Par do wrapper `mount` (CLAUDE.md 24): antes de desmontar chroot/sys, desmonta o tmpfs que esconde firmware.
+alvo=""
+for argumento in "$@"; do alvo="$argumento"; done
+case "$alvo" in
+    */sys|*/sys/)
+        if /usr/bin/mountpoint -q "${alvo%/}/firmware"; then
+            /usr/bin/umount "${alvo%/}/firmware" || exit $?
+        fi
+        ;;
+esac
+exec /usr/bin/umount "$@"

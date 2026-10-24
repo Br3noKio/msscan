@@ -1,0 +1,3 @@
+PS Redundancy    | 74h | ok  |  7.1 | Fully Redundant
+Status           | 62h | ok  | 10.1 | Presence detected
+Status           | 63h | ok  | 10.2 | Presence detected

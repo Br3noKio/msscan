@@ -1,0 +1,10 @@
+{
+  "comando": [
+    "dmidecode",
+    "-s",
+    "system-sku-number"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.005
+}

@@ -1,0 +1,16 @@
+[project]
+name = "msscan"
+dynamic = ["version"]
+description = "Diagnóstico de servidores físicos a partir de um pendrive bootável"
+requires-python = ">=3.11"
+dependencies = ["requests", "PyYAML", "packaging"]
+
+[tool.setuptools.dynamic]
+version = { attr = "msscan.__version__" }
+
+[tool.setuptools.package-data]
+"msscan.interface" = ["estaticos/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

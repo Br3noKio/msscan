@@ -1,0 +1,187 @@
+# MSscan — catálogo de provedores de IA (CLAUDE.md 10c).
+#
+# Atualizável sem mexer no código: edite este arquivo ou coloque uma cópia em
+# MSSCAN/config/ia_provedores.yaml no pendrive (a do pendrive tem prioridade, se for válida).
+# Tudo aqui foi conferido na documentação oficial de cada provedor na data de "verificado_em";
+# ao atualizar, confira de novo e troque a data. Nunca coloque chaves neste arquivo.
+#
+# Campos: id (letras minúsculas, números e _), nome, categoria (gratuita | paga),
+# tipo_api (gemini | openai | anthropic; "openai" = compatível com a API da OpenAI),
+# url (base da API; o MSscan completa o caminho), modelo_padrao, link_chave,
+# arquivo_chave (arquivo antigo em config/, lido se o ia.conf não tiver a chave),
+# limites, privacidade, avisos (treinamento | china | limite_pequeno), verificado_em, fontes.
+
+versao: 1
+provedores:
+  - id: gemini_gratuito
+    nome: Google Gemini (plano gratuito do AI Studio)
+    categoria: gratuita
+    tipo_api: gemini
+    url: https://generativelanguage.googleapis.com/v1beta
+    # Flash-Lite como principal (pedido de 01/10/2026: velocidade na análise e no chat). "gemini-3.5-flash-lite" é o
+    # Flash-Lite mais novo em docs/models (01/10/2026: "Our fastest, most cost-effective 3.5 model"), gratuito no plano
+    # gratuito (docs/pricing: "Free of charge"), com thinking. O 3.8 Flash fica como alternativo (também gratuito).
+    modelo_padrao: gemini-3.5-flash-lite
+    modelo_alternativo: gemini-3.8-flash
+    link_chave: https://aistudio.google.com/apikey
+    arquivo_chave: gemini.key
+    limites: >-
+      Sem custo, com limites por modelo que o Google não publica em número na documentação:
+      veja-os no AI Studio (menu Rate limit). Um diagnóstico cabe com folga no contexto do modelo.
+    privacidade: >-
+      No plano gratuito o Google usa o conteúdo enviado e as respostas para melhorar os produtos,
+      com revisão por pessoas.
+    avisos: [treinamento]
+    verificado_em: 2026-10-01
+    fontes:
+      - https://ai.google.dev/gemini-api/docs/models
+      - https://ai.google.dev/gemini-api/docs/pricing
+      - https://ai.google.dev/gemini-api/docs/rate-limits
+      - https://ai.google.dev/gemini-api/terms
+
+  - id: groq
+    nome: Groq (plano gratuito)
+    categoria: gratuita
+    tipo_api: openai
+    url: https://api.groq.com/openai/v1
+    modelo_padrao: openai/gpt-oss-120b
+    link_chave: https://console.groq.com/keys
+    arquivo_chave: groq.key
+    limites: >-
+      Gratuito: 30 pedidos/min, 1.000/dia, 8.000 tokens/min e 200.000 tokens/dia (gpt-oss-120b).
+      Um diagnóstico completo tem cerca de 19.000 tokens (medido no Dell R640), acima do limite por
+      minuto: no plano gratuito a análise inicial tende a ser recusada. O chat usa um resumo compacto
+      (cerca de 4.000 tokens no R640) e cabe: é a IA reserva sugerida, por ser a mais rápida.
+    privacidade: Por padrão a Groq não guarda o conteúdo enviado.
+    avisos: [limite_pequeno]
+    verificado_em: 2026-09-28
+    fontes:
+      - https://console.groq.com/docs/models
+      - https://console.groq.com/docs/rate-limits
+      - https://console.groq.com/docs/your-data
+
+  - id: openrouter_gratuito
+    nome: OpenRouter (modelos gratuitos)
+    categoria: gratuita
+    tipo_api: openai
+    url: https://openrouter.ai/api/v1
+    modelo_padrao: openrouter/free
+    link_chave: https://openrouter.ai/keys
+    arquivo_chave: openrouter.key
+    limites: >-
+      Modelos gratuitos: 20 pedidos/min e 50 pedidos/dia (1.000/dia depois de comprar 10 créditos).
+      "openrouter/free" escolhe entre os modelos gratuitos disponíveis no momento (eles mudam).
+    privacidade: >-
+      Cada modelo gratuito é servido por um provedor com política própria; alguns podem treinar com os
+      dados. Nas configurações da conta dá para bloquear provedores que treinam.
+    avisos: [treinamento]
+    verificado_em: 2026-09-28
+    fontes:
+      - https://openrouter.ai/docs/api/reference/limits
+      - https://openrouter.ai/docs/guides/privacy/logging
+      - https://openrouter.ai/api/v1/models
+
+  - id: mistral_gratuito
+    nome: Mistral (modo gratuito)
+    categoria: gratuita
+    tipo_api: openai
+    url: https://api.mistral.ai/v1
+    modelo_padrao: mistral-medium-latest
+    link_chave: https://console.mistral.ai
+    arquivo_chave: mistral.key
+    limites: >-
+      Modo gratuito sem cartão de crédito, com uso mensal incluído e limites que aparecem só no painel
+      da conta (Admin > API > Limits). Crie a chave em "API Keys" no console.
+    privacidade: >-
+      Pelos termos, a Mistral não treina com os dados, exceto se o treino estiver ativado na conta:
+      confira a opção de treino nas configurações de privacidade antes de enviar.
+    avisos: [treinamento]
+    verificado_em: 2026-09-28
+    fontes:
+      - https://docs.mistral.ai/getting-started/quickstarts/studio/activate-and-generate-api-key.md
+      - https://docs.mistral.ai/admin/billing-usage/usage-limits.md
+      - https://legal.mistral.ai/terms/commercial-terms-of-service
+
+  - id: anthropic
+    nome: Claude (Anthropic)
+    categoria: paga
+    tipo_api: anthropic
+    url: https://api.anthropic.com/v1
+    modelo_padrao: claude-sonnet-5
+    link_chave: https://platform.claude.com/settings/keys
+    arquivo_chave: ia.key
+    limites: Pago por uso (créditos na conta); limites por nível da conta.
+    privacidade: API comercial (dados da API seguem os termos comerciais da Anthropic).
+    avisos: []
+    verificado_em: 2026-09-28
+    fontes:
+      - https://platform.claude.com/docs/en/about-claude/models/overview.md
+      - https://platform.claude.com/docs/en/manage-claude/authentication.md
+
+  - id: openai
+    nome: ChatGPT (OpenAI)
+    categoria: paga
+    tipo_api: openai
+    url: https://api.openai.com/v1
+    modelo_padrao: gpt-5.6-terra
+    link_chave: https://platform.openai.com/api-keys
+    arquivo_chave: openai.key
+    limites: Pago por uso (créditos na conta); limites por nível da conta.
+    privacidade: Dados enviados à API não são usados para treinar modelos, salvo adesão explícita.
+    avisos: []
+    verificado_em: 2026-09-28
+    fontes:
+      - https://developers.openai.com/api/docs/models/gpt-5.6-terra
+      - https://developers.openai.com/api/docs/guides/your-data
+
+  - id: gemini_pago
+    nome: Google Gemini (plano pago)
+    categoria: paga
+    tipo_api: gemini
+    url: https://generativelanguage.googleapis.com/v1beta
+    modelo_padrao: gemini-3.5-flash-lite
+    modelo_alternativo: gemini-3.8-flash
+    link_chave: https://aistudio.google.com/apikey
+    arquivo_chave: gemini_pago.key
+    limites: Pago por uso; exige faturamento ativado no projeto do AI Studio. Limites maiores que o gratuito.
+    privacidade: No plano pago o Google não usa o conteúdo para melhorar os produtos (guarda por tempo limitado).
+    avisos: []
+    verificado_em: 2026-10-01
+    fontes:
+      - https://ai.google.dev/gemini-api/docs/pricing
+      - https://ai.google.dev/gemini-api/terms
+
+  - id: deepseek
+    nome: DeepSeek
+    categoria: paga
+    tipo_api: openai
+    url: https://api.deepseek.com
+    modelo_padrao: deepseek-flash
+    link_chave: https://platform.deepseek.com/api_keys
+    arquivo_chave: deepseek.key
+    limites: Pago por uso (créditos na conta); preço menor fora do horário de pico.
+    privacidade: A DeepSeek coleta, processa e armazena os dados na República Popular da China.
+    avisos: [china]
+    verificado_em: 2026-09-28
+    fontes:
+      - https://api-docs.deepseek.com/
+      - https://api-docs.deepseek.com/quick_start/pricing
+      - https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html
+
+  - id: openrouter_pago
+    nome: OpenRouter (pago)
+    categoria: paga
+    tipo_api: openai
+    url: https://openrouter.ai/api/v1
+    modelo_padrao: openrouter/auto
+    link_chave: https://openrouter.ai/keys
+    arquivo_chave: openrouter.key
+    limites: Pago por uso (créditos); "openrouter/auto" escolhe o modelo. A mesma chave serve para o gratuito.
+    privacidade: >-
+      Depende do provedor escolhido pelo roteador; nas configurações da conta dá para bloquear
+      provedores que treinam com os dados.
+    avisos: []
+    verificado_em: 2026-09-28
+    fontes:
+      - https://openrouter.ai/docs/api/reference/limits
+      - https://openrouter.ai/docs/guides/privacy/logging

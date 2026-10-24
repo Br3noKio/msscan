@@ -1,0 +1,20 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "msg_chat",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-sonnet-5",
+  "content": [
+   {
+    "type": "text",
+    "text": "{\"resposta\": \"Resolva primeiro a energia: a PS1 está sem entrada de energia [E1]. O disco precisa ser trocado [E2]. Veja também o controlador [E3].\", \"evidencias\": [{\"id\": \"E1\", \"componente\": \"fontes\", \"trecho\": \"Power Supply AC lost\"}, {\"id\": \"E2\", \"componente\": \"discos\", \"trecho\": \"setores realocados: 812\"}], \"acoes_catalogo\": [\"bmc.sel_exportar_limpar\", \"disco.formatar_tudo\"]}"
+   }
+  ],
+  "stop_reason": "end_turn",
+  "usage": {
+   "input_tokens": 9000,
+   "output_tokens": 200
+  }
+ }
+}

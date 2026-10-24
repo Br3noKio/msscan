@@ -1,0 +1,17 @@
+Fan1A            | 38h | ok  |  7.1 | 7800 RPM
+Fan1B            | 40h | ok  |  7.1 | 7320 RPM
+Fan2A            | 39h | ok  |  7.1 | 7440 RPM
+Fan2B            | 41h | ok  |  7.1 | 6960 RPM
+Fan3A            | 3Ah | ok  |  7.1 | 7440 RPM
+Fan3B            | 42h | ok  |  7.1 | 6480 RPM
+Fan Redundancy   | 78h | ok  |  7.1 | Fully Redundant
+Fan4A            | 3Bh | ok  |  7.1 | 7080 RPM
+Fan4B            | 43h | ok  |  7.1 | 6720 RPM
+Fan5A            | 3Ch | ok  |  7.1 | 6960 RPM
+Fan5B            | 44h | ok  |  7.1 | 6720 RPM
+Fan6A            | 3Dh | ok  |  7.1 | 6960 RPM
+Fan6B            | 45h | ok  |  7.1 | 6480 RPM
+Fan7A            | 3Eh | ok  |  7.1 | 6960 RPM
+Fan7B            | 46h | ok  |  7.1 | 6360 RPM
+Fan8A            | 3Fh | ok  |  7.1 | 6840 RPM
+Fan8B            | 47h | ok  |  7.1 | 6480 RPM

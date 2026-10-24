@@ -1,0 +1,12 @@
+{
+  "https://api.anthropic.com/": {
+    "erro": "",
+    "erro_tipo": "",
+    "status": 404
+  },
+  "https://downloads.dell.com/": {
+    "erro": "",
+    "erro_tipo": "",
+    "status": 200
+  }
+}

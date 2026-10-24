@@ -1,0 +1,6 @@
+/* Demonstração: faixa fixa no topo (cores do tema). */
+.faixa-demo {
+  position: sticky; top: 0; z-index: 30; padding: 8px 16px; text-align: center; font-weight: 600;
+  background: var(--ms-alerta-fundo); color: var(--ms-alerta); border-bottom: 1px solid var(--ms-alerta);
+  background-color: var(--ms-preto-0);
+}

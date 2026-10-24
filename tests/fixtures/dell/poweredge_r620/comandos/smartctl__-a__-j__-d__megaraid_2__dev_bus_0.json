@@ -1,0 +1,13 @@
+{
+  "comando": [
+    "smartctl",
+    "-a",
+    "-j",
+    "-d",
+    "megaraid,2",
+    "/dev/bus/0"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 2.717
+}

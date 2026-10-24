@@ -1,0 +1,34 @@
+# MSscan — catálogos ANTIGOS da Dell para servidores que saíram do catálogo atual (pedido de 15/10/2026).
+#
+# A Dell tira as gerações em fim de suporte do Catalog.xml.gz ("PowerEdge 9th through 13th Generation servers have reached
+# end of support life, new catalogs do not carry content for these platforms" — KB 000132986), mas os catálogos antigos e
+# os pacotes deles continuam em downloads.dell.com. Quando o modelo não tem BIOS no catálogo atual, o MSscan usa o mais novo
+# desta lista que tiver BIOS para o System ID dele.
+#
+# Cada entrada: o caminho e o MD5 vêm do índice oficial (https://downloads.dell.com/catalog/CatalogIndex.gz e os índices
+# anteriores, pelo predecessorPath); o SHA-256 foi calculado do arquivo baixado de lá (MD5 conferido com o índice). Só https
+# em downloads.dell.com. Hash diferente: o arquivo é apagado e o catálogo não é usado.
+
+catalogos:
+  - versao: "26.06.01"
+    data: "2026-06-01"
+    url: "https://downloads.dell.com/FOLDER14611037M/1/Catalog.xml.gz"
+    md5: "ef0aabd608b090923b8cde4620e54741"
+    sha256: "0e7a8f80ef60f3271b4bced83b02dc10e7c4e07f195e58c6e721865285fb50f7"
+    tamanho: 1663973
+    motivo: "último catálogo LC com a 13ª geração (o de 26.06.08 já não traz)"
+    # Conferido em 15/10/2026: 270 pacotes do R530 (063A), com BIOS 2.19.0 e iDRAC 2.86.86.86; amostra de 5 pacotes
+    # da 13ª geração ainda baixa de downloads.dell.com (HTTP 200).
+    verificado: "2026-10-15"
+  - versao: "22.12.30"
+    data: "2022-12-30"
+    url: "https://downloads.dell.com/FOLDER09390002M/1/Catalog.xml.gz"
+    md5: "633bbd664c8a6a0670b94f5b2d408868"
+    sha256: "94ed85392c59fb951405f2bb48204d65b9f4980402674770263481567d32c80c"
+    tamanho: 915625
+    motivo: "último catálogo LC com a 12ª geração (o de 23.01.06 já não traz)"
+    # Conferido em 15/10/2026 (caminho e MD5 do índice 23.10.20, achado pela cadeia predecessorPath): R620 (04CE) com
+    # BIOS 2.9.0 e iDRAC 2.65.65.65; R320 e T620 também; amostra de 4 pacotes do R620 ainda baixa (HTTP 200).
+    # 11ª geração (R710 0235, R610 0236, R410 0287): ausente já no catálogo 22.10.07; o índice anterior ao de 23.10.20
+    # está com o link quebrado no site da Dell — sem catálogo oficial conferido, continua na Atualização manual.
+    verificado: "2026-10-15"

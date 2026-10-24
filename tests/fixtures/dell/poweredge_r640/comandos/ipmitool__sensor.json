@@ -1,0 +1,9 @@
+{
+  "comando": [
+    "ipmitool",
+    "sensor"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 2.765
+}

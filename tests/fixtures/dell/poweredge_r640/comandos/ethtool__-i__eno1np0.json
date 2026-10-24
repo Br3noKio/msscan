@@ -1,0 +1,10 @@
+{
+  "comando": [
+    "ethtool",
+    "-i",
+    "eno1np0"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.002
+}

@@ -1,0 +1,23 @@
+{
+ "status": 200,
+ "corpo": {
+  "id": "chatcmpl-chat",
+  "object": "chat.completion",
+  "model": "llama-3.3-70b-versatile",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\"resposta\": \"Resolva primeiro a energia: a PS1 está sem entrada de energia [E1]. O disco precisa ser trocado [E2]. Veja também o controlador [E3].\", \"evidencias\": [{\"id\": \"E1\", \"componente\": \"fontes\", \"trecho\": \"Power Supply AC lost\"}, {\"id\": \"E2\", \"componente\": \"discos\", \"trecho\": \"setores realocados: 812\"}], \"acoes_catalogo\": [\"bmc.sel_exportar_limpar\", \"disco.formatar_tudo\"]}\n```"
+    },
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 9000,
+   "completion_tokens": 200,
+   "total_tokens": 9200
+  }
+ }
+}

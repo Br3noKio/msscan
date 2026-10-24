@@ -1,0 +1,15 @@
+[Unit]
+Description=MSscan - desmontagem limpa dos dados no pendrive ao desligar
+# Parado antes da desmontagem dos sistemas de arquivos (ordem inversa no desligamento).
+After=local-fs.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/true
+ExecStop=/usr/local/sbin/msscan-pendrive-desligar
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

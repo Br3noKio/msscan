@@ -1,0 +1,9 @@
+{
+  "comando": [
+    "lsscsi",
+    "-g"
+  ],
+  "rc": 0,
+  "stderr": "",
+  "duracao": 0.003
+}
