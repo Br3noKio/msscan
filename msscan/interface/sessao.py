@@ -93,6 +93,16 @@ from msscan.relatorio.html import gerar_html
 from msscan.relatorio.simbolos import UNICODE
 from msscan.relatorio.terminal import formatar_configuracao, formatar_localizacao, formatar_relatorio, veredito
 
+ESPERA_PRINT_S = 4.0
+"""Print da tela depois do fim da instalação: a tela consulta o estado a cada 2 s (no máximo); em 4 s ela já mostra o resultado final."""
+
+INTERVALO_DISCOS_S = 30.0
+"""Releitura da aba Discos: o ``smartctl -a -j`` leva ~3 s por disco atrás da PERC (R620)."""
+PONTOS_TEMPERATURA_DISCO = 120
+"""Uma hora de temperatura por disco a cada 30 s."""
+CAMPOS_AO_VIVO_DISCO = ("temperatura", "temperatura_detalhe", "horas_ligado", "ciclos_energia", "autoteste", "autotestes")
+"""O que a releitura atualiza; status e saúde continuam os do diagnóstico (refazer o diagnóstico reavalia o disco)."""
+
 # Etapas da sessão (a interface decide a tela pela etapa).
 REDE = "rede"
 DETECCAO = "deteccao"
@@ -257,6 +267,12 @@ class Sessao:
         self._sensores: dict[str, Any] | None = None
         self._sensores_lidos = 0.0
         self._trava_sensores = threading.Lock()  # uma leitura ao vivo por vez (o ipmitool leva ~2 s)
+        self._discos_vivo: dict[str, dict[str, Any]] = {}
+        """Aba Discos (CLAUDE.md 31): última releitura de cada disco (id → ``parse_smart``) e a hora dela."""
+        self._discos_historico: dict[str, list[list[Any]]] = {}
+        """id → [[hora, °C], ...] da temperatura ao vivo (no máximo ``PONTOS_TEMPERATURA_DISCO``)."""
+        self._discos_lidos = 0.0
+        self._discos_lendo = False
         self.firewall_pareamento = firewall_pareamento
         self.ssh = AcessoSSH(self.executor.rodar, pasta_dados, firewall=firewall_pareamento)
         """22.5: acesso SSH/SFTP (desligado por padrão; aba Terminal ou ``msscan.ssh=1``)."""
@@ -348,6 +364,13 @@ class Sessao:
                         atual = getattr(self, campo) or {}
                         if atual.get("situacao") == "executando":
                             setattr(self, campo, {**atual, "situacao": "falhou", "mensagem": textos.t("py_sessao.erro_inesperado_0_se_algo", self.erro)})  # fmt: skip
+            finally:
+                # Pedido de 22/10/2026: depois de toda instalação (ou tentativa), o log técnico final fica no pendrive.
+                if self.aplicacao is not None:
+                    self.log_automatico()
+                    espera = threading.Timer(ESPERA_PRINT_S, self.print_tela)  # a tela mostra o resultado final
+                    espera.daemon = True
+                    espera.start()
 
         self._thread = threading.Thread(target=protegido, name="msscan-sessao", daemon=True)
         self._thread.start()
@@ -1097,6 +1120,7 @@ class Sessao:
             self.retomada = retomada
             self._continuacao = estado if not motivo else None
             self._parado = estado if not parado else None
+        self.log_automatico()  # pedido de 22/10/2026: o antes × depois da volta também fica no log
 
     def antes_depois(self, ctx: Any, resultado: dict[str, Any]) -> None:
         """Relatório final antes × depois (15.6): relê o inventário para o que o BMC aplicou sem reinício.
@@ -1563,6 +1587,27 @@ class Sessao:
         except Exception:  # noqa: BLE001 - o log nunca para a atualização
             pass
 
+    def print_tela(self) -> None:
+        """Pedido de 22/10/2026: print da tela ao fim de toda instalação (ou tentativa), ao lado do log automático
+        (``..._auto_tela_<hora>.png``). Tirado na RAM (``scrot``, X do quiosque) e só então gravado no pendrive. Ao contrário
+        do log, NÃO é sanitizado: mostra o que a tela mostra. Nunca levanta exceção."""
+        import os
+        import tempfile
+
+        from msscan.acoes.comum import gravar_conferido
+
+        if not self._log_gravavel() or self._log_auto is None or not os.environ.get("DISPLAY"):
+            return
+        try:
+            with tempfile.TemporaryDirectory(prefix="msscan_tela_") as pasta:
+                png = Path(pasta) / "tela.png"
+                if self.executor.rodar(["scrot", "-o", str(png)], timeout=20)[0] != 0 or not png.is_file():
+                    return
+                with self._escrita():
+                    gravar_conferido(self._log_auto.with_name(f"{self._log_auto.stem}_tela_{datetime.now():%H%M%S}.png"), png.read_bytes())
+        except Exception:  # noqa: BLE001 - o print nunca atrapalha a sessão
+            pass
+
     def _novo_acompanhamento(self, itens: list[dict[str, Any]]) -> dict[str, Any]:
         """Resultado parcial com o ``Progresso`` ao vivo (21.1) ligado ao log automático (21.7)."""
         from msscan.atualizacao.aplicacao import componentes_do_plano
@@ -1826,6 +1871,91 @@ class Sessao:
             return {**self._sensores, "pausa": pausa}
         lista = (getattr(resultados.get("sensores"), "dados", None) or {}).get("sensores") or []
         return {**vis.sensores(lista), "origem": "diagnostico", "lido": None, "pausa": pausa} if lista else None
+
+    # Aba Discos (CLAUDE.md 31) ----------------------------------------------
+
+    def _discos_diagnosticados(self) -> list[dict[str, Any]]:
+        with self._trava:
+            resultado = self.resultados.get("discos")
+        return [d for d in (getattr(resultado, "dados", None) or {}).get("discos") or [] if d.get("dispositivo")]
+
+    def _pausa_discos(self) -> str | None:
+        return self._motivo_energia_bloqueada() or (textos.t("visao.pausa_diagnostico") if self.etapa == DIAGNOSTICO else None)
+
+    def discos(self) -> dict[str, Any]:
+        """Painel da aba Discos: o que o diagnóstico leu + a releitura ao vivo (só enquanto a aba pede). Nunca levanta exceção."""
+        from msscan import discos as dsc
+
+        lista = self._discos_diagnosticados()
+        pausa = self._pausa_discos()
+        if lista and not pausa and time.monotonic() - self._discos_lidos >= INTERVALO_DISCOS_S and not self._discos_lendo:
+            self._discos_lendo = True
+            threading.Thread(target=self._reler_discos, args=(lista,), name="msscan-discos", daemon=True).start()
+        with self._trava:
+            vivo, historico = dict(self._discos_vivo), {k: list(v) for k, v in self._discos_historico.items()}
+            ignorados = ((getattr(self.resultados.get("discos"), "dados", None) or {}).get("ignorados") or [])
+        cartoes = [dsc.painel({**d, **vivo.get(dsc.identificador(d), {})}, historico.get(dsc.identificador(d))) for d in lista]
+        return {"discos": cartoes, "ignorados": ignorados, "pausa": pausa, "intervalo_s": INTERVALO_DISCOS_S,
+                "demonstracao": self.replay}  # fmt: skip
+
+    def _reler_discos(self, lista: list[dict[str, Any]]) -> None:
+        """O mesmo ``smartctl -a -j`` do diagnóstico, fora do histórico: temperatura, horas e andamento do autoteste."""
+        from msscan import discos as dsc
+        from msscan.parsers.smartctl import parse_smart
+
+        try:
+            for disco in lista:
+                if disco.get("status") == "NAO_VERIFICADO" or self._pausa_discos():
+                    continue
+                tipo, nome = disco.get("tipo"), disco["dispositivo"]
+                comando = ["smartctl", "-a", "-j", "-d", tipo, nome] if tipo else ["smartctl", "-a", "-j", nome]
+                _, saida, _ = self.executor.rodar(comando, timeout=60, registrar=False)
+                try:
+                    novo = parse_smart(saida)
+                except ErroParser:
+                    continue
+                chave, agora = dsc.identificador(disco), datetime.now().isoformat(timespec="seconds")
+                with self._trava:
+                    self._discos_vivo[chave] = {c: novo.get(c) for c in CAMPOS_AO_VIVO_DISCO}
+                    temperatura = novo.get("temperatura")
+                    if isinstance(temperatura, (int, float)):
+                        pontos = self._discos_historico.setdefault(chave, [])
+                        pontos.append([agora, temperatura])
+                        del pontos[:-PONTOS_TEMPERATURA_DISCO]
+        except Exception:  # noqa: BLE001 - leitura ao vivo nunca derruba a sessão
+            pass
+        finally:
+            self._discos_lidos = time.monotonic()
+            self._discos_lendo = False
+
+    def autoteste_disco(self, identificador: str, tipo: str | None) -> tuple[bool, str]:
+        """Inicia (``tipo`` curto/estendido) ou interrompe (``tipo=None``) o autoteste de um disco JÁ diagnosticado, achado pelo
+        id (nunca um caminho vindo da interface). A confirmação fica na interface; aqui, as salvaguardas."""
+        from msscan import discos as dsc
+
+        if self.replay:
+            return False, textos.t("discos.indisponivel_demonstracao")
+        pausa = self._pausa_discos()
+        if pausa:
+            return False, pausa
+        disco = next((d for d in self._discos_diagnosticados() if dsc.identificador(d) == identificador), None)
+        if disco is None or disco.get("status") == "NAO_VERIFICADO":
+            return False, textos.t("discos.disco_nao_verificado")
+        with self._trava:
+            atual = {**disco, **self._discos_vivo.get(identificador, {})}.get("autoteste") or {}
+        if tipo is not None and not atual.get("suportado"):
+            return False, textos.t("discos.autoteste_nao_suportado")
+        if tipo is not None and atual.get("em_andamento"):
+            return False, textos.t("discos.autoteste_ja_rodando")
+        comando = dsc.comando_autoteste(disco, tipo)
+        if comando is None:
+            return False, textos.t("discos.disco_nao_verificado")
+        rc, saida, erro = self.executor.autoteste_disco(comando)
+        self._discos_lidos = 0.0  # a próxima consulta da aba já relê o andamento
+        if rc != 0:
+            linhas = (erro or saida).strip().splitlines()
+            return False, textos.t("discos.autoteste_falhou", linhas[-1] if linhas else rc)
+        return True, textos.t("discos.autoteste_interrompido" if tipo is None else "discos.autoteste_iniciado")
 
     def estado(self) -> dict[str, Any]:
         """Estado resumido para a interface (consultado a cada ~0,5 s)."""

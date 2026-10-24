@@ -89,10 +89,24 @@ class Registro:
                     comp.nome,
                     [{"provedor": "-", "resultado": "erro", "detalhe": f"{type(erro).__name__}: {erro}"}],
                 )
+            _mapear_posicoes(resultado, ctx)
             resultados.append(resultado)
             _avisar(progresso, comp.nome, resultado)
         return resultados
 
+
+
+def _mapear_posicoes(resultado: Resultado, ctx: Contexto) -> None:
+    """Mapa por posição (pedido de 22/10/2026) a partir do que o provedor já leu; nunca para o diagnóstico."""
+    from msscan.acesso_idrac import eh_dell
+    from msscan import posicoes
+
+    try:
+        linhas = posicoes.montar(resultado.componente, resultado.dados, eh_dell(ctx))
+        if linhas:
+            resultado.dados["posicoes"] = linhas
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def _avisar(progresso: Progresso | None, nome: str, resultado: Resultado | None) -> None:

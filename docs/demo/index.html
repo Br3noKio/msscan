@@ -24,11 +24,12 @@
         <ul role="tablist" id="abas">
           <li><a role="tab" href="#/inicio" data-tela="inicio" id="aba-inicio"><span class="num" aria-hidden="true">1</span><span data-icone="home" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.inicio"></span></a></li>
           <li><a role="tab" href="#/diagnostico" data-tela="diagnostico" id="aba-diagnostico"><span class="num" aria-hidden="true">2</span><span data-icone="pulse" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.diagnostico"></span><span class="contador" id="contador-problemas" hidden></span></a></li>
-          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">3</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
-          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">4</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
-          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">5</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
-          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">6</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
-          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">7</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
+          <li><a role="tab" href="#/discos" data-tela="discos" id="aba-discos"><span class="num" aria-hidden="true">3</span><span data-icone="hard-drive" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.discos"></span><span class="contador" id="contador-discos" hidden></span></a></li>
+          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">4</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
+          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">5</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
+          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">6</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
+          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">7</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
+          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">8</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
           <li class="aba-sem-espaco"><a role="tab" href="#/sobre" data-tela="sobre" id="aba-sobre"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.configuracoes"></span></a></li>
         </ul>
       </nav>
@@ -310,6 +311,13 @@
     </section>
 
     <!-- 4. Relatórios -->
+    <!-- Aba Discos, como o Hard Disk Sentinel (CLAUDE.md 31) -->
+    <section class="tela" id="tela-discos" role="tabpanel" aria-labelledby="aba-discos" hidden>
+      <p class="texto-sec" id="discos-mensagem" role="status" aria-live="polite"></p>
+      <div class="discos-lista" id="discos-lista"></div>
+      <p class="legenda" data-t="discos.legenda_saude"></p>
+    </section>
+
     <section class="tela" id="tela-relatorios" role="tabpanel" aria-labelledby="aba-relatorios" hidden>
       <div id="rel-resumo-area">
         <div class="cartao">
@@ -324,6 +332,14 @@
             <p class="texto-sec" data-t="relatorios.se_algo_falhar_exporte_o"></p>
             <div class="acoes"><button type="button" class="botao botao-secundario" data-exportar-log><span data-icone="download" aria-hidden="true"></span><span data-t="relatorios.exportar_log_tecnico"></span></button></div>
             <p class="texto-sec pequeno" data-log-mensagem role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="cartao">
+          <h2 class="cabeca-cartao" data-t="relatorios.coleta_titulo"></h2>
+          <div class="cartao-corpo">
+            <p class="texto-sec" data-t="relatorios.coleta_explicacao"></p>
+            <div class="acoes"><button type="button" class="botao botao-secundario" id="coleta-botao"><span data-icone="download" aria-hidden="true"></span><span data-t="relatorios.coletar_dados"></span></button></div>
+            <p class="texto-sec pequeno" id="coleta-mensagem" role="status" aria-live="polite"></p>
           </div>
         </div>
       </div>
@@ -555,7 +571,9 @@
           <p id="atu-preparo-mensagem" role="status" aria-live="polite"></p>
           <ul class="lista-local" id="atu-preparo" data-t-aria-label="atualizacoes.pacotes_baixados_e_conferidos"></ul>
           <div class="aviso aviso-alerta" id="atu-acesso" hidden><span id="atu-acesso-texto"></span>
-            <button type="button" class="botao botao-secundario botao-pequeno" id="atu-acesso-botao"></button></div>
+            <button type="button" class="botao botao-secundario botao-pequeno" id="atu-acesso-botao"></button>
+            <p id="atu-sem-idrac" hidden><span id="atu-sem-idrac-texto"></span>
+              <button type="button" class="botao botao-secundario botao-pequeno" id="atu-sem-idrac-botao" data-t="atualizacoes.atualizacao_manual"></button></p></div>
         </div>
       </div>
       <!-- Atualização manual (fase 11, CLAUDE.md 11b): navegador integrado + assistente do pacote -->
@@ -772,7 +790,7 @@
           <h2 class="cabeca-cartao" data-t="sobre.sobre"></h2>
           <div class="cartao-corpo">
             <p><strong data-t="sobre.msscan"></strong> <span id="sobre-versao"></span> <span data-t="sobre.diagnostico_de_servidores_fisicos_somente"></span></p>
-            <p class="texto-sec pequeno"><span data-t="sobre.interface_local_nada_sai_deste"></span> <code data-t="sobre.msscan_texto_1"></code>).</p>
+            <p class="texto-sec pequeno" data-t="sobre.interface_local_nada_sai_deste"></p>
             <p class="texto-sec pequeno" data-t="sobre.icones_octicons_mit_paleta_baseada"></p>
             <details class="licenca">
               <summary data-t="sobre.licenca_mit_do_three_js"></summary>
@@ -795,7 +813,7 @@
       <div class="cartao cartao-bloqueio">
         <h1 class="titulo-cartao"><span data-icone="stop" aria-hidden="true"></span><span data-t="erro.erro"></span></h1>
         <p id="erro-texto"></p>
-        <p class="texto-sec"><span data-t="erro.o_modo_texto_continua_disponivel"></span> <code data-t="erro.msscan_texto_1"></code>).</p>
+        <p class="texto-sec" data-t="erro.reinicie_para_abrir_de_novo"></p>
       </div>
     </section>
   </main>
@@ -904,6 +922,19 @@
           <button type="button" class="botao botao-perigo" id="energia-confirmar" data-t="erro.desligar"></button>
         </div>
         <p class="texto-sec" id="energia-mensagem" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+  <div class="fundo-dialogo" id="autoteste-fundo" hidden>
+    <div class="dialogo" role="alertdialog" aria-modal="true" aria-labelledby="autoteste-titulo" aria-describedby="autoteste-texto">
+      <div class="dialogo-cabeca"><h2 id="autoteste-titulo"></h2></div>
+      <div class="dialogo-corpo">
+        <p id="autoteste-texto"></p>
+        <div class="acoes">
+          <button type="button" class="botao botao-secundario" id="autoteste-cancelar" data-t="plano.cancelar"></button>
+          <button type="button" class="botao botao-primario" id="autoteste-confirmar"></button>
+        </div>
+        <p class="texto-sec" id="autoteste-mensagem" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>

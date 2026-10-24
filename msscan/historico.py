@@ -87,7 +87,7 @@ def classificar_memoria(eventos: list[dict[str, str]], slots_instalados: set[str
         presente = None if slot is None or slots_instalados is None else slot in slots_instalados
         erros = ue_agora[slot] if slot in ue_agora else ue_agora.get("*", 0)
         confirmado = f"EDAC com {erros} erro(s) desde a inicialização" if erros and presente is not False else ""
-        saida.append(classificar(evento, f"o slot {slot}" if slot else None, presente, confirmado))
+        saida.append({**classificar(evento, f"o slot {slot}" if slot else None, presente, confirmado), "slot": slot})
     return saida
 
 

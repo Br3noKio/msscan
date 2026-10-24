@@ -6,6 +6,9 @@
   executor recusa `mount`, `fsck`, `debugfs`, leitura de `/dev/sdX`/`/dev/nvmeX` por ferramentas de arquivo e qualquer
   alteração de volume. A única montagem permitida é a do pendrive do MSscan.
 - Comandos de ferramentas de RAID passam por uma lista de leitura permitida.
+- A única ação sobre os discos é o autoteste SMART (`smartctl -t short|long` e `-X`), por um método próprio do executor,
+  com o disco escolhido entre os já diagnosticados; o teste roda dentro do disco, sem leitura dos dados pelo MSscan.
+  Qualquer outro `smartctl` que altere o disco é recusado.
 
 ## Credenciais e chaves
 

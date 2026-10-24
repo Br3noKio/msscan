@@ -17,6 +17,9 @@ firmware do catálogo oficial com uma única confirmação e retomada automátic
 
 - **Diagnóstico somente leitura** de fontes, ventoinhas, temperaturas, processadores, memória, discos (SMART), RAID,
   placas de rede e registro de eventos, pela melhor fonte disponível (Redfish → IPMI → sistema operacional).
+- **Discos, como o Hard Disk Sentinel:** saúde %, temperatura ao vivo, atributos SMART, autoteste e varredura de
+  superfície feitos pelo próprio disco, inclusive atrás da controladora RAID.
+- **Mapa por posição:** slot a slot, qual peça funciona e onde está a ruim (ex.: pente não reconhecido no POST).
 - **Histórico × atual:** eventos antigos do controlador não são tratados como falhas atuais.
 - **Localização física** de cada problema ("DIMM A2 (CPU1)", "Fonte 1"), com mapa e modelo 3D do chassi.
 - **Relatórios** em TXT, HTML e JSON no pendrive, e log técnico automático.
@@ -65,7 +68,7 @@ sha256sum -c msscan-<versão>-amd64.iso.sha256
 | Página | Conteúdo |
 |---|---|
 | [Uso](docs/uso.md) | Gravação, primeiro uso, pasta de dados, parâmetros de boot, rede, IA, terminal e SSH, relatórios |
-| [Diagnóstico](docs/diagnostico.md) | Detecção, fontes por componente, histórico × atual, localização física |
+| [Diagnóstico](docs/diagnostico.md) | Detecção, fontes por componente, aba Discos, mapa por posição, histórico × atual, localização |
 | [Atualização de firmware](docs/atualizacao-de-firmware.md) | Regras, fluxo, bloqueios, caminhos de instalação, retomada |
 | [Compatibilidade](docs/compatibilidade.md) | Fabricantes, gerações do iDRAC, o que foi validado e limitações |
 | [Segurança](docs/seguranca.md) | Dados do cliente, credenciais, dados enviados, rede |

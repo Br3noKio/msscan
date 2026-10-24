@@ -7,7 +7,7 @@ SAIDA="$1"; PREFIXO="${2:-}"
 DEMO="file://$(cd "$(dirname "$0")/../demo" && pwd)/index.html"
 mkdir -p "$SAIDA"
 for tamanho in ${TAMANHOS:-1920x1080 1024x768}; do
-  for cena in "inicio::" "diagnostico:diagnostico:diagnostico" "ia:ia:ia" "chat:chat:chat" "atualizacoes:atualizacoes:atualizacoes" \
+  for cena in "inicio::" "diagnostico:diagnostico:diagnostico" "discos:discos:diagnostico" "ia:ia:ia" "chat:chat:chat" "atualizacoes:atualizacoes:atualizacoes" \
               "plano-atualizacao:atualizacoes:aviso" "relatorio:relatorios:diagnostico" "terminal:terminal:diagnostico" "sobre:sobre:diagnostico"; do
     nome=${cena%%:*}; resto=${cena#*:}; rota=${resto%%:*}; estado=${resto#*:}
     url="$DEMO?cena=$estado"; [ -n "$rota" ] && url="$url&rota=$rota"

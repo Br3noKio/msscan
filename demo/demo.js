@@ -97,6 +97,7 @@
     if (rota === "estado") return resposta(estadoAtual());
     if (rota === "tela") return resposta({ disponivel: false, motivo: "demonstração no navegador" });
     if (rota === "visao") return resposta(visaoAtual());
+    if (rota === "discos") return resposta(estado.etapa === "pronto" ? { discos: [], ignorados: [] } : Object.assign(copia(D.discos), { demonstracao: true }));
     if (rota === "ia/config") return resposta(D.config_ia);
     if (rota.startsWith("ia/qr/")) return D.qr[rota.slice(6)] ? resposta(D.qr[rota.slice(6)]) : resposta({ erro: "IA desconhecida" }, 404);
     if (rota === "ia/previa") return resposta(D.previa_ia);

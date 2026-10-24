@@ -23,11 +23,11 @@ só ganha escrita durante cada gravação, com `sync` no fim.
 2. O MSscan confere a rede e detecta o servidor.
 3. Se houver iDRAC com Redfish, informe usuário e senha (ou **Pular**: o diagnóstico continua pelo IPMI e pelo sistema
    operacional). No máximo 3 tentativas, para não bloquear a conta no iDRAC.
-4. O diagnóstico roda sozinho. Use **Refazer diagnóstico** (tudo ou um componente) para comparar antes × depois.
+4. O diagnóstico roda sozinho. A aba **Discos** mostra a saúde de cada disco ([Diagnóstico](diagnostico.md#aba-discos)). Use **Refazer diagnóstico** (tudo ou um componente) para comparar antes × depois.
 5. Opcional: análise por IA e conversa.
 6. Opcional (Dell): aba Atualizações. Ver [Atualização de firmware](atualizacao-de-firmware.md).
 
-Atalhos: `Alt+1` a `Alt+7` trocam de etapa, `?` abre a ajuda, `Esc` volta. Tudo funciona só com teclado.
+Atalhos: `Alt+1` a `Alt+8` trocam de etapa (a aba Discos é a 3ª, também `g h`), `?` abre a ajuda, `Esc` volta. Tudo funciona só com teclado.
 
 | Diagnóstico | Plano de atualização |
 |---|---|

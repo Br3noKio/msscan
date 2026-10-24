@@ -182,6 +182,8 @@ class ManipuladorUI(BaseHTTPRequestHandler):
             self._json(sessao.estado())
         elif rota == "visao":  # nova interface (09/10/2026): visão do servidor e sensores ao vivo
             self._json(sessao.visao())
+        elif rota == "discos":  # aba Discos (CLAUDE.md 31)
+            self._json(sessao.discos())
         elif rota == "tela":
             tela = sessao.tela
             self._json(tela.estado() if tela else {"disponivel": False, "motivo": textos.t("py_servidor.resolucao_indisponivel_neste_modo")})
@@ -301,6 +303,18 @@ class ManipuladorUI(BaseHTTPRequestHandler):
             else:
                 manual.procurar()
                 aceito = True
+        elif rota in ("discos/autoteste", "discos/interromper"):
+            dados = _corpo_json(corpo) or {}
+            tipo = dados.get("tipo") if rota == "discos/autoteste" else None
+            if not isinstance(dados.get("id"), str) or (rota == "discos/autoteste" and tipo not in ("curto", "estendido")):
+                self._erro(HTTPStatus.BAD_REQUEST, textos.t("discos.pedido_invalido"))
+                return
+            ok, mensagem = sessao.autoteste_disco(dados["id"], tipo)
+            if not ok:
+                self._erro(HTTPStatus.CONFLICT, mensagem)
+                return
+            self._json({"ok": True, "mensagem": mensagem})
+            return
         elif rota == "manual/apagar":
             dados = _corpo_json(corpo) or {}
             if not isinstance(dados.get("nome"), str) or dados.get("confirmar") is not True:

@@ -72,7 +72,7 @@ chamada de rede.
 python3 -m pytest -q
 ```
 
-Mais de 2.200 testes: parsers contra saídas reais gravadas, diagnóstico de ponta a ponta por replay, mockups Redfish da
+Mais de 2.300 testes: parsers contra saídas reais gravadas, diagnóstico de ponta a ponta por replay, mockups Redfish da
 DMTF, simuladores (iDRAC falso por HTTPS, `ipmi_sim`, pacotes Dell e racadm falsos) e travas de segurança (nenhuma
 combinação de opções chega a uma escrita no iDRAC sem as condições). Cada falha vista em hardware real vira teste.
 

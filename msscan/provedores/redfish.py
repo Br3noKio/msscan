@@ -27,6 +27,7 @@ from msscan.parsers.redfish import (
     parse_disco,
     parse_entradas_log,
     parse_fonte_subsistema,
+    parse_memoria,
     parse_porta_rede,
     parse_power,
     parse_servico_log,
@@ -407,6 +408,20 @@ def _armazenamento(ctx: Contexto) -> list[dict[str, Any]]:
             storage["discos_lidos"] = [parse_disco(obter(ctx, d)) for d in storage["discos"]]
             conjuntos.append(storage)
     return conjuntos
+
+
+def ler_memoria_redfish(ctx: Contexto) -> list[dict[str, Any]] | None:
+    """Pentes pelo inventário do BMC (``Systems/*/Memory``), só com credenciais validadas; ``None`` sem acesso ou se a leitura
+    falhar (a memória segue pelo SMBIOS). O BMC enxerga o pente mesmo quando a BIOS o desabilitou no POST."""
+    if not _ProvedorRedfish().disponivel(ctx).ok:
+        return None
+    try:
+        pentes = []
+        for sistema in _colecao(ctx, _raiz(ctx)["sistemas"]):
+            pentes += [parse_memoria(obter(ctx, m)) for m in _colecao(ctx, link(obter(ctx, sistema), "Memory"))]
+        return pentes
+    except (FalhaColeta, ErroParser):
+        return None
 
 
 def avaliar_armazenamento(conjuntos: list[dict[str, Any]]) -> Resultado:

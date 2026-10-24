@@ -398,7 +398,7 @@ class TestMemoria:
     def test_sem_sel_ok(self):
         r = avaliar_memoria(memorias_r640(), edac_r640(), [])
         assert r.status == Status.OK
-        assert r.mensagem == "2 módulo(s) instalado(s), 16 GB"
+        assert r.mensagem == "2 de 24 slots com pente reconhecido, 16 GB"  # 22/10/2026: slots reconhecidos × total
 
     def test_erro_nao_corrigivel(self):
         edac = edac_r640()

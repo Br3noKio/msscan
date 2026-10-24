@@ -275,6 +275,19 @@ def parse_disco(dados: Any) -> dict[str, Any]:
 # --- Log e contas ------------------------------------------------------------------------------
 
 
+def parse_memoria(dados: Any) -> dict[str, Any]:
+    """Um pente (``Memory``, esquema DMTF): ``slot`` (``DeviceLocator``, ``Location`` ou ``Id``), ``saude``, ``estado``
+    (``Absent`` = slot vazio), ``capacidade_mb``. Dell: ``Id`` "DIMM.Socket.A1", ``DeviceLocator`` "DIMM A1".
+    MOCKUP(rodada final): formato do iDRAC para um pente desabilitado no POST não conferido em hardware."""
+    item = _objeto(dados, "Memory")
+    saude, estado_ = estado(item)
+    capacidade = _numero(item.get("CapacityMiB"))
+    slot = next((v.strip() for v in (item.get("DeviceLocator"), local_redfish(item), item.get("Id"))
+                 if isinstance(v, str) and v.strip()), None)  # fmt: skip
+    return {"slot": slot, "id": item.get("Id"), "saude": saude, "estado": estado_,
+            "capacidade_mb": int(capacidade) if capacidade else None}  # fmt: skip
+
+
 def parse_servico_log(dados: Any) -> dict[str, Any]:
     """``LogService``: identificador, tipo de entrada e link das entradas."""
     servico = _objeto(dados, "LogService")

@@ -43,19 +43,20 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
 <body>
 <main>
 <h1>MSscan — Dell Inc. PowerEdge R640</h1>
-<p class="sub">Diagnóstico de 14/10/2026 18:15 · MSscan 1.0.1 · modo de demonstração</p>
+<p class="sub">Diagnóstico de 24/10/2026 01:10 · MSscan 1.0.13 · modo de demonstração</p>
 <div class="cartao veredito">Servidor diagnosticado com sucesso (todos os componentes verificados). Resultado: 4 alertas e nenhuma falha.</div>
 
 <div class="cartao grade"><div><span>Fabricante</span>Dell Inc.</div><div><span>Modelo</span>PowerEdge R640</div><div><span>BIOS</span>2.21.2</div><div><span>IPMI</span>2.0 disponível</div><div><span>Redfish</span>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</div><div><span>Controladoras de armazenamento</span>Intel Corporation C620 Series Chipset Family SSATA Controller [RAID mode] (ahci), Intel Corporation C620 Series Chipset Family SATA Controller [RAID mode] (ahci)</div><div><span>Ferramentas do fabricante</span>nenhuma</div></div>
 <div class="cartao"><strong>Rede:</strong> Rede OK: cabo, endereço IP e acesso HTTPS confirmados.</div>
 
 
+<div class="cartao"><strong>Acesso ao iDRAC: iDRAC acessível só por dentro do servidor (IPMI)</strong><ul><li>racadm: não disponível (modo sem alterações no sistema (replay ou coleta): o racadm não é preparado)</li><li>iDRAC inacessível pela rede (cabo, IP, porta). O diagnóstico, o inventário e a atualização seguem pelo acesso interno que responder (racadm ou IPMI).</li><li>Este servidor é da 14ª geração (iDRAC9). Firmware do iDRAC recomendado: 14ª: 7.00.00.183 (mínimo 7.00.00.173); 15ª/16ª: 7.30.30.51. Para atualizar pela página web do iDRAC: abra https://&lt;IP do iDRAC&gt; num navegador de outro computador, entre como administrador e use Manutenção (Maintenance) &gt; Atualização do sistema (System Update) ou, nos iDRAC6/7/8, Visão geral &gt; Configurações do iDRAC &gt; Atualização e reversão, enviando o pacote do iDRAC baixado do site da Dell.</li><li>Para atualizar sem depender da rede do iDRAC, copie o pacote iDRAC Tools for Linux da Dell para a pasta MSSCAN/vendor/ do pendrive.</li></ul></div>
 <div class="cartao"><strong>Banco de compatibilidade (dica; a detecção prevalece):</strong> Dell PowerEdge R640 — iDRAC9, 14ª geração (14G)<ul><li>Divergência com a detecção: O banco indica Redfish (iDRAC9), mas ele não foi confirmado neste equipamento: Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</li><li>Limitação conhecida: A Redfish Host Interface (SMBIOS tipo 42) pode estar desativada no iDRAC; nesse caso o endereço do Redfish vem do IP do iDRAC (ipmitool lan print 1), que precisa ser alcançável pela rede do MSscan.</li><li>Limitação conhecida: Sem credenciais do iDRAC, RAID de hardware (PERC) só é verificado com perccli64 em vendor/.</li></ul></div>
 <h2>Configuração do servidor</h2>
 <div class="cartao"><p>Configuração: 2 processadores, 2 pentes (16 GB), 2 fontes (1 com energia: sem redundância agora), 1 disco</p><ul><li><strong>Atenção:</strong> CPU2 sem nenhum pente de memória (o primeiro slot dela é o B1). O fabricante pede memória idêntica em cada processador num servidor com 2 processadores (ex.: pente no A1 → pente igual no B1); fora disso o servidor pode não iniciar, travar ao configurar a memória ou operar com memória reduzida.</li><li>CPU1: 2 pente(s) em 2 de 6 canais (funciona; desempenho máximo com um pente por canal).</li><li>Com duas fontes, o fabricante exige a mesma potência máxima e o mesmo tipo de etiqueta (ex.: EPP); misturar fontes de gerações anteriores não é suportado.</li></ul><p class="sub">Regras: Dell EMC PowerEdge R640 Installation and Service Manual (conferido em 01/10/2026).</p></div>
 
 <h2>Onde está o problema</h2>
-<div class="cartao"><svg viewBox="0 -24 1000 658" role="img" aria-label="Mapa do Dell PowerEdge R640 com as áreas com problema destacadas" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font:14px sans-serif"><rect x="0" y="30" width="957" height="550" fill="#161b22" stroke="#6e7681" stroke-width="2" rx="8"/><text x="4" y="-6" fill="#b1bac4">FRENTE ←</text><text x="940" y="-6" fill="#b1bac4" text-anchor="end">→ TRASEIRA</text><rect x="12" y="37" width="129" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Discos (frente)</title></rect><text x="18" y="55" fill="#b1bac4" font-weight="400">Discos</text><rect x="141" y="37" width="49" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Backplane de discos (atrás dos discos)</title></rect><text x="147" y="55" fill="#b1bac4" font-weight="400">BP</text><rect x="282" y="50" width="111" height="505" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Ventoinhas (fileira central)</title></rect><text x="288" y="68" fill="#b1bac4" font-weight="400">Ventoinhas</text><rect x="470" y="120" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU2 (lado esquerdo, visto da frente)</title></rect><text x="476" y="138" fill="#b1bac4" font-weight="400">CPU2</text><rect x="436" y="37" width="177" height="270" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>DIMMs B1–B12 (CPU2)</title></rect><text x="442" y="55" fill="#b1bac4" font-weight="400">DIMMs B</text><rect x="470" y="380" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU1 (lado direito, visto da frente)</title></rect><rect x="626" y="393" width="92" height="135" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Controladora de armazenamento (PERC, ao lado da CPU1)</title></rect><text x="632" y="411" fill="#b1bac4" font-weight="400">PERC</text><rect x="693" y="37" width="252" height="116" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Fonte 2 (PSU2, traseira, na borda)</title></rect><text x="699" y="55" fill="#b1bac4" font-weight="400">PSU2</text><rect x="730" y="276" width="215" height="190" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 2 (traseira, centro)</title></rect><rect x="730" y="466" width="215" height="104" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 1 (traseira, canto direito)</title></rect><rect x="436" y="307" width="177" height="263" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>DIMMs A1–A12 (CPU1)</title></rect><text x="442" y="325" fill="#ffdcd7" font-weight="700">DIMMs A — PROBLEMA</text><rect x="184" y="528" width="442" height="42" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Cabos SAS (controladora → backplane, junto à lateral direita)</title></rect><text x="190" y="546" fill="#ffdcd7" font-weight="700">Cabos SAS — PROBLEMA</text><rect x="693" y="153" width="252" height="117" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Fonte 1 (PSU1, traseira, a de dentro)</title></rect><text x="699" y="171" fill="#ffdcd7" font-weight="700">PSU1 — PROBLEMA</text><rect x="730" y="276" width="215" height="294" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Risers PCIe (traseira)</title></rect><text x="736" y="294" fill="#ffdcd7" font-weight="700">Risers — PROBLEMA</text></svg><p class="sub">vista de cima, frente à esquerda. Área destacada = problema (contorno vermelho grosso e o texto PROBLEMA).</p><table><thead><tr><th>Componente</th><th>Local físico</th><th>Problema</th></tr></thead><tbody><tr><td>Fontes de alimentação</td><td><strong>Fonte 1 (PSU1)</strong><br><small>Fonte 1 (PSU1, traseira, a de dentro)</small></td><td>Status: Presence detected, Power Supply AC lost</td></tr><tr><td>Memória</td><td><strong>DIMM A2 (CPU1)</strong><br><small>DIMMs A1–A12 (CPU1)</small></td><td>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 08/08/25 12:45:46 -03: Power Supply Status — Power Supply AC lost (10x)</td></tr><tr><td>Log do BMC</td><td><strong>Cabo SAS A0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS A0 — Config Error (5x)</td></tr><tr><td>Log do BMC</td><td><strong>Cabo SAS B0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS B0 — Config Error (5x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/18/26 13:45:58 -03: Processor Status — Presence detected (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/20/20 02:44:42 -03: System Firmwares POST Err — (2x)</td></tr><tr><td>Log do BMC</td><td><strong>DIMM A2 (CPU1)</strong><br><small>DIMMs A1–A12 (CPU1)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2)</td></tr><tr><td>Log do BMC</td><td><strong>Slot PCIe 1 (o riser exato depende da configuração)</strong><br><small>Risers PCIe (traseira)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt FatalPCIErrOnBus — (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Unknown Err Reg Pointer — (6x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS A0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS A0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS B0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 09/18/26 10:48:35 -03: Cable / Interconnect Cable SAS B0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Slot PCIe 1 (o riser exato depende da configuração)</strong><br><small>Risers PCIe (traseira)</small></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (3x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:23:33 -02: Critical Interrupt FatalPCIErrOnBus — (3x)</td></tr></tbody></table></div>
+<div class="cartao"><svg viewBox="0 -24 1000 658" role="img" aria-label="Mapa do Dell PowerEdge R640 com as áreas com problema destacadas" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font:14px sans-serif"><rect x="0" y="30" width="957" height="550" fill="#161b22" stroke="#6e7681" stroke-width="2" rx="8"/><text x="4" y="-6" fill="#b1bac4">FRENTE ←</text><text x="940" y="-6" fill="#b1bac4" text-anchor="end">→ TRASEIRA</text><rect x="12" y="37" width="129" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Discos (frente)</title></rect><text x="18" y="55" fill="#b1bac4" font-weight="400">Discos</text><rect x="141" y="37" width="49" height="533" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Backplane de discos (atrás dos discos)</title></rect><text x="147" y="55" fill="#b1bac4" font-weight="400">BP</text><rect x="282" y="50" width="111" height="505" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Ventoinhas (fileira central)</title></rect><text x="288" y="68" fill="#b1bac4" font-weight="400">Ventoinhas</text><rect x="470" y="120" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU2 (lado esquerdo, visto da frente)</title></rect><text x="476" y="138" fill="#b1bac4" font-weight="400">CPU2</text><rect x="436" y="37" width="177" height="270" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>DIMMs B1–B12 (CPU2)</title></rect><text x="442" y="55" fill="#b1bac4" font-weight="400">DIMMs B</text><rect x="470" y="380" width="110" height="110" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>CPU1 (lado direito, visto da frente)</title></rect><rect x="626" y="393" width="92" height="135" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Controladora de armazenamento (PERC, ao lado da CPU1)</title></rect><text x="632" y="411" fill="#b1bac4" font-weight="400">PERC</text><rect x="693" y="37" width="252" height="116" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Fonte 2 (PSU2, traseira, na borda)</title></rect><text x="699" y="55" fill="#b1bac4" font-weight="400">PSU2</text><rect x="730" y="276" width="215" height="190" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 2 (traseira, centro)</title></rect><rect x="730" y="466" width="215" height="104" fill="rgba(88,166,255,.08)" stroke="#6e7681" stroke-width="1" rx="4"><title>Riser 1 (traseira, canto direito)</title></rect><rect x="436" y="307" width="177" height="263" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>DIMMs A1–A12 (CPU1)</title></rect><text x="442" y="325" fill="#ffdcd7" font-weight="700">DIMMs A — PROBLEMA</text><rect x="184" y="528" width="442" height="42" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Cabos SAS (controladora → backplane, junto à lateral direita)</title></rect><text x="190" y="546" fill="#ffdcd7" font-weight="700">Cabos SAS — PROBLEMA</text><rect x="693" y="153" width="252" height="117" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Fonte 1 (PSU1, traseira, a de dentro)</title></rect><text x="699" y="171" fill="#ffdcd7" font-weight="700">PSU1 — PROBLEMA</text><rect x="730" y="276" width="215" height="294" fill="rgba(248,81,73,.35)" stroke="#f85149" stroke-width="5" rx="4"><title>Risers PCIe (traseira)</title></rect><text x="736" y="294" fill="#ffdcd7" font-weight="700">Risers — PROBLEMA</text></svg><p class="sub">vista de cima, frente à esquerda. Área destacada = problema (contorno vermelho grosso e o texto PROBLEMA).</p><table><thead><tr><th>Componente</th><th>Local físico</th><th>Problema</th></tr></thead><tbody><tr><td>Fontes de alimentação</td><td><strong>Fonte 1 (PSU1)</strong><br><small>Fonte 1 (PSU1, traseira, a de dentro)</small></td><td>Status: Presence detected, Power Supply AC lost</td></tr><tr><td>Memória</td><td><strong>DIMM A2 (CPU1)</strong><br><small>DIMMs A1–A12 (CPU1)</small></td><td>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS A0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS A0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Cabo SAS B0 (controladora → backplane)</strong><br><small>Cabos SAS (controladora → backplane, junto à lateral direita)</small></td><td>log do BMC 01/03/98 18:51:25 -02: Cable / Interconnect Cable SAS B0 — Config Error (5x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>Slot PCIe 1 (o riser exato depende da configuração)</strong><br><small>Risers PCIe (traseira)</small></td><td>log do BMC 01/03/98 18:55:17 -02: Critical Interrupt PCIE Fatal Err — Bus Fatal Error ( Slot 1) (3x)</td></tr><tr><td>Componentes internos (backplane, cabos, slots)</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:55:17 -02: Critical Interrupt FatalPCIErrOnBus — (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/06/98 19:02:49 -02: Power Supply Status — Power Supply AC lost (10x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/18/26 13:46:47 -03: Processor Status — Presence detected (3x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 09/20/20 02:46:02 -03: System Firmwares POST Err — (2x)</td></tr><tr><td>Log do BMC</td><td><strong>não foi possível localizar a peça com os dados disponíveis</strong></td><td>log do BMC 01/03/98 18:55:17 -02: Unknown Err Reg Pointer — (6x)</td></tr></tbody></table></div>
 
 <h2>Medido</h2>
 <p class="sub">Dados obtidos diretamente das ferramentas do equipamento. Nenhum dado é estimado: o que não pôde ser verificado aparece como “Não verificado”, com as tentativas feitas.</p>
@@ -658,7 +659,7 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
     }
   ],
   &quot;ignorados_sem_leitura&quot;: 3
-}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Fontes de alimentação<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: ipmitool sdr type Power Supply</div><p>2 fonte(s) avaliada(s); redundância de energia perdida</p><ul class="problemas"><li>Status (10.1): Power Supply AC lost — sem energia de entrada (redundância de energia perdida)</li></ul><div class="explicacao">Redundância de energia perdida: há fonte sem energia de entrada ou ausente. O servidor continua operando pela(s) outra(s) fonte(s), mas uma nova falha de energia o desligaria. Verifique cabo, tomada e circuito da fonte indicada (ou instale a fonte, se a redundância for necessária).</div><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Power)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Power Supply)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Fontes de alimentação<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: ipmitool sdr type Power Supply</div><p>2 fonte(s) avaliada(s); redundância de energia perdida</p><ul class="problemas"><li>Status (10.1): Power Supply AC lost — sem energia de entrada (redundância de energia perdida)</li></ul><div class="explicacao">Redundância de energia perdida: há fonte sem energia de entrada ou ausente. O servidor continua operando pela(s) outra(s) fonte(s), mas uma nova falha de energia o desligaria. Verifique cabo, tomada e circuito da fonte indicada (ou instale a fonte, se a redundância for necessária).</div><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>Fonte 1 (PSU1)</td><td>Alerta</td><td>Presence detected, Power Supply AC lost</td></tr><tr><td>Fonte 2 (PSU2)</td><td>OK</td><td>Presence detected</td></tr></table></div></details><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Power)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Power Supply)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;leituras&quot;: [
     {
       &quot;nome&quot;: &quot;Status&quot;,
@@ -696,8 +697,22 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
     &quot;PS Redundancy (7.1): Disabled&quot;
   ],
   &quot;defeito&quot;: false,
-  &quot;redundancia_perdida&quot;: true
-}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Ventoinhas<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ipmitool sdr type Fan</div><p>17 sensor(es) de ventoinha avaliado(s)</p><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Thermal/Fans)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Fan)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;redundancia_perdida&quot;: true,
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;Status&quot;,
+      &quot;local&quot;: &quot;Fonte 1 (PSU1)&quot;,
+      &quot;situacao&quot;: &quot;ALERTA&quot;,
+      &quot;detalhe&quot;: &quot;Presence detected, Power Supply AC lost&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Status&quot;,
+      &quot;local&quot;: &quot;Fonte 2 (PSU2)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;Presence detected&quot;
+    }
+  ]
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Ventoinhas<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ipmitool sdr type Fan</div><p>17 sensor(es) de ventoinha avaliado(s)</p><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>Ventoinha 1A (Fan1A)</td><td>OK</td><td>7800 RPM</td></tr><tr><td>Ventoinha 1B (Fan1B)</td><td>OK</td><td>7320 RPM</td></tr><tr><td>Ventoinha 2A (Fan2A)</td><td>OK</td><td>7440 RPM</td></tr><tr><td>Ventoinha 2B (Fan2B)</td><td>OK</td><td>6960 RPM</td></tr><tr><td>Ventoinha 3A (Fan3A)</td><td>OK</td><td>7440 RPM</td></tr><tr><td>Ventoinha 3B (Fan3B)</td><td>OK</td><td>6480 RPM</td></tr><tr><td>Ventoinha 4A (Fan4A)</td><td>OK</td><td>7080 RPM</td></tr><tr><td>Ventoinha 4B (Fan4B)</td><td>OK</td><td>6720 RPM</td></tr><tr><td>Ventoinha 5A (Fan5A)</td><td>OK</td><td>6960 RPM</td></tr><tr><td>Ventoinha 5B (Fan5B)</td><td>OK</td><td>6720 RPM</td></tr><tr><td>Ventoinha 6A (Fan6A)</td><td>OK</td><td>6960 RPM</td></tr><tr><td>Ventoinha 6B (Fan6B)</td><td>OK</td><td>6480 RPM</td></tr><tr><td>Ventoinha 7A (Fan7A)</td><td>OK</td><td>6960 RPM</td></tr><tr><td>Ventoinha 7B (Fan7B)</td><td>OK</td><td>6360 RPM</td></tr><tr><td>Ventoinha 8A (Fan8A)</td><td>OK</td><td>6840 RPM</td></tr><tr><td>Ventoinha 8B (Fan8B)</td><td>OK</td><td>6480 RPM</td></tr></table></div></details><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Thermal/Fans)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>IPMI (ipmitool sdr type Fan)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;leituras&quot;: [
     {
       &quot;nome&quot;: &quot;Fan1A&quot;,
@@ -889,8 +904,106 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
       &quot;avaliacao&quot;: &quot;OK&quot;
     }
   ],
-  &quot;ignoradas_sem_leitura&quot;: []
-}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Processadores<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: dmidecode -t 4 + /proc/cpuinfo + ipmitool sel elist</div><p>2 processador(es): Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; 72 processadores lógicos</p><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, /proc/cpuinfo, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;ignoradas_sem_leitura&quot;: [],
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;Fan1A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 1A (Fan1A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;7800 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan1B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 1B (Fan1B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;7320 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan2A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 2A (Fan2A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;7440 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan2B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 2B (Fan2B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6960 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan3A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 3A (Fan3A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;7440 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan3B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 3B (Fan3B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6480 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan4A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 4A (Fan4A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;7080 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan4B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 4B (Fan4B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6720 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan5A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 5A (Fan5A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6960 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan5B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 5B (Fan5B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6720 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan6A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 6A (Fan6A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6960 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan6B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 6B (Fan6B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6480 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan7A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 7A (Fan7A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6960 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan7B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 7B (Fan7B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6360 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan8A&quot;,
+      &quot;local&quot;: &quot;Ventoinha 8A (Fan8A)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6840 RPM&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;Fan8B&quot;,
+      &quot;local&quot;: &quot;Ventoinha 8B (Fan8B)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;6480 RPM&quot;
+    }
+  ]
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Processadores<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: dmidecode -t 4 + /proc/cpuinfo + ipmitool sel elist</div><p>2 processador(es): Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; 72 processadores lógicos</p><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>CPU1</td><td>OK</td><td>Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; Populated, Enabled</td></tr><tr><td>CPU2</td><td>OK</td><td>Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; Populated, Enabled</td></tr></table></div></details><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, /proc/cpuinfo, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;processadores&quot;: [
     {
       &quot;soquete&quot;: &quot;CPU1&quot;,
@@ -956,8 +1069,22 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
     &quot;log do BMC #16 09/18/26 13:45:58 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;,
     &quot;log do BMC #17 09/18/26 13:46:04 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;,
     &quot;log do BMC #19 09/18/26 13:46:47 -03: Processor Status — Presence detected (Deasserted) (histórico — os 2 processador(es) estão presentes e habilitados agora)&quot;
+  ],
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;CPU1&quot;,
+      &quot;local&quot;: &quot;CPU1&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; Populated, Enabled&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;CPU2&quot;,
+      &quot;local&quot;: &quot;CPU2&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz; Populated, Enabled&quot;
+    }
   ]
-}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Memória<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: dmidecode -t 17 + EDAC + ipmitool sel elist</div><p>2 módulo(s) instalado(s), 16 GB</p><ul class="problemas"><li>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</li></ul><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details><summary>Observações</summary><ul><li>contadores EDAC valem desde a inicialização do sistema</li></ul></details><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, EDAC, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+}</pre></details></section><section class="cartao comp" style="--cor:#9a6700;--fundo:#fff4d6"><h3>Memória<span class="selo">⚠ Alerta</span></h3><div class="fonte">Fonte: dmidecode -t 17 + EDAC + ipmitool sel elist</div><p>2 de 24 slots com pente reconhecido, 16 GB</p><ul class="problemas"><li>log do BMC #25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted) (histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga))</li></ul><div class="explicacao">Eventos do log do BMC marcados como histórico não foram confirmados agora (as datas do log do BMC não são confiáveis (relógio do BMC)). Se a peça foi trocada ou reencaixada, exporte e limpe o SEL (Ações corretivas → Exportar e limpar o log do BMC) e refaça o diagnóstico: assim o log volta a mostrar só o que acontecer daqui em diante.</div><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>DIMM A2 (CPU1)</td><td>Alerta</td><td>8 GB DDR4 2133 MT/s — erro no log do BMC (histórico)</td></tr><tr><td>DIMM A1 (CPU1)</td><td>OK</td><td>8 GB DDR4 2133 MT/s</td></tr></table></div><p class="fonte">22 posição(ões) vazia(s).</p></details><details><summary>Observações</summary><ul><li>contadores EDAC valem desde a inicialização do sistema</li></ul></details><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>sistema (dmidecode, EDAC, SEL)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;modulos&quot;: [
     {
       &quot;slot&quot;: &quot;A1&quot;,
@@ -1059,6 +1186,153 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
     &quot;B11&quot;,
     &quot;B12&quot;
   ],
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;A1&quot;,
+      &quot;local&quot;: &quot;DIMM A1 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;8 GB DDR4 2133 MT/s&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A2&quot;,
+      &quot;local&quot;: &quot;DIMM A2 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;ALERTA&quot;,
+      &quot;detalhe&quot;: &quot;8 GB DDR4 2133 MT/s — erro no log do BMC (histórico)&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A3&quot;,
+      &quot;local&quot;: &quot;DIMM A3 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A4&quot;,
+      &quot;local&quot;: &quot;DIMM A4 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A5&quot;,
+      &quot;local&quot;: &quot;DIMM A5 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A6&quot;,
+      &quot;local&quot;: &quot;DIMM A6 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A7&quot;,
+      &quot;local&quot;: &quot;DIMM A7 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A8&quot;,
+      &quot;local&quot;: &quot;DIMM A8 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A9&quot;,
+      &quot;local&quot;: &quot;DIMM A9 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A10&quot;,
+      &quot;local&quot;: &quot;DIMM A10 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A11&quot;,
+      &quot;local&quot;: &quot;DIMM A11 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;A12&quot;,
+      &quot;local&quot;: &quot;DIMM A12 (CPU1)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B1&quot;,
+      &quot;local&quot;: &quot;DIMM B1 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B2&quot;,
+      &quot;local&quot;: &quot;DIMM B2 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B3&quot;,
+      &quot;local&quot;: &quot;DIMM B3 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B4&quot;,
+      &quot;local&quot;: &quot;DIMM B4 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B5&quot;,
+      &quot;local&quot;: &quot;DIMM B5 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B6&quot;,
+      &quot;local&quot;: &quot;DIMM B6 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B7&quot;,
+      &quot;local&quot;: &quot;DIMM B7 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B8&quot;,
+      &quot;local&quot;: &quot;DIMM B8 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B9&quot;,
+      &quot;local&quot;: &quot;DIMM B9 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B10&quot;,
+      &quot;local&quot;: &quot;DIMM B10 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B11&quot;,
+      &quot;local&quot;: &quot;DIMM B11 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;B12&quot;,
+      &quot;local&quot;: &quot;DIMM B12 (CPU2)&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;&quot;
+    }
+  ],
+  &quot;pentes_bmc&quot;: null,
   &quot;eventos_sel&quot;: [
     {
       &quot;texto&quot;: &quot;#25 01/03/98 18:23:33 -02: Memory ECC Uncorr Err — Uncorrectable ECC (UnCorrectable ECC | DIMMA2) (Asserted)&quot;,
@@ -1066,7 +1340,8 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
       &quot;nota&quot;: &quot;histórico — o slot A2 está ocupado agora, mas nenhuma leitura atual confirma o problema (se a peça foi trocada, o evento é da peça antiga)&quot;,
       &quot;peca&quot;: &quot;o slot A2&quot;,
       &quot;presente&quot;: true,
-      &quot;critico&quot;: true
+      &quot;critico&quot;: true,
+      &quot;slot&quot;: &quot;A2&quot;
     }
   ],
   &quot;eventos_sel_resumo&quot;: {
@@ -2442,7 +2717,7 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
     &quot;atual&quot;: 0,
     &quot;historico&quot;: 16
   }
-}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Discos<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: smartctl</div><p>1 disco(s) verificado(s)</p><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>smartctl</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Discos<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: smartctl</div><p>1 disco(s) verificado(s)</p><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>/dev/sda</td><td>OK</td><td>VK001920GWSXK; 24 °C</td></tr></table></div></details><details><summary>Tentativas (1)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>smartctl</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;discos&quot;: [
     {
       &quot;dispositivo&quot;: &quot;/dev/sda&quot;,
@@ -2465,7 +2740,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 50,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 5,
@@ -2473,7 +2751,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 10,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 9,
@@ -2481,7 +2762,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 40295
+          &quot;bruto&quot;: 40295,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;40295&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 11,
@@ -2489,7 +2773,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 73
+          &quot;bruto&quot;: 73,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;73&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 12,
@@ -2497,7 +2784,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 82
+          &quot;bruto&quot;: 82,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;82&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 171,
@@ -2505,7 +2795,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 172,
@@ -2513,7 +2806,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 173,
@@ -2521,7 +2817,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 69,
           &quot;limite&quot;: 10,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 2146
+          &quot;bruto&quot;: 2146,
+          &quot;pior&quot;: 69,
+          &quot;bruto_texto&quot;: &quot;2146&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 174,
@@ -2529,7 +2828,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 73
+          &quot;bruto&quot;: 73,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;73&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 175,
@@ -2537,7 +2839,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 1,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 180,
@@ -2545,7 +2850,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 1,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 184,
@@ -2553,7 +2861,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 187,
@@ -2561,7 +2872,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 188,
@@ -2569,7 +2883,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 170
+          &quot;bruto&quot;: 170,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;170&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 194,
@@ -2577,7 +2894,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 76,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 163209740312
+          &quot;bruto&quot;: 163209740312,
+          &quot;pior&quot;: 62,
+          &quot;bruto_texto&quot;: &quot;24 (Min/Max 15/38)&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 196,
@@ -2585,7 +2905,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 1,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: true
         },
         {
           &quot;id&quot;: 197,
@@ -2593,7 +2916,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 198,
@@ -2601,7 +2927,10 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 0
+          &quot;bruto&quot;: 0,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;0&quot;,
+          &quot;prefalha&quot;: false
         },
         {
           &quot;id&quot;: 199,
@@ -2609,11 +2938,36 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
           &quot;valor&quot;: 100,
           &quot;limite&quot;: 0,
           &quot;falhou_quando&quot;: &quot;&quot;,
-          &quot;bruto&quot;: 4
+          &quot;bruto&quot;: 4,
+          &quot;pior&quot;: 100,
+          &quot;bruto_texto&quot;: &quot;4&quot;,
+          &quot;prefalha&quot;: false
         }
       ],
       &quot;nvme&quot;: null,
       &quot;scsi_defeitos_crescidos&quot;: null,
+      &quot;temperatura_detalhe&quot;: {
+        &quot;atual&quot;: 24,
+        &quot;minima&quot;: 15,
+        &quot;maxima&quot;: 38,
+        &quot;limite&quot;: null
+      },
+      &quot;ciclos_energia&quot;: 82,
+      &quot;ciclos_especificados&quot;: null,
+      &quot;rotacao_rpm&quot;: 0,
+      &quot;formato&quot;: &quot;2.5 inches&quot;,
+      &quot;interface&quot;: &quot;6.0 Gb/s&quot;,
+      &quot;fabricacao&quot;: null,
+      &quot;desgaste_pct&quot;: null,
+      &quot;scsi_erros_nao_corrigidos&quot;: null,
+      &quot;autotestes&quot;: [],
+      &quot;autoteste&quot;: {
+        &quot;em_andamento&quot;: false,
+        &quot;restante_pct&quot;: null,
+        &quot;suportado&quot;: true,
+        &quot;minutos_curto&quot;: 2,
+        &quot;minutos_estendido&quot;: 14
+      },
       &quot;status&quot;: &quot;OK&quot;,
       &quot;problemas&quot;: [],
       &quot;observacoes&quot;: [
@@ -2622,11 +2976,19 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
       ]
     }
   ],
-  &quot;ignorados&quot;: []
-}</pre></details></section><section class="cartao comp" style="--cor:#57606a;--fundo:#f6f8fa"><h3>RAID<span class="selo">N/A Não aplicável</span></h3><div class="fonte">Fonte: /proc/mdstat + mdadm --examine --scan</div><p>nenhuma controladora RAID de hardware e nenhum volume RAID de software/chipset encontrado</p><details><summary>Tentativas (6)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Storage)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>fabricante (perccli64/perccli/storcli64/storcli/perccli2/storcli2)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid_sas</td></tr><tr><td>fabricante (MegaCli64/MegaCli/megacli)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid/megaraid_sas</td></tr><tr><td>fabricante (ssacli/hpssacli/hpacucli)</td><td>indisponível</td><td>nenhuma controladora com driver cciss/hpsa/smartpqi</td></tr><tr><td>fabricante (arcconf)</td><td>indisponível</td><td>nenhuma controladora com driver aacraid/smartpqi</td></tr><tr><td>sistema (mdadm)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+  &quot;ignorados&quot;: [],
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;/dev/sda&quot;,
+      &quot;local&quot;: &quot;/dev/sda&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;VK001920GWSXK; 24 °C&quot;
+    }
+  ]
+}</pre></details></section><section class="cartao comp" style="--cor:#57606a;--fundo:#f6f8fa"><h3>RAID<span class="selo">N/A Não aplicável</span></h3><div class="fonte">Fonte: /proc/mdstat + mdadm --examine --scan</div><p>nenhuma controladora RAID de hardware e nenhum volume RAID de software/chipset encontrado</p><details><summary>Tentativas (7)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (Storage)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>fabricante (perccli64/perccli/storcli64/storcli/perccli2/storcli2)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid_sas</td></tr><tr><td>fabricante (MegaCli64/MegaCli/megacli)</td><td>indisponível</td><td>nenhuma controladora com driver megaraid/megaraid_sas</td></tr><tr><td>fabricante (ssacli/hpssacli/hpacucli)</td><td>indisponível</td><td>nenhuma controladora com driver cciss/hpsa/smartpqi</td></tr><tr><td>fabricante (arcconf)</td><td>indisponível</td><td>nenhuma controladora com driver aacraid/smartpqi</td></tr><tr><td>IPMI (sensores de baia e bateria do BMC)</td><td>indisponível</td><td>nenhuma controladora RAID de hardware</td></tr><tr><td>sistema (mdadm)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;arrays&quot;: [],
   &quot;superblocos&quot;: []
-}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Placas de rede<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ip -s link + ethtool</div><p>4 porta(s) física(s); 1 com link (eno3 1000 Mb/s Full)</p><details><summary>Observações</summary><ul><li>eno1np0: sem cabo/link</li><li>eno2np1: sem cabo/link</li><li>eno3: 24 pacote(s) descartado(s) (comum; informativo)</li><li>eno4: sem cabo/link</li></ul></details><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (NetworkAdapters)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>sistema (ip, ethtool)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
+}</pre></details></section><section class="cartao comp" style="--cor:#1a7f37;--fundo:#e7f5ea"><h3>Placas de rede<span class="selo">✓ OK</span></h3><div class="fonte">Fonte: ip -s link + ethtool</div><p>4 porta(s) física(s); 1 com link (eno3 1000 Mb/s Full)</p><details open><summary>Por posição</summary><div class="tabela"><table><tr><th>Posição</th><th>Situação</th><th>Detalhe</th></tr><tr><td>eno3</td><td>OK</td><td>igb; com link</td></tr></table></div><p class="fonte">3 posição(ões) vazia(s).</p></details><details><summary>Observações</summary><ul><li>eno1np0: sem cabo/link</li><li>eno2np1: sem cabo/link</li><li>eno3: 24 pacote(s) descartado(s) (comum; informativo)</li><li>eno4: sem cabo/link</li></ul></details><details><summary>Tentativas (2)</summary><div class="tabela"><table><tr><th>Método</th><th>Resultado</th><th>Detalhe</th></tr><tr><td>Redfish (NetworkAdapters)</td><td>indisponível</td><td>Redfish Host Interface não anunciada pelo SMBIOS (tipo 42 ausente); IP do BMC pelo IPMI não obtido (canal 1: comando sem gravação nesta fixture; canal 2: comando sem gravação nesta fixture)</td></tr><tr><td>sistema (ip, ethtool)</td><td>sucesso</td><td></td></tr></table></div></details><details><summary>Dados medidos</summary><pre>{
   &quot;portas&quot;: [
     {
       &quot;nome&quot;: &quot;eno1np0&quot;,
@@ -2811,29 +3173,55 @@ footer { color: #57606a; font-size: .8rem; margin-top: 32px; text-align: center;
       &quot;avaliacao&quot;: &quot;nao_verificada&quot;
     }
   ],
-  &quot;ignoradas&quot;: []
+  &quot;ignoradas&quot;: [],
+  &quot;posicoes&quot;: [
+    {
+      &quot;posicao&quot;: &quot;eno1np0&quot;,
+      &quot;local&quot;: &quot;eno1np0&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;i40e; sem link (sem cabo ou desligada na outra ponta)&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;eno2np1&quot;,
+      &quot;local&quot;: &quot;eno2np1&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;i40e; sem link (sem cabo ou desligada na outra ponta)&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;eno3&quot;,
+      &quot;local&quot;: &quot;eno3&quot;,
+      &quot;situacao&quot;: &quot;OK&quot;,
+      &quot;detalhe&quot;: &quot;igb; com link&quot;
+    },
+    {
+      &quot;posicao&quot;: &quot;eno4&quot;,
+      &quot;local&quot;: &quot;eno4&quot;,
+      &quot;situacao&quot;: &quot;VAZIO&quot;,
+      &quot;detalhe&quot;: &quot;igb; sem link (sem cabo ou desligada na outra ponta)&quot;
+    }
+  ]
 }</pre></details></section>
 
 <h2>Interpretação (IA)</h2><p class="sub">Interpretação gerada por IA a partir dos dados acima (sem identificadores). Não altera nenhum status do diagnóstico; confira as evidências antes de agir. Gerado por: Google Gemini (plano gratuito do AI Studio) [gemini_gratuito] (gemini, modelo gemini-3.5-flash-lite), IA principal.</p><div class="cartao">Servidor funcionando com a redundância de energia perdida (PS1 sem energia de entrada) e com histórico de erro de memória não corrigível no DIMM A2 e de erros nos cabos SAS e no slot PCIe 1 registrados pelo BMC.</div><div class="cartao"><strong>[CRÍTICA] Erro de memória não corrigível no DIMM A2</strong><p>O BMC registrou erro ECC não corrigível no slot A2 (CPU1). Esse tipo de erro pode travar o servidor e corromper dados; a atualização de firmware fica bloqueada enquanto ele constar.</p><ul><li>✓ memoria: <code>Uncorrectable ECC</code></li></ul><p><strong>Plano de solução</strong> — prioridade alta; intervenção física: sim; troca de peça: sim</p><ol><li>Desligar o servidor e reencaixar o pente do slot A2</li><li>Se o erro voltar, trocar o pente</li><li>Rodar o diagnóstico da Dell (F10 → Hardware Diagnostics)</li><li>Exportar e limpar o SEL e refazer o diagnóstico da memória no MSscan</li></ol><p><strong>Ação do catálogo recomendada:</strong> <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL) (disponível no MSscan (com prévia e confirmação do técnico))</p></div><div class="cartao"><strong>[ALTA] Redundância de energia perdida</strong><p>A fonte 1 está sem energia de entrada: se a outra falhar, o servidor desliga.</p><ul><li>✓ fontes: <code>Power Supply AC lost</code></li></ul><p><strong>Plano de solução</strong> — prioridade alta; intervenção física: sim; troca de peça: não</p><ol><li>Conferir o LED da PSU1 (traseira)</li><li>Trocar o cabo de força ou a tomada</li><li>Refazer o diagnóstico das fontes</li></ol></div><div class="cartao"><strong>[MÉDIA] Erros de configuração nos cabos SAS A0/B0</strong><p>O BMC registrou &#x27;Config Error&#x27; nos cabos SAS entre a controladora e o backplane.</p><ul><li>✓ internos: <code>Cable SAS A0</code></li></ul><p><strong>Plano de solução</strong> — prioridade média; intervenção física: sim; troca de peça: não</p><ol><li>Desligar e abrir a tampa</li><li>Reencaixar os cabos SAS A0 e B0</li><li>Refazer o diagnóstico e conferir se o evento se repete</li></ol></div><div class="cartao"><strong>Limitações</strong><ul><li>RAID de hardware não presente: nada a verificar de volumes.</li><li>Os eventos do log do BMC são históricos e podem já ter sido resolvidos.</li></ul></div>
 <h2>Conversa com a IA</h2><p class="sub">Textos como foram enviados (sem identificadores do servidor). Evidências que não existem nos dados aparecem marcadas.</p>
-<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Diagnóstico: Servidor funcionando com a redundância de energia perdida (PS1 sem energia de entrada) e com histórico de erro de memória não corrigível no DIMM A2 e de erros nos cabos SAS e no slot PCIe 1 registrados pelo BMC.<br><br>Principais soluções, em ordem de prioridade:<br>1. Erro de memória não corrigível no DIMM A2 (prioridade alta; severidade critica; provável troca de peça; exige ir até o servidor) <span class="ev-ok">[E1]</span><br>   - Desligar o servidor e reencaixar o pente do slot A2<br>   - Se o erro voltar, trocar o pente<br>   - Rodar o diagnóstico da Dell (F10 → Hardware Diagnostics)<br>   - Exportar e limpar o SEL e refazer o diagnóstico da memória no MSscan<br>2. Redundância de energia perdida (prioridade alta; severidade alta; exige ir até o servidor) <span class="ev-ok">[E2]</span><br>   - Conferir o LED da PSU1 (traseira)<br>   - Trocar o cabo de força ou a tomada<br>   - Refazer o diagnóstico das fontes<br>3. Erros de configuração nos cabos SAS A0/B0 (prioridade media; severidade media; exige ir até o servidor) <span class="ev-ok">[E3]</span><br>   - Desligar e abrir a tampa<br>   - Reencaixar os cabos SAS A0 e B0<br>   - Refazer o diagnóstico e conferir se o evento se repete<br><br>Ficou sem verificação: RAID de hardware não presente: nada a verificar de volumes.; Os eventos do log do BMC são históricos e podem já ter sido resolvidos.<br><br>Pergunte o que quiser sobre esses problemas. Eu só explico e recomendo; não executo nada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>[E3] internos: “Cable SAS A0” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
-<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>O que resolvo primeiro?</p></div>
-<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Primeiro a memória: há erro não corrigível no DIMM A2 <span class="ev-ok">[E1]</span> e ele bloqueia qualquer atualização. Depois a energia da PSU1 <span class="ev-ok">[E2]</span>. Os cabos SAS podem esperar a próxima parada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li></ul></div>
-<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>Preciso trocar alguma peça?</p></div>
-<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Talvez o pente do slot A2 <span class="ev-ok">[E1]</span>: reencaixe primeiro; se o erro voltar depois de limpar o SEL, troque. Para a fonte, em geral basta o cabo ou a tomada <span class="ev-ok">[E2]</span>.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
-<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>O que ficou sem verificação?</p></div>
-<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>Pelo diagnóstico, nada ficou como não verificado: não há RAID de hardware neste servidor e o Redfish não foi usado (sem credenciais do BMC), então tudo veio do IPMI e do sistema.</p></div>
-<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-14T18:15:11</small></p><p>Explique o problema mais grave.</p></div>
-<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-14T18:15:11</small></p><p>O mais grave é o erro ECC não corrigível no DIMM A2 <span class="ev-ok">[E1]</span>: a memória entregou um dado que o ECC não conseguiu corrigir. Isso costuma derrubar o sistema e é sinal de pente com defeito ou mal encaixado.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li></ul></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-24T01:10:26</small></p><p>Diagnóstico: Servidor funcionando com a redundância de energia perdida (PS1 sem energia de entrada) e com histórico de erro de memória não corrigível no DIMM A2 e de erros nos cabos SAS e no slot PCIe 1 registrados pelo BMC.<br><br>Principais soluções, em ordem de prioridade:<br>1. Erro de memória não corrigível no DIMM A2 (prioridade alta; severidade critica; provável troca de peça; exige ir até o servidor) <span class="ev-ok">[E1]</span><br>   - Desligar o servidor e reencaixar o pente do slot A2<br>   - Se o erro voltar, trocar o pente<br>   - Rodar o diagnóstico da Dell (F10 → Hardware Diagnostics)<br>   - Exportar e limpar o SEL e refazer o diagnóstico da memória no MSscan<br>2. Redundância de energia perdida (prioridade alta; severidade alta; exige ir até o servidor) <span class="ev-ok">[E2]</span><br>   - Conferir o LED da PSU1 (traseira)<br>   - Trocar o cabo de força ou a tomada<br>   - Refazer o diagnóstico das fontes<br>3. Erros de configuração nos cabos SAS A0/B0 (prioridade media; severidade media; exige ir até o servidor) <span class="ev-ok">[E3]</span><br>   - Desligar e abrir a tampa<br>   - Reencaixar os cabos SAS A0 e B0<br>   - Refazer o diagnóstico e conferir se o evento se repete<br><br>Ficou sem verificação: RAID de hardware não presente: nada a verificar de volumes.; Os eventos do log do BMC são históricos e podem já ter sido resolvidos.<br><br>Pergunte o que quiser sobre esses problemas. Eu só explico e recomendo; não executo nada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>[E3] internos: “Cable SAS A0” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-24T01:10:26</small></p><p>O que resolvo primeiro?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-24T01:10:26</small></p><p>Primeiro a memória: há erro não corrigível no DIMM A2 <span class="ev-ok">[E1]</span> e ele bloqueia qualquer atualização. Depois a energia da PSU1 <span class="ev-ok">[E2]</span>. Os cabos SAS podem esperar a próxima parada.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-24T01:10:26</small></p><p>Preciso trocar alguma peça?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-24T01:10:26</small></p><p>Talvez o pente do slot A2 <span class="ev-ok">[E1]</span>: reencaixe primeiro; se o erro voltar depois de limpar o SEL, troque. Para a fonte, em geral basta o cabo ou a tomada <span class="ev-ok">[E2]</span>.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li><li>[E2] fontes: “Power Supply AC lost” — confirmada</li><li>Ação do catálogo recomendada: <code>bmc.sel_exportar_limpar</code> — Exportar e limpar o log do BMC (SEL)</li></ul></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-24T01:10:26</small></p><p>O que ficou sem verificação?</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-24T01:10:26</small></p><p>Pelo diagnóstico, nada ficou como não verificado: não há RAID de hardware neste servidor e o Redfish não foi usado (sem credenciais do BMC), então tudo veio do IPMI e do sistema.</p></div>
+<div class="cartao"><p><strong>Técnico</strong> <small>2026-10-24T01:10:26</small></p><p>Explique o problema mais grave.</p></div>
+<div class="cartao"><p><strong>IA (Google Gemini (plano gratuito do AI Studio), principal, gemini-3.5-flash-lite)</strong> <small>2026-10-24T01:10:26</small></p><p>O mais grave é o erro ECC não corrigível no DIMM A2 <span class="ev-ok">[E1]</span>: a memória entregou um dado que o ECC não conseguiu corrigir. Isso costuma derrubar o sistema e é sinal de pente com defeito ou mal encaixado.</p><ul><li>[E1] memoria: “Uncorrectable ECC” — confirmada</li></ul></div>
 
 
 
-<h2>Atualizações</h2><p class="sub">Catálogo Dell 26.09.17 (baixado agora de https://downloads.dell.com/catalog/Catalog.xml.gz). Verificação somente informativa: nada é aplicado sem escolha, o plano de atualização e a confirmação ATUALIZAR.</p><div class="cartao">3 componente(s) inventariado(s): 2 com atualização disponível, 0 sem necessidade de atualização (confirmado), 1 em que não foi possível determinar. Somente informativo: nada foi aplicado.<div class="tabela"><table><tr><th>Componente</th><th>Instalada</th><th>Catálogo</th><th>Situação</th></tr><tr><td>BIOS</td><td>2.21.2</td><td>2.28.1</td><td>Atualização disponível (2.28.1, 11/08/2026)</td></tr><tr><td>iDRAC (BMC)</td><td>7.00</td><td>7.00.00.185</td><td>Não foi possível determinar<br><small>a fonte informa só &#x27;7.00&#x27;: não dá para saber se &#x27;7.00.00.185&#x27; é mais nova</small></td></tr><tr><td>Intel(R) Ethernet 10G 4P X710/I350 rNDC (eno1np0, eno2np1, eno3, eno4)</td><td>19.0.12</td><td>25.0.4</td><td>Atualização disponível (25.0.4, 24/01/2026)</td></tr></table></div><p><strong>Avisos</strong></p><ul><li>Redundância de energia perdida (fonte sem energia ou ausente): a aplicação pedirá uma confirmação extra, separada do ATUALIZAR.</li><li>Espaço livre e integridade (SHA-256) dos pacotes são verificados na aplicação (simulada ou real).</li></ul></div>
+<h2>Atualizações</h2><p class="sub">Catálogo Dell 26.09.17 (baixado agora de https://downloads.dell.com/catalog/Catalog.xml.gz). Verificação somente informativa: nada é aplicado sem escolha, o plano de atualização e a confirmação ATUALIZAR.</p><div class="cartao">3 componente(s) inventariado(s): 2 com atualização disponível, 0 sem necessidade de atualização (confirmado), 1 em que não foi possível determinar. Somente informativo: nada foi aplicado.<div class="tabela"><table><tr><th>Componente</th><th>Instalada</th><th>Catálogo</th><th>Situação</th></tr><tr><td>BIOS</td><td>2.21.2</td><td>2.28.1</td><td>Atualização disponível (2.28.1, 11/08/2026)</td></tr><tr><td>iDRAC (BMC)</td><td>7.00</td><td>7.00.00.185</td><td>Não foi possível determinar<br><small>a fonte informa só &#x27;7.00&#x27;: não dá para saber se &#x27;7.00.00.185&#x27; é mais nova</small></td></tr><tr><td>Intel(R) Ethernet 10G 4P X710/I350 rNDC (eno1np0, eno2np1, eno3, eno4)</td><td>19.0.12</td><td>25.0.4</td><td>Atualização disponível (25.0.4, 24/01/2026)</td></tr></table></div><p><strong>Avisos</strong></p><ul><li>Redundância de energia perdida (fonte sem energia ou ausente): a aplicação pedirá uma confirmação extra, separada do ATUALIZAR.</li><li>Espaço livre e integridade (SHA-256) dos pacotes são verificados na instalação.</li></ul></div>
 
 
 <h2>Registro técnico</h2>
 <div class="cartao"><details><summary>Histórico de comandos (38)</summary><div class="tabela"><table><tr><th>Comando</th><th>Código</th><th>Duração</th><th>Erro</th></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>GET https://downloads.dell.com/</code></td><td>200</td><td>0.0 s</td><td></td></tr><tr><td><code>GET https://api.anthropic.com/</code></td><td>404</td><td>0.0 s</td><td></td></tr><tr><td><code>dmidecode -s system-manufacturer</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s system-product-name</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s bios-version</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>dmidecode -s system-sku-number</code></td><td>0</td><td>0.005 s</td><td></td></tr><tr><td><code>dmidecode -t 38</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool mc info</code></td><td>0</td><td>0.102 s</td><td></td></tr><tr><td><code>dmidecode -t 42</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool lan print 1</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool lan print 2</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>lspci -nnk</code></td><td>0</td><td>0.037 s</td><td></td></tr><tr><td><code>sensors -j</code></td><td>0</td><td>0.015 s</td><td></td></tr><tr><td><code>ipmitool lan print 1</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool delloem lan get</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ipmitool delloem lan get active</code></td><td>-1</td><td>0.0 s</td><td>comando sem gravação nesta fixture</td></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ipmitool sensor</code></td><td>0</td><td>2.765 s</td><td></td></tr><tr><td><code>ipmitool sdr type Power Supply</code></td><td>0</td><td>1.969 s</td><td></td></tr><tr><td><code>ipmitool sdr type Fan</code></td><td>0</td><td>2.023 s</td><td></td></tr><tr><td><code>dmidecode -t 4</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ipmitool sel elist</code></td><td>0</td><td>2.225 s</td><td></td></tr><tr><td><code>dmidecode -t 17</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>smartctl --scan-open -j</code></td><td>0</td><td>0.024 s</td><td></td></tr><tr><td><code>lsblk -J -d -o NAME,TRAN,TYPE,SIZE,MODEL</code></td><td>0</td><td>0.005 s</td><td></td></tr><tr><td><code>smartctl -a -j -d sat /dev/sda</code></td><td>0</td><td>0.025 s</td><td></td></tr><tr><td><code>mdadm --examine --scan</code></td><td>0</td><td>0.012 s</td><td></td></tr><tr><td><code>ip -j addr show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ip -j -s link show</code></td><td>0</td><td>0.004 s</td><td></td></tr><tr><td><code>ethtool eno1np0</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool -i eno1np0</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno2np1</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>ethtool -i eno2np1</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno3</code></td><td>0</td><td>0.003 s</td><td></td></tr><tr><td><code>ethtool -i eno3</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool eno4</code></td><td>0</td><td>0.002 s</td><td></td></tr><tr><td><code>ethtool -i eno4</code></td><td>0</td><td>0.002 s</td><td></td></tr></table></div></details></div>
-<footer>Gerado pelo MSscan 1.0.1 em 14/10/2026 18:15</footer>
+<footer>Gerado pelo MSscan 1.0.13 em 24/10/2026 01:10</footer>
 </main>
 </body>
 </html>

@@ -22,11 +22,12 @@
         <ul role="tablist" id="abas">
           <li><a role="tab" href="#/inicio" data-tela="inicio" id="aba-inicio"><span class="num" aria-hidden="true">1</span><span data-icone="home" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.inicio"></span></a></li>
           <li><a role="tab" href="#/diagnostico" data-tela="diagnostico" id="aba-diagnostico"><span class="num" aria-hidden="true">2</span><span data-icone="pulse" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.diagnostico"></span><span class="contador" id="contador-problemas" hidden></span></a></li>
-          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">3</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
-          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">4</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
-          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">5</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
-          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">6</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
-          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">7</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
+          <li><a role="tab" href="#/discos" data-tela="discos" id="aba-discos"><span class="num" aria-hidden="true">3</span><span data-icone="hard-drive" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.discos"></span><span class="contador" id="contador-discos" hidden></span></a></li>
+          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">4</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
+          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">5</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
+          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">6</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
+          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">7</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
+          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">8</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
           <li class="aba-sem-espaco"><a role="tab" href="#/sobre" data-tela="sobre" id="aba-sobre"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.configuracoes"></span></a></li>
         </ul>
       </nav>
@@ -308,6 +309,13 @@
     </section>
 
     <!-- 4. Relatórios -->
+    <!-- Aba Discos, como o Hard Disk Sentinel (CLAUDE.md 31) -->
+    <section class="tela" id="tela-discos" role="tabpanel" aria-labelledby="aba-discos" hidden>
+      <p class="texto-sec" id="discos-mensagem" role="status" aria-live="polite"></p>
+      <div class="discos-lista" id="discos-lista"></div>
+      <p class="legenda" data-t="discos.legenda_saude"></p>
+    </section>
+
     <section class="tela" id="tela-relatorios" role="tabpanel" aria-labelledby="aba-relatorios" hidden>
       <div id="rel-resumo-area">
         <div class="cartao">
@@ -912,6 +920,19 @@
           <button type="button" class="botao botao-perigo" id="energia-confirmar" data-t="erro.desligar"></button>
         </div>
         <p class="texto-sec" id="energia-mensagem" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+  <div class="fundo-dialogo" id="autoteste-fundo" hidden>
+    <div class="dialogo" role="alertdialog" aria-modal="true" aria-labelledby="autoteste-titulo" aria-describedby="autoteste-texto">
+      <div class="dialogo-cabeca"><h2 id="autoteste-titulo"></h2></div>
+      <div class="dialogo-corpo">
+        <p id="autoteste-texto"></p>
+        <div class="acoes">
+          <button type="button" class="botao botao-secundario" id="autoteste-cancelar" data-t="plano.cancelar"></button>
+          <button type="button" class="botao botao-primario" id="autoteste-confirmar"></button>
+        </div>
+        <p class="texto-sec" id="autoteste-mensagem" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>

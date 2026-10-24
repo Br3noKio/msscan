@@ -103,6 +103,9 @@ def gerar(xterm: Path, three: Path = Path("/usr/share/javascript/three")) -> Non
     sessao.aguardar(120)
     estados["diagnostico"] = _limpar(sessao.estado())
     visoes["diagnostico"] = _limpar(sessao.visao())
+    sessao.discos()  # aba Discos (CLAUDE.md 31): a primeira consulta dispara a releitura do SMART
+    _esperar(lambda: not sessao._discos_lendo and sessao._discos_lidos)
+    discos = _limpar(sessao.discos())
     componentes = {c["componente"]: _limpar(sessao.componente(c["componente"]))
                    for c in estados["diagnostico"]["diagnostico"]["componentes"]}  # fmt: skip
     previa = _limpar(sessao.previa_ia())
@@ -137,7 +140,7 @@ def gerar(xterm: Path, three: Path = Path("/usr/share/javascript/three")) -> Non
                 for cmd, arquivo in COMANDOS_TERMINAL.items()}  # fmt: skip
     dados = {"estados": estados, "componentes": componentes, "previa_ia": previa, "config_ia": config_ia, "qr": qrs,
              "ia": ia, "chat": chat, "atualizacoes": atualizacoes, "avisos": avisos, "final": final,
-             "terminal": terminal, "versao": final.get("versao"), "visao": visoes,
+             "terminal": terminal, "versao": final.get("versao"), "visao": visoes, "discos": discos,
              "fetch": fetch.montar(sessao_visao, "Debian GNU/Linux 13 (trixie)", final.get("versao"))}  # fmt: skip
     texto = json.dumps(dados, ensure_ascii=False)
     for proibido in ("CHAVE-DE-DEMONSTRACAO", str(pasta)):

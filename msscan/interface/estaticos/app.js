@@ -110,6 +110,9 @@ const STATUS = {
   PENDENTE: { texto: T("status.aguardando"), icone: "clock" },
   ANDAMENTO: { texto: T("status.em_andamento"), icone: "sync" },
   NA: { texto: T("status.nao_aplicavel"), icone: "skip" },
+  // Mapa por posição (pedido de 22/10/2026): slot vazio e "conferir" (indício fraco; não muda o status do componente).
+  VAZIO: { texto: T("status.vazio"), icone: "dot-fill", classe: "NAO_APLICAVEL" },
+  CONFERIR: { texto: T("status.conferir"), icone: "question", classe: "NAO_VERIFICADO" },
   DISPONIVEL: { texto: T("status.disponivel"), icone: "check-circle", classe: "OK" },
   // Versão nova no catálogo: informação (azul), não problema de hardware — Atenção fica para alertas reais.
   ATUALIZAVEL: { texto: T("status.atualizacao_disponivel"), icone: "download", classe: "INFO" },
@@ -216,7 +219,7 @@ function abasComSetas(lista, ativar) {
 
 let ESTADO = null;
 let rotaAtual = "";
-const TELAS = ["rede", "inicio", "diagnostico", "relatorios", "ia", "chat", "atualizacoes", "terminal", "sobre", "erro"];
+const TELAS = ["rede", "inicio", "diagnostico", "discos", "relatorios", "ia", "chat", "atualizacoes", "terminal", "sobre", "erro"];
 
 function redeBloqueia(estado) {
   return estado && estado.etapa === "rede" && estado.rede.situacao !== "desativada";
@@ -253,6 +256,7 @@ function aplicarRota(focarConteudo) {
   if (nomeTela === "chat" && mudou) rolarChat();
   if (nomeTela === "rede") renderizarRede();
   if (nomeTela === "terminal" && mudou) { abrirTerminal(); focoTratado = true; }
+  if (nomeTela === "discos" && mudou) acompanharDiscos();
   if (mudou && focarConteudo && !focoTratado) $("conteudo").focus();
   if (ESTADO) renderizarEtapas(ESTADO);
   aplicarLimites();
@@ -2478,7 +2482,8 @@ function renderizarDados(painel, dados) {
     bloco.append(el("h3", { texto: T("renderizar_dados.problemas") }), el("ul", { classe: "lista-simples" }, dados.problemas.map((p) => el("li", { texto: textoDe(p) }))));
   }
   for (const explicacao of dados.explicacoes || []) bloco.append(el("p", { classe: "explicacao", texto: textoDe(explicacao) }));
-  const resto = Object.entries(dados).filter(([chave]) => !["tentativas", "problemas", "explicacoes"].includes(chave));
+  if ((dados.posicoes || []).length) bloco.append(...tabelaPosicoes(dados.posicoes));
+  const resto = Object.entries(dados).filter(([chave]) => !["tentativas", "problemas", "explicacoes", "posicoes"].includes(chave));
   const simples = resto.filter(([, valor]) => !ehEstruturado(valor));
   if (simples.length) {
     const lista = el("dl", { classe: "chave-valor" });
@@ -2492,6 +2497,19 @@ function renderizarDados(painel, dados) {
   if (!bloco.childElementCount) bloco.append(el("p", { classe: "texto-sec", texto: T("renderizar_dados.nenhum_dado_medido") }));
   painel.replaceChildren(bloco);
   for (const corpo of painel.querySelectorAll("tbody")) navegavel(corpo, "tr", null).garantirTabindex();
+}
+
+/* Mapa por posição (pedido de 22/10/2026): o que funciona e onde está o que não funciona; problemas primeiro. */
+function tabelaPosicoes(posicoes) {
+  const ordem = { FALHA: 0, ALERTA: 1, CONFERIR: 2, OK: 3, VAZIO: 4 };
+  const linhas = [...posicoes].sort((a, b) => (ordem[a.situacao] ?? 5) - (ordem[b.situacao] ?? 5));
+  const contagem = ["OK", "FALHA", "ALERTA", "CONFERIR", "VAZIO"].map((s) => [s, posicoes.filter((p) => p.situacao === s).length]).filter(([, n]) => n);
+  const corpo = el("tbody", {}, linhas.map((p) => el("tr", { tabindex: "-1" },
+    el("td", { texto: p.local || p.posicao }), el("td", {}, etiqueta(p.situacao)), el("td", { texto: p.detalhe || "—" }))));
+  return [el("h3", { texto: T("posicoes.titulo") }),
+    el("p", { classe: "texto-sec pequeno" }, contagem.map(([s, n]) => [etiqueta(s, STATUS[s].texto + ": " + n), " "])),
+    el("div", { classe: "tabela-rolagem" }, el("table", { classe: "tabela" },
+      el("thead", {}, el("tr", {}, [T("posicoes.local"), T("posicoes.situacao"), T("posicoes.detalhe")].map((c) => el("th", { scope: "col", texto: c })))), corpo))];
 }
 
 function ehEstruturado(valor) {
@@ -2587,9 +2605,10 @@ function mostrarVisor(ver, mudou) {
 const ATALHOS = [
   [["?"], T("atalhos.mostrar_os_atalhos_de_teclado")],
   [["/"], T("atalhos.filtrar_componentes_tela_diagnostico")],
-  [["Alt", "1…7"], T("atalhos.espacos_de_trabalho")],
+  [["Alt", "1…8"], T("atalhos.espacos_de_trabalho")],
   [["g", "i"], T("atalhos.ir_para_inicio")],
   [["g", "d"], T("atalhos.ir_para_diagnostico")],
+  [["g", "h"], T("atalhos.ir_para_discos")],
   [["g", "r"], T("atalhos.ir_para_relatorios")],
   [["g", "c"], T("atalhos.ir_para_o_chat_com")],
   [["g", "a"], T("atalhos.ir_para_atualizacoes")],
@@ -2775,6 +2794,15 @@ function teclaGlobal(ev) {
     }
     return;
   }
+  if (!$("autoteste-fundo").hidden) {
+    if (ev.key === "Escape") { ev.preventDefault(); fecharAutoteste(); }
+    else if (ev.key === "Tab") {
+      const botoes = [$("autoteste-cancelar"), $("autoteste-confirmar")].filter((b) => !b.hidden && !b.disabled);
+      ev.preventDefault();
+      botoes[(botoes.indexOf(document.activeElement) + 1) % botoes.length].focus();
+    }
+    return;
+  }
   if (!$("energia-fundo").hidden) {
     if (ev.key === "Escape") { ev.preventDefault(); fecharEnergia(); }
     else if (ev.key === "Tab") {
@@ -2788,8 +2816,8 @@ function teclaGlobal(ev) {
   if (ev.target && ev.target.closest && ev.target.closest("#terminal-area")) return;
   if (ev.key === "Escape" && !$("menu-energia").hidden) { ev.preventDefault(); abrirMenuEnergia(false); $("botao-energia").focus(); return; }
   if (ev.key === "Escape" && gavetaAberta()) { ev.preventDefault(); fecharGavetas(true); return; }
-  // Alt+1 a Alt+7: espaços de trabalho (as etapas), como no Hyprland.
-  if (ev.altKey && !ev.ctrlKey && !ev.metaKey && /^Digit[1-7]$/.test(ev.code) && $("dialogo-fundo").hidden) {
+  // Alt+1 a Alt+8: espaços de trabalho (as etapas), como no Hyprland.
+  if (ev.altKey && !ev.ctrlKey && !ev.metaKey && /^Digit[1-8]$/.test(ev.code) && $("dialogo-fundo").hidden) {
     ev.preventDefault();
     if (redeBloqueia(ESTADO)) { anunciar(T("iniciar.resolva_a_rede_primeiro")); return; }
     ir(ESPACOS[Number(ev.code.slice(5)) - 1]);
@@ -2816,7 +2844,7 @@ function teclaGlobal(ev) {
   if (digitando(ev.target) || ev.ctrlKey || ev.altKey || ev.metaKey) return;
   if (prefixoG && Date.now() - prefixoG < 1500) {
     prefixoG = 0;
-    const destino = { i: "inicio", d: "diagnostico", r: "relatorios", c: "chat", a: "atualizacoes", t: "terminal", s: "sobre" }[ev.key];
+    const destino = { i: "inicio", d: "diagnostico", h: "discos", r: "relatorios", c: "chat", a: "atualizacoes", t: "terminal", s: "sobre" }[ev.key];
     if (destino) { ev.preventDefault(); ir(destino); window.setTimeout(() => $("conteudo").focus(), 0); }
     return;
   }
@@ -3075,6 +3103,225 @@ async function confirmarEnergia() {
   anunciar($("energia-mensagem").textContent);
 }
 
+/* ------------------------------------------------------------------ discos (CLAUDE.md 31) */
+
+const INTERVALO_TELA_DISCOS_MS = 5000; // o servidor relê o SMART no máximo a cada 30 s; aqui só pega o que já leu
+let DISCOS = null;
+let discosLendo = false;
+let autoteste = null;
+let focoAntesDoAutoteste = null;
+
+async function acompanharDiscos() {
+  if (discosLendo) return;
+  discosLendo = true;
+  try {
+    while (rotaAtual === "discos") {
+      try { DISCOS = await api("discos"); renderizarDiscos(); } catch (e) { $("discos-mensagem").textContent = T("discos.sem_contato", e.message); }
+      await new Promise((fim) => window.setTimeout(fim, INTERVALO_TELA_DISCOS_MS));
+    }
+  } finally { discosLendo = false; }
+}
+
+function rotuloDisco(d) {
+  const id = /megaraid,(\d+)$/.exec(d.tipo || "");
+  return id ? T("discos.id_controladora", id[1]) : d.dispositivo;
+}
+
+function nivelSaude(p) { return p === null || p === undefined ? "" : p >= 70 ? "ok" : p >= 30 ? "alerta" : "falha"; }
+
+function numero(n) { return n === null || n === undefined ? "—" : Number(n).toLocaleString("pt-BR"); }
+
+function horasLigado(h) {
+  if (h === null || h === undefined) return "—";
+  const dias = Math.floor(h / 24), anos = Math.floor(dias / 365);
+  return T("discos.horas", numero(h), anos ? T("discos.anos_dias", anos, dias % 365) : T("discos.dias", dias));
+}
+
+function tipoDisco(d) {
+  if ((d.tipo || "").startsWith("nvme") || /^\/dev\/nvme/.test(d.dispositivo || "")) return T("discos.nvme");
+  if (d.rotacao_rpm === 0) return T("discos.ssd");
+  return d.rotacao_rpm ? T("discos.hdd_rpm", numero(d.rotacao_rpm)) : null;
+}
+
+function barraDisco(valor, maximo, nivel) {
+  const barra = el("div", { classe: "barra-valor" + (nivel ? " " + nivel : "") }, el("span", {}));
+  const proporcao = maximo && valor !== null && valor !== undefined ? Math.max(0, Math.min(1, valor / maximo)) : 0;
+  barra.firstChild.style.setProperty("--v", proporcao.toFixed(3));
+  return barra;
+}
+
+function graficoTemperatura(t) {
+  const pontos = t.historico || [];
+  if (pontos.length < 2) return el("p", { classe: "legenda", texto: T("discos.grafico_aguardando") });
+  const valores = pontos.map((p) => p[1]);
+  const menor = Math.min(...valores), maior = Math.max(...valores);
+  const base = menor - 5, topo = Math.max(maior, t.limite);
+  const largura = 300, altura = 60, y = (v) => (altura - ((v - base) / (topo - base || 1)) * altura).toFixed(1);
+  const svg = document.createElementNS(SVG_NS, "svg");
+  for (const [a, v] of [["viewBox", "0 0 300 60"], ["preserveAspectRatio", "none"], ["role", "img"], ["class", "grafico-disco"],
+    ["aria-label", T("discos.grafico_rotulo", pontos.length, menor, maior, t.limite)]]) svg.setAttribute(a, v);
+  const limite = document.createElementNS(SVG_NS, "line");
+  for (const [a, v] of [["x1", "0"], ["x2", String(largura)], ["y1", y(t.limite)], ["y2", y(t.limite)], ["class", "linha-limite"]]) limite.setAttribute(a, v);
+  const linha = document.createElementNS(SVG_NS, "polyline");
+  linha.setAttribute("points", valores.map((v, i) => ((i * largura) / (valores.length - 1)).toFixed(1) + "," + y(v)).join(" "));
+  linha.setAttribute("class", "linha-temp " + (t.nivel || ""));
+  svg.append(limite, linha);
+  const hora = (p) => String(p[0]).slice(11, 16);
+  return el("figure", { classe: "figura-disco" }, svg,
+    el("figcaption", { classe: "legenda", texto: T("discos.grafico_legenda", hora(pontos[0]), hora(pontos[pontos.length - 1]), menor, maior, t.limite) }));
+}
+
+function botaoAutoteste(d, nomeIcone, texto, tipo) {
+  const botao = botaoPequeno(nomeIcone, texto, () => abrirAutoteste(d, tipo));
+  botao.dataset.foco = tipo || "interromper";
+  return botao;
+}
+
+function blocoAutoteste(d) {
+  const a = d.autoteste || {};
+  const ultimo = (d.autotestes || [])[0];
+  const situacao = a.em_andamento
+    ? etiqueta("ANDAMENTO", a.restante_pct !== null && a.restante_pct !== undefined ? T("discos.autoteste_restante", a.restante_pct) : T("discos.autoteste_rodando"))
+    : el("p", { texto: ultimo ? T("discos.ultimo_autoteste", ultimo.tipo || "—", ultimo.resultado || "—", numero(ultimo.horas)) : T("discos.nenhum_autoteste") });
+  let botoes;
+  if (!a.suportado) botoes = el("p", { classe: "legenda", texto: T("discos.autoteste_nao_suportado") });
+  else if (a.em_andamento) botoes = el("div", { classe: "acoes" }, botaoAutoteste(d, "stop", T("discos.interromper"), null));
+  else {
+    botoes = el("div", { classe: "acoes" },
+      botaoAutoteste(d, "zap", T("discos.teste_curto", a.minutos_curto || "?"), "curto"),
+      botaoAutoteste(d, "search", T("discos.varredura", a.minutos_estendido || "?"), "estendido"));
+  }
+  return el("section", { classe: "disco-bloco" }, el("h3", {}, icone("activity-square"), T("discos.autoteste")), situacao, botoes,
+    el("p", { classe: "legenda", texto: T("discos.autoteste_explica") }));
+}
+
+function tabelaDisco(d, nome, titulo, colunas, linhas) {
+  if (!linhas.length) return null;
+  return el("details", { classe: "detalhes-tecnicos", "data-chave": nome }, el("summary", { texto: titulo }),
+    el("div", { classe: "tabela-rolagem" }, el("table", { classe: "tabela" },
+      el("thead", {}, el("tr", {}, colunas.map((c) => el("th", { scope: "col", texto: T(c) })))),
+      el("tbody", {}, linhas.map((celulas) => el("tr", {}, celulas.map((c) => el("td", { texto: c === null || c === undefined ? "—" : String(c) }))))))));
+}
+
+function situacaoAtributo(a) {
+  if (a.falhou_quando === "now") return T("discos.falhando_agora");
+  if (a.falhou_quando === "past") return T("discos.falhou_antes");
+  return a.prefalha ? T("discos.prefalha") : T("discos.informativo");
+}
+
+function cartaoDisco(d, indice) {
+  const s = d.saude || {}, t = d.temperatura || {};
+  const nivel = nivelSaude(s.percentual);
+  const titulo = "disco-titulo-" + indice;
+  const faixa = [t.minima, t.maxima].every((v) => v !== null && v !== undefined) ? T("discos.temp_faixa", t.minima, t.maxima, t.limite) : T("discos.temp_limite", t.limite);
+  const ciclos = d.ciclos_especificados ? T("discos.ciclos_de", numero(d.ciclos_energia), numero(d.ciclos_especificados)) : numero(d.ciclos_energia);
+  const dados = [
+    [T("discos.capacidade"), bytesLegiveis(d.capacidade_bytes)], [T("discos.tipo"), tipoDisco(d)], [T("discos.interface"), d.interface],
+    [T("discos.formato"), d.formato], [T("discos.firmware"), d.firmware], [T("discos.serial"), d.serial],
+    [T("discos.horas_ligado"), horasLigado(d.horas_ligado)], [T("discos.ciclos"), ciclos], [T("discos.fabricacao"), d.fabricacao],
+  ];
+  if (d.desgaste_pct !== null && d.desgaste_pct !== undefined) dados.push([T("discos.desgaste"), d.desgaste_pct + "%"]);
+  if (d.desgaste_pct !== null && d.desgaste_pct !== undefined) {
+    dados.push([T("discos.vida_restante"), d.vida_restante_dias !== null && d.vida_restante_dias !== undefined ? T("discos.vida_dias", numero(d.vida_restante_dias)) : T("discos.vida_sem_base")]);
+  }
+  if (d.scsi_defeitos_crescidos !== null && d.scsi_defeitos_crescidos !== undefined) dados.push([T("discos.defeitos_crescidos"), numero(d.scsi_defeitos_crescidos)]);
+  if (d.scsi_erros_nao_corrigidos !== null && d.scsi_erros_nao_corrigidos !== undefined) dados.push([T("discos.erros_nao_corrigidos"), numero(d.scsi_erros_nao_corrigidos)]);
+  const avisos = [...(d.problemas || []), ...(d.observacoes || [])];
+  return el("section", { classe: "cartao cartao-disco", "data-id": d.id, "aria-labelledby": titulo },
+    el("h2", { classe: "cabeca-cartao", id: titulo }, icone("hard-drive"), el("span", { texto: (d.modelo || T("discos.modelo_desconhecido")) + " · " + rotuloDisco(d) }), etiqueta(d.status)),
+    el("div", { classe: "cartao-corpo" },
+      el("div", { classe: "disco-medidores" },
+        el("div", { classe: "medidor-disco" }, el("span", { classe: "legenda", texto: T("discos.saude") }),
+          el("strong", { classe: "valor-disco " + nivel, texto: s.percentual === null || s.percentual === undefined ? "—" : s.percentual + "%" }), barraDisco(s.percentual, 100, nivel)),
+        el("div", { classe: "medidor-disco" }, el("span", { classe: "legenda", texto: T("discos.temperatura") }),
+          el("strong", { classe: "valor-disco " + (t.nivel || ""), texto: t.atual === null || t.atual === undefined ? "—" : t.atual + " °C" }),
+          barraDisco(t.atual, t.limite, t.nivel), el("span", { classe: "legenda", texto: faixa }))),
+      graficoTemperatura(t),
+      el("div", { classe: "disco-dados" }, dados.filter(([, valor]) => valor !== null && valor !== undefined && valor !== "").map(([rotulo, valor]) => kv(rotulo, valor))),
+      el("section", { classe: "disco-bloco" }, el("h3", {}, icone("gauge"), T("discos.por_que")),
+        (s.motivos || []).length ? el("ul", { classe: "disco-motivos" }, s.motivos.map((m) => el("li", { texto: m }))) : el("p", { texto: T("discos.sem_perdas") })),
+      avisos.length ? el("section", { classe: "disco-bloco" }, el("h3", {}, icone("info"), T("discos.do_diagnostico")),
+        el("ul", { classe: "disco-motivos" }, avisos.map((m) => el("li", { texto: m })))) : null,
+      blocoAutoteste(d),
+      tabelaDisco(d, d.id + "|atributos", T("discos.atributos", (d.atributos || []).length),
+        ["discos.col_id", "discos.col_nome", "discos.col_valor", "discos.col_pior", "discos.col_limite", "discos.col_bruto", "discos.col_situacao"],
+        (d.atributos || []).map((a) => [a.id, a.nome, a.valor, a.pior, a.limite, a.bruto_texto || a.bruto, situacaoAtributo(a)])),
+      tabelaDisco(d, d.id + "|autotestes", T("discos.log_autotestes", (d.autotestes || []).length),
+        ["discos.col_tipo", "discos.col_resultado", "discos.col_horas", "discos.col_lba"],
+        (d.autotestes || []).map((a) => [a.tipo, a.resultado, numero(a.horas), a.lba]))));
+}
+
+function renderizarDiscos() {
+  const d = DISCOS || {};
+  const lista = d.discos || [];
+  $("discos-mensagem").textContent = !lista.length ? T("discos.nenhum_disco")
+    : d.pausa || (d.demonstracao ? T("discos.demonstracao") : T("discos.ao_vivo", Math.round(d.intervalo_s || 30)));
+  const alvo = $("discos-lista");
+  const atuais = new Map([...alvo.children].map((c) => [c.dataset.id, c]));
+  const abertos = new Set([...alvo.querySelectorAll("details[open]")].map((x) => x.dataset.chave));
+  const ativo = document.activeElement;
+  const cartaoAtivo = ativo && ativo.closest ? ativo.closest(".cartao-disco") : null;
+  const foco = cartaoAtivo && ativo.dataset.foco ? [cartaoAtivo.dataset.id, ativo.dataset.foco] : null;
+  const novos = lista.map((disco, i) => {
+    const chave = JSON.stringify(disco);
+    const existente = atuais.get(disco.id);
+    if (existente && existente.dataset.chave === chave) return existente;
+    const cartao = cartaoDisco(disco, i);
+    cartao.dataset.chave = chave;
+    for (const x of cartao.querySelectorAll("details")) x.open = abertos.has(x.dataset.chave);
+    return cartao;
+  });
+  if (novos.length !== alvo.children.length || novos.some((n, i) => n !== alvo.children[i])) alvo.replaceChildren(...novos);
+  if (foco && !alvo.contains(document.activeElement)) {
+    const cartao = [...alvo.children].find((c) => c.dataset.id === foco[0]);
+    const botao = cartao && (cartao.querySelector('[data-foco="' + foco[1] + '"]') || cartao.querySelector("[data-foco]"));
+    if (botao) botao.focus();
+  }
+  const problemas = lista.filter((x) => ["ALERTA", "FALHA"].includes(x.status)).length;
+  $("contador-discos").hidden = !problemas;
+  $("contador-discos").textContent = problemas ? String(problemas) : "";
+}
+
+function abrirAutoteste(d, tipo) {
+  autoteste = { id: d.id, tipo: tipo };
+  focoAntesDoAutoteste = document.activeElement;
+  const nome = (d.modelo || T("discos.modelo_desconhecido")) + " · " + rotuloDisco(d);
+  const a = d.autoteste || {};
+  $("autoteste-titulo").textContent = tipo === null ? T("discos.interromper_titulo") : tipo === "curto" ? T("discos.curto_titulo") : T("discos.varredura_titulo");
+  $("autoteste-texto").textContent = tipo === null ? T("discos.interromper_texto", nome)
+    : T("discos.confirmar_texto", nome, (tipo === "curto" ? a.minutos_curto : a.minutos_estendido) || "?") + (tipo === "estendido" ? " " + T("discos.varredura_aviso") : "");
+  $("autoteste-confirmar").textContent = tipo === null ? T("discos.interromper") : T("discos.iniciar");
+  $("autoteste-confirmar").hidden = false;
+  $("autoteste-confirmar").disabled = false;
+  $("autoteste-cancelar").textContent = T("plano.cancelar");
+  $("autoteste-mensagem").textContent = "";
+  $("autoteste-fundo").hidden = false;
+  $("autoteste-cancelar").focus();
+}
+
+function fecharAutoteste() {
+  $("autoteste-fundo").hidden = true;
+  if (focoAntesDoAutoteste && document.contains(focoAntesDoAutoteste)) focoAntesDoAutoteste.focus();
+  else if ($("discos-lista").querySelector("[data-foco]")) $("discos-lista").querySelector("[data-foco]").focus();
+}
+
+async function confirmarAutoteste() {
+  const botao = $("autoteste-confirmar");
+  botao.disabled = true;
+  $("autoteste-cancelar").focus();
+  try {
+    const r = autoteste.tipo === null ? await api("discos/interromper", "POST", { id: autoteste.id })
+      : await api("discos/autoteste", "POST", { id: autoteste.id, tipo: autoteste.tipo });
+    $("autoteste-mensagem").textContent = r.mensagem;
+    botao.hidden = true;
+    $("autoteste-cancelar").textContent = T("abrir_energia.fechar");
+  } catch (e) {
+    $("autoteste-mensagem").textContent = e.message;
+    botao.disabled = false;
+  }
+  anunciar($("autoteste-mensagem").textContent);
+}
+
 /* ------------------------------------------------------------------ terminal (CLAUDE.md 15.5) */
 
 /* xterm.js do pacote Debian node-xterm, carregado só ao abrir a aba. A saída vem por long-poll (bytes em base64);
@@ -3328,6 +3575,9 @@ function iniciar() {
   $("ssh-desativar").addEventListener("click", () => acaoSSH("ssh/desativar", T("iniciar.desativando_o_acesso_ssh")));
   $("botao-desligar").addEventListener("click", () => abrirEnergia("desligar"));
   $("botao-reiniciar").addEventListener("click", () => abrirEnergia("reiniciar"));
+  $("autoteste-cancelar").addEventListener("click", fecharAutoteste);
+  $("autoteste-confirmar").addEventListener("click", confirmarAutoteste);
+  $("autoteste-fundo").addEventListener("click", (ev) => { if (ev.target === $("autoteste-fundo")) fecharAutoteste(); });
   $("energia-cancelar").addEventListener("click", fecharEnergia);
   $("energia-confirmar").addEventListener("click", confirmarEnergia);
   $("energia-fundo").addEventListener("click", (ev) => { if (ev.target === $("energia-fundo")) fecharEnergia(); });
@@ -3399,8 +3649,8 @@ async function acaoSSH(caminho, texto) {
    sensores ao vivo e central de notificações. Tudo reorganiza o que já existia; nenhuma ação nova no servidor.
    ==================================================================================================================== */
 
-const ORDEM_TELAS = ["inicio", "diagnostico", "ia", "chat", "atualizacoes", "relatorios", "terminal", "sobre"];
-const ESPACOS = ["inicio", "diagnostico", "ia", "chat", "atualizacoes", "relatorios", "terminal"];
+const ORDEM_TELAS = ["inicio", "diagnostico", "discos", "ia", "chat", "atualizacoes", "relatorios", "terminal", "sobre"];
+const ESPACOS = ["inicio", "diagnostico", "discos", "ia", "chat", "atualizacoes", "relatorios", "terminal"];
 const TELA_DA_ETAPA = { rede: "inicio", diagnostico: "diagnostico", ia: "ia", chat: "chat", atualizacoes: "atualizacoes", relatorio: "relatorios" };
 let VISAO = null;
 let telaAnterior = "";

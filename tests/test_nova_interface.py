@@ -94,9 +94,9 @@ def test_terminal_mostra_o_msscan_fetch_ao_abrir(tmp_path):
 def test_estrutura_em_mosaico_com_todas_as_funcoes():
     espacos = re.findall(r'<span class="num" aria-hidden="true">(\d)</span><span data-icone="[a-z-]+" aria-hidden="true"></span>'
                          r'<span class="rotulo-espaco" data-t="[a-z_.]+"', HTML)  # fmt: skip
-    assert espacos == list("1234567")
+    assert espacos == list("12345678")  # 22/10/2026: aba Discos (CLAUDE.md 31) na 3ª posição
     ordem = re.findall(r'data-tela="([a-z]+)" id="aba-', HTML)
-    assert ordem == ["inicio", "diagnostico", "ia", "chat", "atualizacoes", "relatorios", "terminal", "sobre"]
+    assert ordem == ["inicio", "diagnostico", "discos", "ia", "chat", "atualizacoes", "relatorios", "terminal", "sobre"]
     for id_ in ("painel-servidor", "painel-rapido", "doca", "sensores-vivo", "notif-silenciar", "notif-limpar", "pilula-temp", "pilula-fontes",
                 "pilula-idrac", "pilula-ia", "pilula-ssh", "menu-energia", "botao-desligar", "botao-reiniciar", "relogio", "doca-refazer",
                 "doca-relatorio", "doca-terminal", "doca-drivers", "doca-downloads", "doca-config", "faixa-seguranca", "faixa-ssh"):

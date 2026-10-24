@@ -481,6 +481,37 @@ def validar_acao_bmc(operacao: str, url: str, corpo: Any) -> str:
     return f"ação no BMC não permitida: {operacao}"
 
 
+# --- Autoteste dos discos (aba Discos, CLAUDE.md 31) ---------------------------------------------------------------------
+RE_TIPO_SMART = re.compile(r"(sat|scsi|nvme|ata|sat\+megaraid,\d{1,3}|megaraid,\d{1,3})")
+RE_DISPOSITIVO_SMART = re.compile(r"/dev/(sd[a-z]{1,3}|nvme\d{1,3}(n\d{1,3})?|bus/\d{1,3})")
+OPCOES_ESCRITA_SMARTCTL = ("-t", "--test", "-X", "--abort", "-s", "--smart", "-o", "--offlineauto", "-S", "--saveauto", "--set")
+"""Opções do ``smartctl`` que mudam algo no disco ou disparam um teste: ``rodar`` recusa todas."""
+
+
+def _escrita_smartctl(comando: list[str]) -> bool:
+    return bool(comando) and os.path.basename(comando[0]) == "smartctl" and any(
+        a.split("=")[0] in OPCOES_ESCRITA_SMARTCTL for a in comando[1:])
+
+
+def validar_autoteste_disco(cmd: list[str]) -> str:
+    """Salvaguarda do autoteste: ``""`` só para ``smartctl -t short|long`` ou ``smartctl -X``, com ``-d <tipo>`` opcional e um
+    disco inteiro; senão, o motivo. O disco lê a própria superfície: nenhum dado do cliente passa pelo MSscan (18.5)."""
+    if not cmd or cmd[0] != "smartctl":
+        return "autoteste só pelo smartctl"
+    a = cmd[1:]
+    if a[:2] in (["-t", "short"], ["-t", "long"]):
+        resto = a[2:]
+    elif a[:1] == ["-X"]:
+        resto = a[1:]
+    else:
+        return "smartctl: só -t short, -t long ou -X"
+    if len(resto) == 3 and resto[0] == "-d" and RE_TIPO_SMART.fullmatch(resto[1]):
+        resto = resto[2:]
+    if len(resto) != 1 or not RE_DISPOSITIVO_SMART.fullmatch(resto[0]):
+        return "smartctl: dispositivo de disco inválido"
+    return ""
+
+
 def _escrita_ipmitool(comando: list[str]) -> bool:
     return bool(comando) and os.path.basename(comando[0]) == "ipmitool" and any(a.lower() in PALAVRAS_ESCRITA_IPMITOOL for a in comando[1:])
 
@@ -934,6 +965,10 @@ class Executor:
         if motivo:
             self.historico.append(Execucao(cmd, RC_FALHA_EXECUCAO, 0.0, self.origem, motivo))
             return RC_FALHA_EXECUCAO, "", motivo
+        if _escrita_smartctl(cmd):
+            motivo = "smartctl que altera o disco recusado (diagnóstico é somente leitura; autoteste só por autoteste_disco)"
+            self.historico.append(Execucao(cmd, RC_FALHA_EXECUCAO, 0.0, self.origem, motivo))
+            return RC_FALHA_EXECUCAO, "", motivo
         if _escrita_ipmitool(cmd) or _escrita_racadm(cmd):
             motivo = f"comando do {os.path.basename(cmd[0])} que altera o BMC recusado (diagnóstico é somente leitura)"
             self.historico.append(Execucao(cmd, RC_FALHA_EXECUCAO, 0.0, self.origem, motivo))
@@ -1180,6 +1215,25 @@ class Executor:
         self.historico.append(Execucao(registro, rc, duracao, self.origem, erro if rc == RC_FALHA_EXECUCAO else ""))
         if rc == 0:
             self._acompanhar_temporario(cmd)
+        return rc, saida, erro
+
+    def autoteste_disco(self, comando: list[str], timeout: float = 60) -> Retorno:
+        """Inicia ou interrompe o autoteste SMART de um disco (CLAUDE.md 31): lista fechada de ``validar_autoteste_disco``,
+        atrás da trava ``ACOES_REAIS_LIBERADAS``. O ``smartctl -t`` volta na hora; o teste roda dentro do disco. Nunca levanta
+        exceção."""
+        cmd = [str(a) for a in comando] if isinstance(comando, (list, tuple)) else []
+        motivo = validar_autoteste_disco(cmd)
+        if not motivo and not self.acoes_permitidas():
+            motivo = MOTIVO_TRAVA_ACOES
+        if motivo:
+            self.historico.append(Execucao(cmd or ["?"], RC_FALHA_EXECUCAO, 0.0, self.origem, motivo))
+            return RC_FALHA_EXECUCAO, "", motivo
+        inicio = time.monotonic()
+        try:
+            rc, saida, erro, duracao = self._rodar(cmd, timeout)
+        except Exception as excecao:  # noqa: BLE001
+            rc, saida, erro, duracao = RC_FALHA_EXECUCAO, "", f"erro inesperado ao executar: {excecao}", time.monotonic() - inicio
+        self.historico.append(Execucao(cmd, rc, duracao, self.origem, erro if rc == RC_FALHA_EXECUCAO else ""))
         return rc, saida, erro
 
     def acao_rede_idrac(self, comando: list[str], timeout: float = 60) -> Retorno:

@@ -35,6 +35,30 @@ Cada componente tem uma cadeia de fontes, em ordem. Cada tentativa vai para o re
 
 Arrays de RAID por software nunca são montados: montar um array degradado poderia escrever nos discos do cliente.
 
+## Aba Discos
+
+Um cartão por disco, como o Hard Disk Sentinel, a partir do mesmo `smartctl -a -j` do diagnóstico (ATA, SAS e NVMe,
+inclusive atrás da PERC):
+
+- **Saúde %:** estimativa do MSscan, com uma tabela fixa de penalidades (setores realocados, pendentes e incorrigíveis, erros de mídia,
+  SMART reprovado, autoteste reprovado, desgaste) e o motivo de cada ponto perdido, em português. Sem dado suficiente, não há número (nunca 100% por falta de dado).
+- **Temperatura ao vivo** (atual, mínima e máxima da vida do disco, limite), relida a cada 30 s só com a aba aberta e
+  pausada durante gravação de firmware e diagnóstico.
+- Capacidade, interface, horas ligado, ciclos de energia, desgaste e vida restante estimada (SSD/NVMe), atributos e o log
+  de autotestes.
+- **Autoteste rápido e varredura de superfície** (autoteste estendido): quem lê a superfície é o próprio disco; nenhum
+  dado do cliente passa pelo MSscan. Confirmação com foco em "Cancelar" e botão "Interromper".
+
+![Aba Discos](imagens/discos-1920x1080.png)
+
+## Mapa por posição
+
+Todo componente com posições (memória, processadores, fontes, ventoinhas, discos, portas de rede) mostra uma linha por
+slot ou peça: OK, Alerta, Falha, Conferir ou Vazio, com o local físico. Na memória, o MSscan cruza o SMBIOS, o Redfish
+(com credenciais), o registro de eventos e a ordem de instalação para achar **pente não reconhecido no POST** (aparece no
+SMBIOS como slot vazio): "N de M slots com pente reconhecido" e o slot suspeito. Sem evidência, o slot fica Vazio; nada
+é inventado.
+
 ## Situações
 
 | Situação | Significado |

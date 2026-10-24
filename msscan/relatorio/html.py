@@ -75,6 +75,25 @@ def _lista(itens: list[Any], classe: str = "") -> str:
     return f"<ul{atributo}>" + "".join(f"<li>{escape(str(i))}</li>" for i in itens) + "</ul>"
 
 
+SITUACOES_POSICAO = {"FALHA": 0, "ALERTA": 1, "CONFERIR": 2, "OK": 3}
+
+
+def _posicoes(posicoes: list[dict[str, Any]]) -> str:
+    """Mapa por posição (pedido de 22/10/2026): as ocupadas e as que pedem conferência; as vazias só na contagem."""
+    if not posicoes:
+        return ""
+    visiveis = sorted((p for p in posicoes if p.get("situacao") in SITUACOES_POSICAO), key=lambda p: SITUACOES_POSICAO[p["situacao"]])
+    rotulos = {"OK": ROTULOS.get("OK", "OK"), "ALERTA": ROTULOS.get("ALERTA", "ALERTA"), "FALHA": ROTULOS.get("FALHA", "FALHA"),
+               "CONFERIR": textos.t("status.conferir")}  # fmt: skip
+    linhas = "".join(f"<tr><td>{escape(str(p.get('local') or p.get('posicao')))}</td><td>{escape(rotulos[p['situacao']])}</td>"
+                     f"<td>{escape(str(p.get('detalhe') or '—'))}</td></tr>" for p in visiveis)  # fmt: skip
+    vazias = sum(1 for p in posicoes if p.get("situacao") == "VAZIO")
+    rodape = f"<p class=\"fonte\">{textos.t('py_rel_html.posicoes_vazias', vazias)}</p>" if vazias else ""
+    return (f"<details open><summary>{textos.t('posicoes.titulo')}</summary><div class=\"tabela\"><table><tr>"
+            f"<th>{textos.t('posicoes.local')}</th><th>{textos.t('posicoes.situacao')}</th><th>{textos.t('posicoes.detalhe')}</th>"
+            f"</tr>{linhas}</table></div>{rodape}</details>")
+
+
 def _componente(item: dict[str, Any]) -> str:
     status = item.get("status", "NAO_VERIFICADO")
     cor, fundo, simbolo = CORES.get(status, CORES["NAO_VERIFICADO"])
@@ -90,6 +109,7 @@ def _componente(item: dict[str, Any]) -> str:
     partes.append(_lista(dados.get("problemas", []), "problemas"))
     for explicacao in dados.get("explicacoes", []):
         partes.append(f'<div class="explicacao">{escape(explicacao)}</div>')
+    partes.append(_posicoes(dados.get("posicoes") or []))
     if dados.get("observacoes"):
         partes.append(f"<details><summary>{textos.t('py_rel_html.observacoes')}</summary>" + _lista(dados["observacoes"]) + "</details>")
     tentativas = dados.get("tentativas", [])

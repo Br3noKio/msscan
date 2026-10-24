@@ -323,6 +323,8 @@ def esperar_idrac_atualizado(ctx: Any, resultado: dict[str, Any], dormir: Callab
     prog = prog_mod.de(resultado)
     dica = textos.t("py_automatica.nao_desligue_o_servidor_a")
     cliente = getattr(getattr(ctx, "bmc", None), "cliente", None)
+    if cliente is None:
+        return _esperar_idrac_ipmi(ctx, resultado, dormir, item, limite_s)
     ip = urlsplit(str(getattr(cliente, "base", ""))).hostname
     esperado, versao, sessao_nova = 0.0, None, False
     while cliente is not None and esperado <= limite_s:
@@ -356,6 +358,34 @@ def esperar_idrac_atualizado(ctx: Any, resultado: dict[str, Any], dormir: Callab
     _passo(resultado, "iDRAC", textos.t("py_automatica.o_idrac_nao_voltou_com", item.get('disponivel'), int(limite_s // 60), versao or 'nenhuma'), "falhou")  # fmt: skip
     return False
 
+
+SEM_QUEDA_IPMI_S = 600.0
+"""Sem Redfish: se o IPMI local nunca saiu do ar, o iDRAC é dado como de volta depois de 10 min respondendo (o DUP pode ter
+esperado o reinício dele antes de terminar)."""
+
+
+def _esperar_idrac_ipmi(ctx: Any, resultado: dict[str, Any], dormir: Callable[[float], None], item: dict[str, Any],
+                        limite_s: float) -> bool:  # fmt: skip
+    """Pedido de 22/10/2026: firmware do iDRAC pelo ``.BIN`` (caminho f) sem Redfish acessível daqui. O próprio pacote já
+    confirmou a gravação; antes, a falta do Redfish virava "o iDRAC não voltou" na hora e o técnico via falha. A volta é
+    conferida pelo IPMI local (``ipmitool mc info``): sai do ar no reinício do iDRAC e volta. A versão completa fica para o
+    próximo diagnóstico (o IPMI só mostra a abreviada)."""
+    prog = prog_mod.de(resultado)
+    esperado, caiu = 0.0, False
+    # ponytail: sem IPMI local, só a espera fixa (nada a conferir daqui); com IPMI, a queda e a volta dele
+    tem_ipmi = bool(getattr(getattr(ctx, "ipmi", None), "disponivel", False))
+    while esperado <= limite_s:
+        responde = tem_ipmi and ctx.executor.rodar(["ipmitool", "mc", "info"], timeout=20)[0] == 0
+        caiu = caiu or (tem_ipmi and not responde)
+        if (responde and caiu) or (esperado >= SEM_QUEDA_IPMI_S and (responde or not tem_ipmi)):
+            _passo(resultado, "iDRAC", textos.t("py_automatica.idrac_voltou_ipmi" if tem_ipmi else "py_automatica.idrac_sem_ipmi",
+                                                item.get("disponivel"), int(esperado // 60)))  # fmt: skip
+            return True
+        prog.esperando(textos.t("py_automatica.idrac_reiniciando_ipmi", int(esperado // 60)), textos.t("py_automatica.nao_desligue_o_servidor_a"))
+        dormir(INTERVALO_IDRAC_S)
+        esperado += INTERVALO_IDRAC_S
+    _passo(resultado, "iDRAC", textos.t("py_automatica.o_idrac_nao_voltou_a", int(limite_s // 60)), "falhou")
+    return False
 
 def _letra(resultado: dict[str, Any]) -> str:
     return "b" if any(t["caminho"] == "b" and t["situacao"] == "ok" for t in resultado.get("tentativas") or []) else "a"
@@ -1200,6 +1230,7 @@ def _reiniciar(ctx: Any, executor: Any, raiz: Path, resultado: dict[str, Any], d
         return
     if detalhe:
         _passo(resultado, textos.t("py_automatica.reinicio"), detalhe, "aviso")
+    prog.gravar_log()
     ok, erro = executor.reiniciar_para_aplicar()
     resultado["situacao"] = "aguardando_reinicio" if ok else "aguardando_reinicio_manual"
     resultado["mensagem"] = (textos.t("py_automatica.reiniciando_para_aplicar_o_msscan") if ok

@@ -455,9 +455,9 @@ class TestFrontend:
 
     def test_atalhos_documentados(self):
         js = ESTATICOS_TEXTO["app.js"]
-        for teclas in ('[["?"]', '[["/"]', '[["g", "i"]', '[["g", "d"]', '[["g", "r"]', '[["g", "c"]', '[["g", "a"]', '[["g", "t"]', '[["g", "s"]', '[["Ctrl", "+"]'):
+        for teclas in ('[["?"]', '[["/"]', '[["g", "i"]', '[["g", "d"]', '[["g", "h"]', '[["g", "r"]', '[["g", "c"]', '[["g", "a"]', '[["g", "t"]', '[["g", "s"]', '[["Ctrl", "+"]'):
             assert teclas in js
-        assert '{ i: "inicio", d: "diagnostico", r: "relatorios", c: "chat", a: "atualizacoes", t: "terminal", s: "sobre" }' in js
+        assert '{ i: "inicio", d: "diagnostico", h: "discos", r: "relatorios", c: "chat", a: "atualizacoes", t: "terminal", s: "sobre" }' in js
 
 
 class TestRegrasDeSegurancaDaInterface:

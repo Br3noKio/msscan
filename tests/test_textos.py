@@ -18,7 +18,7 @@ CENTRAL = textos.carregar()
 MODULOS_PY = ["msscan/interface/sessao.py", "msscan/interface/manual.py", "msscan/interface/servidor.py", "msscan/acesso_idrac.py",
               "msscan/atualizacao/jobs.py", "msscan/atualizacao/progresso.py", "msscan/atualizacao/liberacao.py",
               "msscan/atualizacao/aviso.py", "main.py", "msscan/atualizacao/automatica.py", "msscan/atualizacao/aplicacao.py",
-              "msscan/atualizacao/verificacao.py"] + sorted(str(p.relative_to(RAIZ)) for p in (RAIZ / "msscan/relatorio").glob("*.py"))  # fmt: skip
+              "msscan/atualizacao/verificacao.py", "msscan/discos.py"] + sorted(str(p.relative_to(RAIZ)) for p in (RAIZ / "msscan/relatorio").glob("*.py"))  # fmt: skip
 """Módulos cujos textos chegam direto à interface (respostas da API, caixas, plano de atualização, faixa de segurança), ao modo
 texto (``main.py``), aos relatórios e às mensagens do motor de atualização."""
 PERMITIDOS_PY = {

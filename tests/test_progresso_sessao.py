@@ -32,6 +32,46 @@ def test_log_automatico_a_cada_etapa_no_mesmo_arquivo(tmp_path):
     assert "Enviando ao iDRAC" in json.dumps(dados, ensure_ascii=False)
 
 
+
+def test_log_final_gravado_ao_terminar_a_instalacao_mesmo_com_erro(tmp_path):
+    """Pedido de 22/10/2026: toda instalação (ou tentativa) deixa o log técnico final no pendrive, sem o técnico lembrar."""
+    sessao = sessao_concluida()
+    sessao.replay, sessao.pasta_dados = False, str(tmp_path)
+    sessao.aplicacao = {"situacao": "executando", "mensagem": ""}
+
+    def falha():
+        raise RuntimeError("pacote recusado")
+
+    sessao._em_segundo_plano(falha)
+    sessao.aguardar()
+    logs = list((tmp_path / "logs").glob("*_auto.json"))
+    assert len(logs) == 1 and "pacote recusado" in logs[0].read_text(encoding="utf-8")
+
+
+def test_print_da_tela_ao_lado_do_log_automatico(tmp_path, monkeypatch):
+    """Pedido de 22/10/2026: print da tela (scrot, na RAM) gravado no pendrive com o nome do log automático."""
+    from pathlib import Path
+
+    sessao = sessao_concluida()
+    sessao.replay, sessao.pasta_dados = False, str(tmp_path)
+    sessao.aplicacao = {"situacao": "falhou", "mensagem": ""}
+    sessao.log_automatico()
+    monkeypatch.setenv("DISPLAY", ":0")
+    comandos = []
+
+    def rodar(cmd, timeout=0):
+        comandos.append(cmd)
+        Path(cmd[-1]).write_bytes(b"\x89PNG")
+        return 0, "", ""
+
+    monkeypatch.setattr(sessao.executor, "rodar", rodar)
+    sessao.print_tela()
+    prints = list((tmp_path / "logs").glob("*_auto_tela_*.png"))
+    assert comandos[0][:2] == ["scrot", "-o"] and len(prints) == 1 and prints[0].read_bytes() == b"\x89PNG"
+    monkeypatch.delenv("DISPLAY")  # sem X (SSH, modo texto): nada
+    sessao.print_tela()
+    assert len(comandos) == 1
+
 def test_log_automatico_sem_pendrive_nao_grava_nem_quebra(tmp_path):
     sessao = sessao_concluida()  # replay: nada vai para o pendrive
     prog = _executando(sessao)

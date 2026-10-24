@@ -111,6 +111,10 @@ class Progresso:
         self.aviso_imediato = texto
         self._mudou()
 
+    def gravar_log(self) -> None:
+        """Log automático agora (antes do reinício: o processo pode não ter outra chance)."""
+        self._mudou()
+
     def pedir_parada(self) -> None:
         self.parar_pedido = True
 

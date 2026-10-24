@@ -61,3 +61,24 @@ def test_cache_junta_os_bin_ao_catalogo_em_uso(tmp_path) -> None:
     caminho_cache(str(tmp_path), ARQUIVO_LINUX).write_bytes(LINUX.read_bytes())
     dados = catalogo_em_cache(str(tmp_path))
     assert dados["versao"] == parse_catalogo_dell(RECORTE.read_bytes())["versao"] and len(dados["bin_linux"]) == 2
+
+
+def test_idrac_pelo_bin_sem_redfish_confere_a_volta_pelo_ipmi() -> None:
+    """Pedido de 22/10/2026: sem Redfish, o firmware do iDRAC pelo .BIN virava "o iDRAC não voltou" na hora (falha falsa)."""
+    from types import SimpleNamespace
+
+    from msscan.atualizacao import automatica
+
+    respostas = iter([1, 1, 0])  # IPMI sai do ar no reinício do iDRAC e volta
+    executor = SimpleNamespace(rodar=lambda cmd, timeout: (next(respostas), "", ""))
+    ctx = SimpleNamespace(bmc=None, executor=executor, ipmi=SimpleNamespace(disponivel=True))
+    resultado = {"passos": []}
+    assert automatica.esperar_idrac_atualizado(ctx, resultado, lambda s: None, {"disponivel": "7.00.00.185"})
+    assert "voltou a responder (IPMI local)" in resultado["passos"][-1]["detalhe"]
+    # Sem IPMI local: espera fixa, sem falha
+    ctx.ipmi.disponivel = False
+    assert automatica.esperar_idrac_atualizado(ctx, {"passos": []}, lambda s: None, {"disponivel": "7.00.00.185"})
+    # IPMI nunca volta: falha real
+    executor.rodar = lambda cmd, timeout: (1, "", "")
+    ctx.ipmi.disponivel = True
+    assert not automatica.esperar_idrac_atualizado(ctx, {"passos": []}, lambda s: None, {"disponivel": "x"})

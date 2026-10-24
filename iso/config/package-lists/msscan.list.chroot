@@ -85,6 +85,8 @@ kbd
 nftables
 # 22.5: acesso SSH/SFTP ao MSscan, DESLIGADO por padrão (ligado pela aba Terminal ou msscan.ssh=1)
 openssh-server
+# Print da tela ao fim de cada instalação, ao lado do log técnico automático (pedido de 22/10/2026)
+scrot
 # Navegador integrado (fase 11): esconder/mostrar a janela do navegador ("Voltar ao MSscan")
 xdotool
 # Aba Terminal (CLAUDE.md 15.5): xterm.js local (sem CDN), servido pelo MSscan em /estaticos/xterm/

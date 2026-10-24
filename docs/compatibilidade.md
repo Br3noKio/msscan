@@ -40,6 +40,8 @@ O restante foi testado com coletas reais gravadas, simuladores e mockups, mas n�
 - **RAID de hardware pelas ferramentas do fabricante** (perccli/storcli, ssacli, arcconf): as saídas são coletadas, mas
   ainda não interpretadas, por falta de coletas reais. Sem credenciais, o RAID vem dos sensores de baia e bateria do BMC;
   sem problema indicado, aparece como não verificado. RAID por software (`mdadm`) funciona.
+- **Autoteste e varredura de superfície** e o **mapa por posição** (pente desabilitado) foram testados com coletas
+  reais e simulação, ainda não em hardware. A saúde % é estimativa do MSscan, não o número do fabricante.
 - **Atualização em iDRAC7/8:** BIOS, placas de rede e exportação de configuração ainda sem validação física.
 - **Repositório pelo iDRAC:** no R640 o iDRAC não buscou o repositório (RED110); o MSscan troca sozinho para o envio
   direto, que é o padrão até 2 componentes. Exige licença Enterprise ou Datacenter; o iDRAC8 não faz pelo racadm local.
