@@ -22,6 +22,7 @@ from datetime import datetime
 from typing import Any
 
 from msscan import __version__
+from msscan import envio_dados
 from msscan.core.executor import MOTIVO_TRAVA, MOTIVO_TRAVA_ACOES, Executor
 from msscan.core.gravando import em_gravacao, gravando
 from msscan.core.modelo import Resultado
@@ -248,6 +249,9 @@ class Sessao:
         """``ControleTela`` (resolução pela tela Sobre); ``None`` fora da interface em tela cheia."""
         self._trava_escrita = threading.RLock()
         """Uma janela de escrita no pendrive por vez (chat e pareamento gravam fora da tarefa em segundo plano)."""
+        self._trava_envio = threading.Lock()
+        self.envio_dados: dict[str, Any] = {"situacao": "nao_enviado", "impressao": None}
+        """Envio automático ao banco da MSServer (CLAUDE.md 33): última situação e impressão do conteúdo enviado."""
         self._janela_aberta = False
         """A thread dona de ``_trava_escrita`` já abriu a janela (o log automático grava dentro da atualização)."""
         self._log_auto: Path | None = None
@@ -495,6 +499,34 @@ class Sessao:
             ctx = self.ctx
         if ctx is not None:
             self._baixar_idrac_tools(ctx)
+        self.enviar_dados()
+
+    def enviar_dados(self) -> None:
+        """Envio automático, sem botão, dos dados ANONIMIZADOS ao banco da MSServer (CLAUDE.md 33).
+
+        Em segundo plano (nunca segura a interface nem a tarefa em andamento), só com internet e relatório pronto; o mesmo
+        conteúdo não vai duas vezes. Replay e coleta não enviam (o executor deles não tem esse envio).
+        """
+        with self._trava:
+            relatorio = self.relatorio
+            internet = bool(self.rede and self.rede.ok) and not (self.monitor is not None and not self.monitor.ok)
+        if relatorio is None or self.replay or not internet:
+            return
+
+        def enviar() -> None:
+            if not self._trava_envio.acquire(blocking=False):
+                return  # já há um envio em andamento; o próximo gatilho manda a versão mais nova
+            try:
+                with self._trava:
+                    ultima = self.envio_dados.get("impressao")
+                impressao, situacao = envio_dados.enviar(self.executor, relatorio, nomes_do_host(self.executor), ultima)
+                with self._trava:
+                    self.envio_dados = {"situacao": situacao, "impressao": impressao or ultima,
+                                        "quando": time.strftime("%d/%m/%Y %H:%M:%S")}  # fmt: skip
+            finally:
+                self._trava_envio.release()
+
+        threading.Thread(target=enviar, name="msscan-envio-dados", daemon=True).start()
 
     def _detectar(self) -> None:
         with self._trava:
@@ -622,6 +654,7 @@ class Sessao:
                 "mensagem": gravacao.mensagem,
             }
             self.etapa = CONCLUIDO
+        self.enviar_dados()
         if somente is None and anterior is None:
             self._ler_jobs_idrac()
             self._continuar_automatico()
@@ -1330,6 +1363,7 @@ class Sessao:
         pasta = Path(self.gravacao["pasta"]) if self.gravacao and self.gravacao["pasta"] else None
         gravar_relatorios(relatorio, self._texto_completo(relatorio), self.pasta_dados, self.replay,
                           persistente=self.local is None or self.local.persistente, pasta=pasta)  # fmt: skip
+        self.enviar_dados()
 
     def prechecar_desfazer(self, indice: int) -> tuple[bool, str]:
         """Botão "Desfazer": relê o BMC e os valores guardados no pendrive e mostra a prévia (só leitura)."""

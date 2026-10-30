@@ -2,7 +2,8 @@
 
 **Diagnóstico de servidores físicos e atualização de firmware Dell, a partir de um pendrive.**
 
-> Projeto corporativo. Código disponível só para consulta; uso e cópia não autorizados ([LICENSE](LICENSE)).
+> Software proprietário da MSServer, de código fechado. Só a imagem ISO oficial é distribuída, com uso livre;
+> redistribuir, modificar ou fazer engenharia reversa exige autorização ([LICENSE](LICENSE)).
 
 O MSscan é um sistema inicializável (Debian 13) que detecta o que o servidor oferece, diagnostica cada componente sem
 tocar nos dados do cliente, mostra onde está cada problema no chassi e, nos servidores Dell, instala as atualizações de
@@ -22,12 +23,14 @@ firmware do catálogo oficial com uma única confirmação e retomada automátic
 - **Mapa por posição:** slot a slot, qual peça funciona e onde está a ruim (ex.: pente não reconhecido no POST).
 - **Histórico × atual:** eventos antigos do controlador não são tratados como falhas atuais.
 - **Localização física** de cada problema ("DIMM A2 (CPU1)", "Fonte 1"), com mapa e modelo 3D do chassi.
-- **Relatórios** em TXT, HTML e JSON no pendrive, e log técnico automático.
+- **Relatórios** em TXT, HTML e JSON no pendrive, e log técnico automático; com internet, uma cópia anonimizada vai
+  sozinha para o banco de dados da MSServer.
 - **Análise por IA e conversa** (opcionais), com dados sanitizados antes do envio.
 - **Atualização de firmware Dell:** catálogo oficial, SHA-256 conferido, plano com ordem e reinícios, bloqueios por saúde
   do hardware, instalação automática e relatório antes × depois.
 - **Ações corretivas** com confirmação: NTP do controlador, limpeza do registro de eventos (depois de exportado), IP fixo do iDRAC.
-- Interface gráfica por teclado e mouse (800x600 a 1920x1080); terminal e SSH opcionais, desligados por padrão.
+- Interface gráfica com a identidade MSServer, por teclado e mouse (800x600 a 1920x1080); terminal e SSH opcionais,
+  desligados por padrão.
 
 ## Cobertura
 
@@ -81,6 +84,11 @@ Histórico de versões: [CHANGELOG.md](CHANGELOG.md).
 
 **Altera os discos do cliente?** Não. Não monta, não lê e não altera partições ou volumes RAID do cliente.
 
+**O MSscan envia dados para fora?** Com internet, envia sozinho uma cópia **anonimizada** de cada relatório para o banco
+de dados da MSServer (modelo, versões de firmware, peças e resultado do diagnóstico), para melhorar as próximas versões.
+Saem antes serial, service tag, UUID, asset tag, MAC, IP, nome do host e WWN; senhas, chaves e dados dos discos nunca.
+Detalhes em [Segurança](docs/seguranca.md#dados-enviados-para-fora).
+
 **A senha do iDRAC fica salva?** Não. Fica só na memória durante a execução.
 
 **E se a energia cair durante a atualização?** O estado fica no pendrive; no próximo boot por ele, o MSscan confere o que
@@ -89,9 +97,10 @@ do próprio fabricante.
 
 ## Licença
 
-Copyright (C) 2026 Breno. Todos os direitos reservados.
+Copyright (C) 2026 Breno / MSServer. Todos os direitos reservados.
 
-O código está disponível **apenas para consulta**: pode ser lido para verificar o que o MSscan faz, mas não pode ser
-usado, copiado, modificado nem redistribuído sem autorização por escrito. Termos completos em [LICENSE](LICENSE).
+Software proprietário, de **código fechado**: só a imagem ISO oficial é disponibilizada para download, e pode ser usada sem
+custo para diagnosticar e atualizar servidores. Redistribuir, modificar ou fazer engenharia reversa exige autorização por
+escrito. Termos completos em [LICENSE](LICENSE).
 
 Créditos e licenças de terceiros em [docs/licencas.md](docs/licencas.md).

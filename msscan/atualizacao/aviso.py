@@ -3,7 +3,7 @@
 Vale para os três caminhos (catálogo, pacote manual e navegador integrado) e para a interface e o modo texto:
 
 - o que será instalado (componente, atual → nova, data, origem, hash);
-- ordem (menor risco primeiro, BIOS por último), tempo estimado e número de reinícios;
+- ordem (iDRAC primeiro, BIOS por último; o resto num reinício só), tempo estimado e número de reinícios;
 - hardware conferido NA HORA (o chamador relê fontes, memória, RAID, sensores e ventoinhas antes de montar o aviso):
   fonte com defeito, erro de memória não corrigível, RAID degradado/em reconstrução, sensor ou ventoinha crítica
   BLOQUEIAM; redundância de energia perdida é destacada e pede a confirmação extra ``SEM REDUNDANCIA``;
@@ -39,10 +39,10 @@ ITEM_HISTORICO = textos.t("py_aviso.item_historico")
 """``historico``: evento crítico só no log do BMC (não confirmado agora) — aviso com a confirmação ``TEXTO_CIENTE``."""
 SEM_VERIFICACAO = textos.t("py_aviso.sem_verificacao")
 
-# Ordem de instalação (pedido do usuário, 09/10/2026; substitui o "iDRAC primeiro" da 21.3): do menor para o maior risco —
-# placas de rede, depois os demais componentes, depois o iDRAC SOZINHO (esperando ele voltar com a versão nova) e a BIOS
-# por último, também sozinha. Antes de um item sozinho, o que ficou agendado é aplicado num reinício e conferido.
-PESO_IDRAC, PESO_BIOS = 8, 9
+# Ordem de instalação (pedido do usuário, 26/10/2026; substitui a de 09/10/2026): o iDRAC PRIMEIRO e sozinho (aplicado na
+# hora pelo próprio iDRAC, sem reiniciar o servidor; esperando ele voltar com a versão nova) e depois todo o resto — placas de
+# rede, demais componentes e a BIOS por último — agendado junto (``OnReset``) para UM reinício só (21.3).
+PESO_IDRAC, PESO_BIOS = 0, 9
 _ORDEM = (("idrac", PESO_IDRAC), ("lifecycle", PESO_IDRAC), ("integrated dell remote access", PESO_IDRAC), ("diagnostic", 2),
           ("network", 1), ("fibre", 1), ("nic", 1), ("ethernet", 1), ("sas", 3), ("raid", 3), ("storage", 3), ("power", 4),
           ("cpld", 5), ("chipset", 5), ("bios", PESO_BIOS))  # fmt: skip
@@ -65,18 +65,18 @@ def peso_ordem(item: dict[str, Any]) -> int:
 
 
 def ordenar(itens: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Placas de rede, demais, iDRAC e BIOS por último (ordenação estável: empate mantém a ordem recebida)."""
+    """iDRAC primeiro, depois placas de rede, demais e BIOS por último (ordenação estável: empate mantém a ordem recebida)."""
     return sorted(itens, key=peso_ordem)
 
 
 def eh_idrac(item: dict[str, Any]) -> bool:
-    """Firmware do próprio iDRAC (com Lifecycle Controller): instalado sozinho, depois dos demais e antes da BIOS."""
+    """Firmware do próprio iDRAC (com Lifecycle Controller): instalado sozinho, antes de todos os outros."""
     return peso_ordem(item) == PESO_IDRAC
 
 
 def sozinho(item: dict[str, Any]) -> bool:
-    """iDRAC e BIOS: instalados sozinhos, cada um depois de o anterior ser confirmado (parar na primeira falha)."""
-    return peso_ordem(item) in (PESO_IDRAC, PESO_BIOS)
+    """Só o iDRAC vai sozinho (o reinício dele derrubaria o envio dos outros); a BIOS entra no reinício único (26/10/2026)."""
+    return eh_idrac(item)
 
 
 def minutos_item(item: dict[str, Any]) -> int:

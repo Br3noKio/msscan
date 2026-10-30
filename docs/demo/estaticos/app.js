@@ -1578,7 +1578,7 @@ function renderizarAviso(atu) {
     el("strong", { texto: i.componente }), " " + (i.atual || "?") + " → " + (i.nova || "?") + (i.data ? " (" + i.data + ")" : ""),
     el("ul", { classe: "lista-simples texto-sec pequeno" }, ...[i.origem, T("renderizar_aviso.hash") + i.hash, i.rollback,
       T("renderizar_aviso.cerca_de") + ((porItem[n] || {}).minutos || "?") + " min" + ((porItem[n] || {}).sozinho
-        ? T((porItem[n] || {}).idrac ? "renderizar_aviso.firmware_do_idrac_sozinho_e" : "renderizar_aviso.bios_sozinha") : ""),
+        ? T("renderizar_aviso.firmware_do_idrac_sozinho_e") : ""),
       i.reinicio ? ((porItem[n] || {}).sozinho ? T("renderizar_aviso.exige_reinicio_do_servidor_um")
         : T("renderizar_aviso.exige_reinicio_do_servidor_junto")) : T("renderizar_aviso.sem_reinicio_do_servidor")].map((t) => el("li", { texto: t }))))));
   // Sem itens (seleção antiga ou verificação refeita), "0 min, 0 reinícios" enganaria: some e o bloqueio explica.
@@ -3668,15 +3668,19 @@ function animarTroca(nomeTela) {
   tela.addEventListener("animationend", () => tela.classList.remove(sentido), { once: true });
 }
 
-/* Largura útil (já descontado o zoom): três colunas a partir de 1400 px; uma coluna abaixo de 900 px. */
+/* Largura útil (já descontado o zoom). Redesign v3 (29/10/2026): barra lateral recolhida (só o número da etapa) abaixo
+   de 1100 px; cabeçalho só com os indicadores em atenção ou falha abaixo de 1240 px; painel rápido como coluna fixa a partir
+   de 1600 px ("tres-colunas"; a visão do servidor fica sempre na gaveta); uma coluna abaixo de 900 px. */
 function ajustarLayout() {
   const largura = window.innerWidth / zoomAtual();
-  const tres = largura >= 1400;
+  const tres = largura >= 1600;
   document.body.classList.toggle("tres-colunas", tres);
+  document.body.classList.toggle("compacto", largura < 1100);
+  document.body.classList.toggle("cabecalho-curto", largura < 1240);
   document.body.classList.toggle("estreito", largura < 900);
   const barra = $("barra");
   document.documentElement.style.setProperty("--topo-gaveta", (barra.offsetTop + barra.offsetHeight + 8) + "px");
-  if (tres) fecharGavetas(false);
+  if (tres && $("painel-rapido").classList.contains("aberta")) fecharGavetas(false);
 }
 
 /* ---------------------------------------------------------------- gavetas (colunas laterais em telas menores) */
@@ -3685,7 +3689,7 @@ let focoAntesDaGaveta = null;
 function gavetaAberta() { return document.querySelector(".painel-lateral.aberta"); }
 
 function abrirGaveta(id) {
-  if (document.body.classList.contains("tres-colunas")) return;
+  if (id === "painel-rapido" && document.body.classList.contains("tres-colunas")) return;
   const painel = $(id);
   const ja = painel.classList.contains("aberta");
   fecharGavetas(false);

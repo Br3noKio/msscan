@@ -31,11 +31,11 @@ def situacoes(medido: dict) -> dict[str, str]:
     return {linha["item"]: linha["situacao"] for linha in avaliar_hardware(medido)}
 
 
-def test_ordem_rede_demais_idrac_e_bios_por_ultimo():
-    """09/10/2026: placas de rede, demais componentes, iDRAC e BIOS por último."""
+def test_ordem_idrac_primeiro_e_bios_por_ultimo():
+    """26/10/2026: iDRAC primeiro, depois placas de rede, demais componentes e BIOS por último."""
     itens = [{"id": "b", "categoria": "BIOS"}, {"id": "i", "categoria": "iDRAC with Lifecycle Controller"},
              {"id": "x", "categoria": "Desconhecida"}, {"id": "n", "categoria": "Network"}, {"id": "r", "categoria": "SAS RAID"}]  # fmt: skip
-    assert [i["id"] for i in ordenar(itens)] == ["n", "r", "x", "i", "b"]
+    assert [i["id"] for i in ordenar(itens)] == ["i", "n", "r", "x", "b"]
 
 
 def test_estimativa_conta_reinicios():
@@ -44,13 +44,13 @@ def test_estimativa_conta_reinicios():
     assert [p["minutos"] for p in est["por_item"]] == [10, 5]
 
 
-def test_estimativa_agrupa_reinicios_e_idrac_e_bios_sozinhos():
-    """RAID num reinício; iDRAC (que exige reinício aqui) e BIOS, cada um no seu (09/10/2026)."""
+def test_estimativa_agrupa_reinicios_com_a_bios_e_idrac_sozinho():
+    """RAID e BIOS no MESMO reinício; só o iDRAC (que exige reinício aqui) no seu (26/10/2026)."""
     itens = [{"categoria": "iDRAC with Lifecycle Controller", "reinicio": True}, {"categoria": "SAS RAID", "reinicio": True},
              {"categoria": "BIOS", "reinicio": True}]
     est = estimativa(itens)
-    assert est["reinicios"] == 3
-    assert [p["sozinho"] for p in est["por_item"]] == [True, False, True]
+    assert est["reinicios"] == 2
+    assert [p["sozinho"] for p in est["por_item"]] == [True, False, False]
     assert estimativa([{"categoria": "Network", "reinicio": False}])["reinicios"] == 0
 
 

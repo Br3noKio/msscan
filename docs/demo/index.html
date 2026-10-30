@@ -16,23 +16,11 @@
   <header class="barra" id="barra">
     <div class="barra-esq">
       <button type="button" class="pilula pilula-botao botao-gaveta" id="gaveta-esq-botao" aria-controls="painel-servidor" aria-expanded="false" data-t-aria-label="barra.visao_do_servidor" data-t-title="barra.visao_do_servidor"><span data-icone="panel-left" aria-hidden="true"></span></button>
-      <span class="pilula marca">
-        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 8.5h7M7 12h10M7 15.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15" cy="15.5" r="1.3" class="logo-led"/></svg>
-        <span class="nome-app" data-t="geral.msscan"></span>
+      <span class="marca">
+        <img class="logo" src="estaticos/logo-msserver.png" width="104" height="26" data-t-alt="geral.logo_msserver">
+        <span class="separador" aria-hidden="true"></span>
+        <span class="marca-texto"><span class="nome-app" data-t="geral.msscan"></span><span class="marca-sub" data-t="geral.diagnostico_de_servidores"></span></span>
       </span>
-      <nav class="espacos" data-t-aria-label="geral.telas">
-        <ul role="tablist" id="abas">
-          <li><a role="tab" href="#/inicio" data-tela="inicio" id="aba-inicio"><span class="num" aria-hidden="true">1</span><span data-icone="home" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.inicio"></span></a></li>
-          <li><a role="tab" href="#/diagnostico" data-tela="diagnostico" id="aba-diagnostico"><span class="num" aria-hidden="true">2</span><span data-icone="pulse" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.diagnostico"></span><span class="contador" id="contador-problemas" hidden></span></a></li>
-          <li><a role="tab" href="#/discos" data-tela="discos" id="aba-discos"><span class="num" aria-hidden="true">3</span><span data-icone="hard-drive" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.discos"></span><span class="contador" id="contador-discos" hidden></span></a></li>
-          <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">4</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
-          <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">5</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
-          <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">6</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
-          <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">7</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
-          <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">8</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
-          <li class="aba-sem-espaco"><a role="tab" href="#/sobre" data-tela="sobre" id="aba-sobre"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.configuracoes"></span></a></li>
-        </ul>
-      </nav>
     </div>
     <div class="barra-centro">
       <span class="pilula pilula-servidor"><span data-icone="server" aria-hidden="true"></span><span class="modelo" id="modelo" data-t-aria-label="geral.servidor" data-t="geral.detectando"></span><span class="separador" aria-hidden="true"></span><time class="relogio" id="relogio"></time></span>
@@ -80,6 +68,30 @@
     </div>
   </div>
 
+  <!-- Redesign v3 (29/10/2026): barra lateral com as oito etapas e, no pé, as ações rápidas e a versão -->
+  <div class="corpo">
+  <nav class="espacos lateral" id="lateral" data-t-aria-label="geral.telas">
+    <ul role="tablist" id="abas">
+      <li><a role="tab" href="#/inicio" data-tela="inicio" id="aba-inicio"><span class="num" aria-hidden="true">1</span><span data-icone="home" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.inicio"></span></a></li>
+      <li><a role="tab" href="#/diagnostico" data-tela="diagnostico" id="aba-diagnostico"><span class="num" aria-hidden="true">2</span><span data-icone="pulse" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.diagnostico"></span><span class="contador" id="contador-problemas" hidden></span></a></li>
+      <li><a role="tab" href="#/discos" data-tela="discos" id="aba-discos"><span class="num" aria-hidden="true">3</span><span data-icone="hard-drive" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.discos"></span><span class="contador" id="contador-discos" hidden></span></a></li>
+      <li><a role="tab" href="#/ia" data-tela="ia" id="aba-ia"><span class="num" aria-hidden="true">4</span><span data-icone="sparkles" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.ia"></span></a></li>
+      <li><a role="tab" href="#/chat" data-tela="chat" id="aba-chat"><span class="num" aria-hidden="true">5</span><span data-icone="message" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.chat"></span><span class="contador" id="contador-chat" hidden></span></a></li>
+      <li><a role="tab" href="#/atualizacoes" data-tela="atualizacoes" id="aba-atualizacoes"><span class="num" aria-hidden="true">6</span><span data-icone="download" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.atualizacoes"></span></a></li>
+      <li><a role="tab" href="#/relatorios" data-tela="relatorios" id="aba-relatorios"><span class="num" aria-hidden="true">7</span><span data-icone="file" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.relatorio"></span></a></li>
+      <li><a role="tab" href="#/terminal" data-tela="terminal" id="aba-terminal"><span class="num" aria-hidden="true">8</span><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-espaco" data-t="geral.terminal"></span></a></li>
+      <li class="aba-sem-espaco"><a role="tab" href="#/sobre" data-tela="sobre" id="aba-sobre"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-espaco" data-t="barra.configuracoes"></span></a></li>
+    </ul>
+    <div class="doca" id="doca" data-t-aria-label="doca.acoes_rapidas">
+      <button type="button" class="item-doca" id="doca-refazer"><span data-icone="sync" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.refazer_diagnostico"></span></button>
+      <button type="button" class="item-doca" id="doca-relatorio"><span data-icone="file-down" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.exportar_relatorio"></span></button>
+      <button type="button" class="item-doca" id="doca-terminal"><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-doca" data-t="geral.terminal"></span></button>
+      <button type="button" class="item-doca" id="doca-drivers"><span data-icone="external-link" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pagina_de_drivers"></span></button>
+      <button type="button" class="item-doca" id="doca-downloads"><span data-icone="file-directory" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pasta_de_downloads"></span></button>
+      <button type="button" class="item-doca" id="doca-config"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-doca" data-t="barra.configuracoes"></span></button>
+      <span class="doca-versao" id="rodape-versao"></span>
+    </div>
+  </nav>
   <div class="mesa" id="mesa">
   <!-- Coluna esquerda: visão do servidor (identidade, versões, peças, sensores com barras) -->
   <aside class="painel painel-lateral" id="painel-servidor" tabindex="-1" aria-labelledby="painel-servidor-titulo">
@@ -836,16 +848,7 @@
     </div>
   </aside>
   </div>
-  <!-- Doca inferior: ações rápidas -->
-  <nav class="doca" id="doca" data-t-aria-label="doca.acoes_rapidas">
-    <button type="button" class="item-doca" id="doca-refazer"><span data-icone="sync" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.refazer_diagnostico"></span></button>
-    <button type="button" class="item-doca" id="doca-relatorio"><span data-icone="file-down" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.exportar_relatorio"></span></button>
-    <button type="button" class="item-doca" id="doca-terminal"><span data-icone="terminal" aria-hidden="true"></span><span class="rotulo-doca" data-t="geral.terminal"></span></button>
-    <button type="button" class="item-doca" id="doca-drivers"><span data-icone="external-link" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pagina_de_drivers"></span></button>
-    <button type="button" class="item-doca" id="doca-downloads"><span data-icone="file-directory" aria-hidden="true"></span><span class="rotulo-doca" data-t="doca.pasta_de_downloads"></span></button>
-    <button type="button" class="item-doca" id="doca-config"><span data-icone="gear" aria-hidden="true"></span><span class="rotulo-doca" data-t="barra.configuracoes"></span></button>
-    <span class="doca-versao" id="rodape-versao"></span>
-  </nav>
+  </div>
   <div class="fundo-gaveta" id="fundo-gaveta" hidden></div>
 
   <!-- Diálogo de atalhos (?) -->

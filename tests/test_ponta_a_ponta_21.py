@@ -71,33 +71,26 @@ def _com_idrac_e_bios(raiz: Path) -> dict:
     return verificacao
 
 
-def test_ordem_rede_demais_idrac_sozinho_e_bios_por_ultimo(tmp_path, ipmi):
-    """09/10/2026: placas de rede e demais num reinício; na volta, o iDRAC sozinho (esperando ele voltar JÁ com a versão
-    nova, M3) e a BIOS por último, sozinha, num reinício próprio."""
+def test_idrac_primeiro_e_o_resto_num_reinicio_so(tmp_path, ipmi):
+    """26/10/2026: o iDRAC primeiro e sozinho (esperando ele voltar JÁ com a versão nova, M3); depois rede, CPLD e BIOS
+    agendados juntos para UM reinício só."""
     raiz = tmp_path / "MSSCAN"
     verificacao = _com_idrac_e_bios(raiz)
     plano = montar_plano(verificacao, ["item3", "item0", "item2", "item1"])
-    assert [i["componente"] for i in plano["itens"]] == ["Rede X710", "CPLD", "iDRAC", "BIOS"]
-    roteiros = [[], [], [_tarefa("Running", "Running", "Updating", 50), {**CONCLUIDA, "_reiniciar": 3}], []]
+    assert [i["componente"] for i in plano["itens"]] == ["iDRAC", "Rede X710", "CPLD", "BIOS"]
+    roteiros = [[_tarefa("Running", "Running", "Updating", 50), {**CONCLUIDA, "_reiniciar": 3}], [], [], []]
     with sim.BMCSimulado(tmp_path, ipmi, repositorio=False, roteiros=roteiros, idrac_novo="7.10.30.00") as bmc:
         executor = sim.ExecutorSimulador(ipmi, tmp_path)
         ctx = _ctx(executor)
         assert tentar_redfish(ctx, "127.0.0.1", bmc.server_address[1], "teste")
         resultado = executar_plano(ctx, plano, executor, str(raiz), MODO_APLICAR, dormir=NADA)
-        # 1º ciclo: rede e CPLD agendados juntos; o iDRAC não começa antes de o reinício aplicá-los e a volta conferir.
-        assert [f["nome"] for f in bmc.firmware] == [Path(CAMINHO_NIC).name, Path(CAMINHO_CPLD).name]
+        assert [f["nome"] for f in bmc.firmware] == [Path(c).name for c in (CAMINHO_IDRAC, CAMINHO_NIC, CAMINHO_CPLD, CAMINHO_BIOS)]
+        assert ("idrac_reiniciou", 3) in bmc.eventos
+        assert any("voltou com o firmware novo (7.10.30.00)" in p["detalhe"] for p in resultado["passos"]), resultado["passos"]
         assert resultado["situacao"] == "aguardando_reinicio" and executor.reinicios == 1, resultado["mensagem"]
         estado = ler_estado(executor, str(raiz))
-        assert [i["componente"] for i in estado["enviados"]] == ["Rede X710", "CPLD"]
-        assert [i["componente"] for i in estado["pendentes"]] == ["iDRAC", "BIOS"]
-        assert any("instalado sozinho" in p["detalhe"] for p in resultado["passos"])
-        # 2º ciclo (retomada): iDRAC sozinho, espera a versão nova; depois a BIOS, agendada para o próprio reinício.
-        retomada = automatica.continuar(ctx, executor, str(raiz), estado, HARDWARE_OK, dormir=NADA)
-        assert [f["nome"] for f in bmc.firmware][2:] == [Path(CAMINHO_IDRAC).name, Path(CAMINHO_BIOS).name]
-        assert ("idrac_reiniciou", 3) in bmc.eventos
-        assert any("voltou com o firmware novo (7.10.30.00)" in p["detalhe"] for p in retomada["passos"]), retomada["passos"]
-        assert retomada["situacao"] == "aguardando_reinicio" and executor.reinicios == 2, retomada["mensagem"]
-        assert [i["componente"] for i in ler_estado(executor, str(raiz))["enviados"]] == ["BIOS"]
+        assert [i["componente"] for i in estado["enviados"]] == ["Rede X710", "CPLD", "BIOS"]
+        assert estado["pendentes"] == []
     assert _sem_temporario(ipmi)
 
 

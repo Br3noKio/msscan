@@ -45,12 +45,19 @@ ESTATICOS = {
     "app.js": "text/javascript; charset=utf-8",
     "icones.js": "text/javascript; charset=utf-8",
     "modelo3d.js": "text/javascript; charset=utf-8",
+    # Redesign v3 (29/10/2026): logo oficial da MSServer e fontes Barlow (SIL OFL 1.1), locais (sem CDN).
+    "logo-msserver.png": "image/png",
+    "fontes/Barlow-Regular.ttf": "font/ttf",
+    "fontes/Barlow-Medium.ttf": "font/ttf",
+    "fontes/Barlow-SemiBold.ttf": "font/ttf",
+    "fontes/Barlow-Bold.ttf": "font/ttf",
+    "fontes/BarlowCondensed-SemiBold.ttf": "font/ttf",
 }
 PASTA_THREE = Path("/usr/share/javascript/three")
 ARQUIVOS_THREE = {"three.min.js": "build/three.min.js", "OrbitControls.js": "examples/js/controls/OrbitControls.js"}
 """three.js r111 do pacote Debian ``libjs-three`` (MIT): modelo 3D do chassi (CLAUDE.md 18.1). Lista fixa."""
 CSP_APP = (
-    "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 )
 # O relatório HTML é autocontido com <style> embutido e sem nenhum script.
 CSP_RELATORIO = "default-src 'none'; style-src 'unsafe-inline'; img-src data:; frame-ancestors 'self'"

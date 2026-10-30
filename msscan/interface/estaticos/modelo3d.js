@@ -7,8 +7,14 @@
 (function () {
   "use strict";
 
-  // Cor = estado da peça (msscan/modelo3d.py): verde OK, amarelo atenção, vermelho problema, cinza não verificado.
-  const CORES = { ok: 0x3fb950, atencao: 0xe3b341, problema: 0xf85149, nao_verificado: 0x8b949e };
+  // Estado da peça (msscan/modelo3d.py) → preenchimento e aresta (redesign v3, 29/10/2026): peça escura com a aresta na cor da
+  // situação; atenção e problema também preenchidos na cor. Lambert, não Standard: o vídeo dos servidores desenha por software.
+  const CORES = {
+    ok: { preenchimento: 0x26282d, aresta: 0x34e39a, opacidade: 0.55 },
+    atencao: { preenchimento: 0xb8892a, aresta: 0xffc53d, opacidade: 1 },
+    problema: { preenchimento: 0xb3303f, aresta: 0xff5c72, opacidade: 1 },
+    nao_verificado: { preenchimento: 0x232429, aresta: 0xb4bdd6, opacidade: 1 },
+  };
   const FPS_MINIMO = 20;
 
   function scripts(lista, pronto, falhou) {
@@ -36,8 +42,8 @@
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = 256; canvas.height = 64;
-    ctx.fillStyle = "rgba(13,17,23,0.85)"; ctx.fillRect(0, 0, 256, 64);
-    ctx.fillStyle = "#f0f6fc"; ctx.font = "bold 34px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillStyle = "rgba(14,14,16,0.92)"; ctx.fillRect(0, 0, 256, 64);
+    ctx.fillStyle = "#ededef"; ctx.font = "bold 34px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText(texto, 128, 34);
     const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), depthTest: false }));
     sprite.scale.set(escala * 4, escala, 1);
@@ -109,19 +115,22 @@
 
     const cena = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, largura / altura, 5, 5000);
-    cena.add(new THREE.AmbientLight(0xffffff, 0.65));
-    const luz = new THREE.DirectionalLight(0xffffff, 0.6);
+    cena.add(new THREE.HemisphereLight(0xdfe8ff, 0x101114, 0.85));
+    const luz = new THREE.DirectionalLight(0xffffff, 0.7);
     luz.position.set(-300, 600, 400);
     cena.add(luz);
 
     // Eixos do servidor → three.js: x = profundidade (frente em x=0), y = altura, z = largura (esquerda vista da frente em z=0).
     const centro = new THREE.Vector3(dim.profundidade / 2, dim.altura / 2, dim.largura / 2);
     const chassi = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxBufferGeometry(dim.profundidade, dim.altura, dim.largura)),
-      new THREE.LineBasicMaterial({ color: 0x8b949e }));
+      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 }));
     chassi.position.copy(centro);
     cena.add(chassi);
+    const grade = new THREE.GridHelper(Math.max(dim.profundidade, dim.largura) * 2, 40, 0x24262b, 0x16171a);
+    grade.position.set(centro.x, -1, centro.z);
+    cena.add(grade);
     const fundo = new THREE.Mesh(new THREE.PlaneBufferGeometry(dim.profundidade, dim.largura),
-      new THREE.MeshLambertMaterial({ color: 0x161b22, side: THREE.DoubleSide }));
+      new THREE.MeshLambertMaterial({ color: 0x141518, side: THREE.DoubleSide }));
     fundo.rotation.x = -Math.PI / 2;
     fundo.position.set(centro.x, 0.5, centro.z);
     cena.add(fundo);
@@ -138,13 +147,16 @@
       const cor = CORES[peca.cor] || CORES.nao_verificado;
       const destaque = peca.cor === "problema" || peca.cor === "atencao";
       if (peca.estado === "presente" || peca.problema) {
-        objeto = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: cor, emissive: destaque ? cor : 0x000000,
+        objeto = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: cor.preenchimento, emissive: destaque ? cor.preenchimento : 0x000000,
           emissiveIntensity: destaque ? 0.35 : 0, transparent: peca.estado !== "presente", opacity: peca.estado === "presente" ? 1 : 0.55 }));
+        objeto.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+          new THREE.LineBasicMaterial({ color: cor.aresta, transparent: cor.opacidade < 1, opacity: cor.opacidade })));
         if (peca.problema === "atual") pulsando.push(objeto);
       } else {
-        // Ausente: vazio (só o contorno escuro); presença não verificada: contorno cinza.
-        objeto = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
-          new THREE.LineBasicMaterial({ color: peca.estado === "ausente" ? 0x484f58 : cor }));
+        // Ausente: vazio (só o contorno branco bem apagado); presença não verificada: contorno na cor de "não verificado".
+        objeto = new THREE.LineSegments(new THREE.EdgesGeometry(geo), peca.estado === "ausente"
+          ? new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.16 })
+          : new THREE.LineBasicMaterial({ color: cor.aresta }));
       }
       objeto.position.copy(pos);
       objeto.userData.peca = peca;

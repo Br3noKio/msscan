@@ -164,6 +164,9 @@ def validar_download(url: str) -> str:
     return ""
 
 
+URL_BANCO_DADOS = "https://breno.tail5c3b10.ts.net/msscan/v1/coletas"
+"""Banco de dados da MSServer (CLAUDE.md 33): recebe os relatórios anonimizados. URL fixa, só HTTPS (Tailscale Funnel)."""
+
 URL_IA = "https://api.anthropic.com/v1/messages"
 """URL fixa da Anthropic."""
 HOST_GEMINI = "generativelanguage.googleapis.com"
@@ -1403,6 +1406,18 @@ class Executor:
                 return RespostaIA(None, erro_tipo="cancelado", erro=MENSAGEM_CANCELADO)
         return saida.get("r") or RespostaIA(None, erro_tipo="outro", erro="sem resposta")
 
+    def enviar_dados_servidor(self, corpo: dict[str, Any], timeout: float = 30) -> RespostaIA:
+        """POST dos dados ANONIMIZADOS para o banco da MSServer (CLAUDE.md 33). Só a URL fixa ``URL_BANCO_DADOS``.
+
+        Replay e coleta não enviam nada (só o executor real implementa). No histórico entram só método e URL.
+        """
+        inicio = time.monotonic()
+        resposta = self._enviar_dados_servidor(corpo, timeout)
+        self.historico.append(Execucao(["POST", URL_BANCO_DADOS, "(dados anonimizados omitidos)"],
+                                       resposta.status if resposta.status is not None else RC_FALHA_EXECUCAO,
+                                       time.monotonic() - inicio, self.origem, resposta.erro))  # fmt: skip
+        return resposta
+
     def cancelar_ia(self) -> None:
         """"Cancelar envio": interrompe a requisição à IA em andamento e as tentativas seguintes."""
         self.ia_cancelada.set()
@@ -1448,6 +1463,9 @@ class Executor:
 
     def _post_ia(self, url: str, cabecalhos: dict[str, str], corpo: dict[str, Any], timeout: float) -> RespostaIA:
         return RespostaIA(None, erro_tipo="outro", erro="IA não suportada por este executor")
+
+    def _enviar_dados_servidor(self, corpo: dict[str, Any], timeout: float) -> RespostaIA:
+        return RespostaIA(None, erro_tipo="outro", erro="envio ao banco não suportado por este executor")
 
     def _post_ia_fluxo(self, url: str, cabecalhos: dict[str, str], corpo: dict[str, Any], timeout: float,
                        ao_evento: Callable[[Any], None]) -> RespostaIA:  # fmt: skip
@@ -1722,6 +1740,20 @@ class ExecutorReal(Executor):
         except OSError as erro:
             temporario.unlink(missing_ok=True)
             return RespostaDownload(url, None, erro_tipo="disco", erro=f"não foi possível gravar {destino}: {erro}")
+
+    def _enviar_dados_servidor(self, corpo: dict[str, Any], timeout: float) -> RespostaIA:
+        try:
+            import requests
+        except ImportError:
+            return RespostaIA(None, erro_tipo="outro", erro="python3-requests não instalado")
+        try:
+            with requests.Session() as sessao:
+                # Internet: respeita o proxy de config/proxy.conf; verificação TLS normal; sem seguir redirecionamentos.
+                resposta = sessao.post(URL_BANCO_DADOS, json=corpo, timeout=(15, timeout), allow_redirects=False)
+        except requests.exceptions.RequestException as erro:
+            tipo, mensagem = classificar_erro_http(erro)
+            return RespostaIA(None, erro_tipo=tipo, erro=mensagem)
+        return RespostaIA(resposta.status_code, None)
 
     def _post_ia(self, url: str, cabecalhos: dict[str, str], corpo: dict[str, Any], timeout: float) -> RespostaIA:
         try:

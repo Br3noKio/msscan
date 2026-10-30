@@ -258,10 +258,10 @@ class TestPlano:
         assert not plano["pode_seguir"] and "item99" in plano["recusados"][0]
 
     def test_ordem_rede_demais_idrac_e_bios_por_ultimo(self):
-        """09/10/2026: placas de rede, demais, iDRAC (sozinho) e BIOS sempre por último."""
+        """26/10/2026: iDRAC primeiro (sozinho), placas de rede, demais e BIOS sempre por último."""
         idrac = item("item3", "iDRAC", "iDRAC with Lifecycle Controller", "6.1", "7.0", b"x")
         plano = montar_plano(verificacao(BIOS, idrac, NIC), ["item2", "item3", "item1"])
-        assert [i["componente"] for i in plano["itens"]] == ["Rede X710", "iDRAC", "BIOS"]
+        assert [i["componente"] for i in plano["itens"]] == ["iDRAC", "Rede X710", "BIOS"]
         assert plano["tamanho_total"] == len(CONTEUDO_NIC) + len(CONTEUDO_BIOS) + 1
 
     def test_confirmacoes(self):
@@ -359,12 +359,12 @@ class TestAplicacao:
                                    dormir=lambda _: None)  # fmt: skip
         assert resultado["situacao"] == "aguardando_reinicio"
         operacoes = [e[0] for e in executor.escritas]
-        # 09/10/2026: a BIOS vai sozinha — a rede é agendada e aplicada num reinício; a BIOS fica pendente para a volta.
-        assert operacoes == [EXPORTAR_CONFIGURACAO, ENVIAR_FIRMWARE, BOOT_UNICO_USB]
-        assert executor.escritas[1][3].endswith("Rede_X710.EXE") and executor.escritas[2][2] == CORPO_BOOT_USB
+        # 26/10/2026: rede e BIOS agendadas juntas, aplicadas no MESMO reinício (nada pendente para a volta).
+        assert operacoes == [EXPORTAR_CONFIGURACAO, ENVIAR_FIRMWARE, ENVIAR_FIRMWARE, BOOT_UNICO_USB]
+        assert executor.escritas[1][3].endswith("Rede_X710.EXE") and executor.escritas[3][2] == CORPO_BOOT_USB
         estado = json.loads((tmp_path / "estado" / "atualizacao_pendente.json").read_text())
-        assert [i["componente"] for i in estado["enviados"]] == ["Rede X710"]
-        assert [i["componente"] for i in estado["pendentes"]] == ["BIOS"]
+        assert [i["componente"] for i in estado["enviados"]] == ["Rede X710", "BIOS"]
+        assert estado["pendentes"] == []
         assert executor.comandos_rodados().count(["systemctl", "reboot"]) == 1
         assert "tok" not in json.dumps(estado) and "senha" not in json.dumps(estado)
         assert ["systemctl", "reboot"] in executor.comandos_rodados()

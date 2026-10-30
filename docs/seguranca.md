@@ -25,6 +25,12 @@ Nunca há credencial fixa, padrão ou tentativa automática de senha.
 
 - **Dell:** catálogo e pacotes; o service tag só vai na URL da página de drivers.
 - **IA (opcional):** dados sanitizados (sem serial, service tag, UUID, asset tag, MAC, IP, hostname, WWN), com prévia.
+- **Banco de dados da MSServer (automático, sem botão):** com internet, a cada relatório novo (diagnóstico concluído,
+  atualizações verificadas, instalação terminada) vai uma cópia anonimizada pela mesma sanitização da IA, por HTTPS, para
+  uma URL fixa. Vão o modelo, as versões de firmware, as peças, o diagnóstico, as atualizações e o resultado da instalação;
+  não vão serial, service tag, UUID, asset tag, MAC, IP, hostname, WWN, histórico de comandos, senhas, chaves nem dados dos
+  discos. O mesmo conteúdo não vai duas vezes; sem internet, vai quando a rede voltar. O relatório registra o envio só como
+  "POST <URL> (dados anonimizados omitidos)".
 - Nada mais sai do servidor.
 
 ## Escritas no iDRAC

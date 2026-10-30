@@ -277,9 +277,11 @@ class TestFrontendChatCelular:
         usos = re.findall(r"^([^{}]+)\{[^}]*var\(--ms-grad-", sem_comentarios, flags=re.MULTILINE)
         # 27 (09/10/2026) prevalece sobre a 15.4: fundo é o papel de parede e a barra substituiu o cabeçalho. A borda ativa do
         # cartão usa --ms-borda-ativa (a regra antiga com --ms-grad-borda era sobrescrita e saiu na consolidação de 14/10).
-        assert sorted({u.strip() for u in usos}) == [".faixa"]
+        # Redesign v3 (29/10/2026): também o brilho azul do fundo (body), o do veredito, o fundo do 3D e a faixa "NÃO desligue".
+        assert {u.strip() for u in usos} <= {"body", ".faixa", ".faixa-seguranca.perigo", ".geral-indicador", ".modelo-3d"}
         espacos = re.findall(r"(?:gap|padding|margin)[a-z-]*:\s*([^;]+);", sem_comentarios)
-        fora = {v for valor in espacos for v in re.findall(r"(\d+)px", valor) if int(v) % 8 and int(v) not in (1, 2, 4)}  # 1 px: .sr-only
+        # Redesign v3 (29/10/2026): além dos múltiplos de 8, as medidas do handoff (5, 6, 9, 10, 12, 14, 18 e 20 px).
+        fora = {v for valor in espacos for v in re.findall(r"(\d+)px", valor) if int(v) % 8 and int(v) not in (1, 2, 4, 5, 6, 9, 10, 12, 14, 18, 20)}
         assert not fora, fora
 
     def test_mostrar_menos_mais_e_modo_leve(self):

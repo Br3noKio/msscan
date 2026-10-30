@@ -10,7 +10,7 @@ Regras (CLAUDE.md 11 e 14):
 - Só itens com "atualização disponível" (nunca downgrade; comparação incerta não é oferecida), todos com hash
   oficial (SHA-256; MD5 só como alternativa). Hash divergente → arquivo apagado e o item abortado.
 - Confirmação digitada ``ATUALIZAR``; com redundância de energia perdida, outra confirmação, separada.
-- Um item por vez, do menor risco para o maior (BIOS por último); firmware agendado para o reinício (``OnReset``) → boot único pelo USB,
+- Um envio por vez (iDRAC primeiro, BIOS por último); tudo o que depende de reinício é agendado junto; firmware agendado para o reinício (``OnReset``) → boot único pelo USB,
   estado salvo em ``estado/atualizacao_pendente.json`` e reinício; na volta, a retomada confere antes × depois.
 - Usuário do BMC somente leitura ou sem credenciais → administrador TEMPORÁRIO pelo IPMI interno, desfeito no fim
   (``automatica.py`` e ``temporarias.py``, CLAUDE.md 18.4).
@@ -58,7 +58,7 @@ MAX_CONSULTAS_TAREFA = 120
 FALHAS_SEGUIDAS_TAREFA = 3
 ESPERA_TAREFA_S = 5.0
 
-# Ordem de instalação: menor risco primeiro, BIOS sempre por último (CLAUDE.md 15.6) — a mesma da tela de aviso.
+# Ordem de instalação: iDRAC primeiro, BIOS sempre por último (26/10/2026; CLAUDE.md 21.3) — a mesma da tela de aviso.
 # MOCKUP(rodada final): conferir com a documentação da Dell e a coleta real (pré-requisitos <Dependency> já são
 # conferidos no plano: item com pré-requisito não atendido é recusado, qualquer que seja a ordem).
 

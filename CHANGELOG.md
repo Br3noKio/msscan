@@ -2,6 +2,17 @@
 
 Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Datas no formato AAAA-MM-DD.
 
+## 1.0.14 — 2026-10-29
+
+- **Nova identidade visual (MSServer, redesign v3):** logotipo oficial, fontes Barlow e Barlow Condensed (locais), tokens de
+  cor novos, cabeçalho flutuante, barra lateral com as oito etapas e as ações rápidas, etiquetas de situação com fundo e
+  borda na cor, botões e janelas novos, faixa vermelha "NÃO desligue" em gradiente e modelo 3D com a estética nova. Só
+  visual: funções, textos, travas e confirmações não mudaram. O papel de parede saiu.
+- **Banco de dados da MSServer:** com internet, o MSscan envia sozinho uma cópia anonimizada de cada relatório novo
+  (sem serial, service tag, MAC, IP, hostname, WWN, senhas nem chaves). Receptor em `ferramentas/banco_dados/`.
+- **Licença:** proprietária, código fechado; só a ISO é distribuída.
+- Aba Discos, mapa por posição e reinício único nas atualizações (iDRAC sozinho; os demais e a BIOS num reinício só).
+
 ## 1.0.13 — 2026-10-21
 
 - **Pacotes Linux (`.BIN`) da Dell sem iDRAC acessível:** além do catálogo do Lifecycle Controller (só `.EXE`), o MSscan

@@ -32,7 +32,8 @@ from msscan.relatorio.terminal import veredito
 from tests.conftest import R640, ExecutorFalso, com_textos
 from tests.test_rede import CARRIER_ENO3, ReplayAlterado
 
-ESTATICOS_TEXTO = {nome: com_textos((PASTA_ESTATICOS / nome).read_text(encoding="utf-8")) for nome in ESTATICOS}
+ESTATICOS_TEXTO = {nome: com_textos((PASTA_ESTATICOS / nome).read_text(encoding="utf-8")) for nome, tipo in ESTATICOS.items()
+                   if tipo.startswith("text/")}  # fmt: skip
 
 
 def sessao_concluida(**kwargs) -> Sessao:
@@ -408,18 +409,17 @@ class TestFrontend:
             assert not cor.search(re.sub(r"/\*.*?\*/", "", ESTATICOS_TEXTO[nome], flags=re.DOTALL)), nome
 
     def test_paleta_do_tema(self):
+        """Redesign v3 (29/10/2026): tokens finais do handoff da identidade MSServer."""
         tema = ESTATICOS_TEXTO["tema.css"]
         paleta = {
-            "preto-0": "#010409", "preto-1": "#0d1117", "preto-2": "#161b22", "borda": "#30363d",
-            "borda-suave": "#21262d", "texto": "#e6edf3", "texto-sec": "#b1bac4", "azul-0": "#0a1a33",
-            "azul-1": "#0d2d62", "azul-2": "#1760d2", "azul-link": "#58a6ff", "ok": "#3fb950",
-            "alerta": "#d29922", "falha": "#f85149",
+            "preto-0": "#050506", "preto-1": "#0e0e10", "preto-2": "#16161a", "texto": "#ededef", "texto-sec": "#b4b4bb",
+            "texto-3": "#8e8e97", "azul-2": "#7ab1fe", "azul-link": "#7ab1fe", "sobre-acento": "#0a0a0c", "ia": "#8fa8ff",
+            "ok": "#34e39a", "alerta": "#ffc53d", "falha": "#ff5c72", "nao-verificado": "#b4bdd6", "na": "#8a93ad",
         }  # fmt: skip
         for nome, valor in paleta.items():
-            assert f"--ms-{nome}: {valor};" in tema
-        assert "linear-gradient(180deg, #010409, #0d1117)" in tema
-        assert "linear-gradient(135deg, #0a1a33, #0d2d62 55%, #1760d2)" in tema
-        assert "Primer" in tema and "MIT" in tema
+            assert f"--ms-{nome}: {valor};" in tema, nome
+        assert "linear-gradient(90deg, #be123c, #e11d48 45%, #f43f5e)" in tema  # faixa "NÃO desligue"
+        assert '"Barlow Condensed"' in tema and "fontes/Barlow-Regular.ttf" in tema
 
     def test_licenca_dos_icones_e_sem_marca(self):
         icones = ESTATICOS_TEXTO["icones.js"]
@@ -445,7 +445,7 @@ class TestFrontend:
     def test_foco_visivel(self):
         css = ESTATICOS_TEXTO["app.css"]
         assert re.search(r":focus-visible[^{]*\{\s*outline: 2px solid var\(--ms-foco\)", css)
-        assert "--ms-foco: #1f6feb;" in ESTATICOS_TEXTO["tema.css"]
+        assert "--ms-foco: #7ab1fe;" in ESTATICOS_TEXTO["tema.css"]
 
     def test_setas_nas_abas_mantem_o_foco_na_aba(self):
         # Achado no QEMU (ISO v0.8.2): a seta trocava a tela e o foco ia para o <main>; as setas seguintes paravam.

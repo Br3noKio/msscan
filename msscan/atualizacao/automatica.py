@@ -770,8 +770,8 @@ def _instalar_em_ordem(ctx: Any, executor: Any, raiz: Path, bmc: dict[str, Any],
         if prog.parar_pedido and posicao > 0:
             return _parar(ctx, raiz, resultado, agendados, fila[posicao:], modo)
         if agendados and sozinho(item):
-            # 09/10/2026: iDRAC e BIOS vão sozinhos. O que ficou agendado antes deles é aplicado num reinício e conferido na
-            # volta; só então o próximo começa (para na primeira falha).
+            # Reserva: o iDRAC vai primeiro (26/10/2026); se algo já estiver agendado antes dele (ordem recebida de fora), é
+            # aplicado num reinício e conferido na volta; só então o iDRAC começa.
             _passo(resultado, textos.t("py_automatica.reinicio"), textos.t("py_automatica.e_instalado_sozinho_antes_o", item['componente'], len(agendados)))  # fmt: skip
             for seguinte in fila[posicao:]:
                 prog.etapa(seguinte["componente"], prog_mod.AGUARDANDO, textos.t("py_automatica.depois_do_reinicio_retomada_automatica"))
@@ -894,8 +894,8 @@ def aplicar_automatico(ctx: Any, executor: Any, raiz: Path, resultado: dict[str,
                        avisar: Any = None, bmc_inicial: dict[str, Any] | None = None) -> None:  # fmt: skip
     """Instala ``resultado["itens"]`` (já baixados e conferidos), sem perguntar nada (CLAUDE.md 18.2, 21.3).
 
-    Ordem (09/10/2026): placas de rede, demais componentes, iDRAC sozinho e BIOS por último, sozinha. Lotes sem iDRAC nem
-    BIOS podem ir pelo repositório do iDRAC (18.7); senão, caminhos a–g componente por componente, com os itens que dependem
+    Ordem (26/10/2026): iDRAC primeiro e sozinho; depois placas de rede, demais componentes e BIOS por último. Lotes sem
+    iDRAC podem ir pelo repositório do iDRAC (18.7); senão, caminhos a–g componente por componente, com os itens que dependem
     de reinício agendados juntos para UM reinício (boot pelo pendrive, mudanças temporárias desfeitas, estado salvo; a
     retomada confere cada um e continua sozinha, parando na primeira falha). Ao fim (ou ao parar), tudo o que foi mudado
     temporariamente no iDRAC é desfeito.
@@ -935,7 +935,7 @@ def aplicar_automatico(ctx: Any, executor: Any, raiz: Path, resultado: dict[str,
         fila = list(resultado["itens"])
         from msscan.atualizacao.aviso import sozinho
 
-        # Repositório só para lotes sem iDRAC nem BIOS: esses vão sozinhos, um de cada vez (09/10/2026).
+        # Repositório só para lotes sem iDRAC: ele vai sozinho, antes dos outros (26/10/2026).
         if not so_bin and resultado.get("metodo") != "manual" and modo == "aplicar" and not any(sozinho(i) for i in fila):
             desfecho_repo = _por_repositorio(ctx, executor, raiz, bmc, resultado, dormir, registro, fila)
             if desfecho_repo is not None:

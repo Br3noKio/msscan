@@ -1,6 +1,6 @@
 # Licenças e créditos de terceiros
 
-Licença do próprio MSscan: **todos os direitos reservados**, código disponível só para consulta ([LICENSE](../LICENSE)).
+Licença do próprio MSscan: **proprietária, código fechado**; só a ISO é distribuída ([LICENSE](../LICENSE)).
 Os componentes abaixo continuam sob as suas próprias licenças.
 
 ## Usados pelo MSscan
@@ -13,9 +13,9 @@ Os componentes abaixo continuam sob as suas próprias licenças.
 | xterm.js | terminal embutido | MIT | pacote Debian `node-xterm` |
 | Firefox ESR | navegador do quiosque e navegador integrado | MPL-2.0 | pacote Debian `firefox-esr` |
 | Lucide | ícones | ISC (partes do Feather, MIT) | incorporados em `msscan/interface/estaticos/icones.js` |
-| Primer | base da paleta de cores | MIT | valores de cor, sem arquivos copiados |
-| Inter e JetBrains Mono | fontes | SIL Open Font License 1.1 | pacotes Debian `fonts-inter` e `fonts-jetbrains-mono` |
-| Papel de parede e logotipo | interface | originais do MSscan | `docs/design/` |
+| Barlow e Barlow Condensed | fontes da interface | SIL Open Font License 1.1 | `msscan/interface/estaticos/fontes/` (com o `OFL-Barlow.txt`) |
+| JetBrains Mono | fonte de dados e números | SIL Open Font License 1.1 | pacote Debian `fonts-jetbrains-mono` |
+| Logotipo MSServer | cabeçalho da interface | marca da MSServer, uso exclusivo | `msscan/interface/estaticos/logo-msserver.png` |
 
 Os textos das licenças MIT, ISC e OFL também aparecem na aba **Sobre** da interface.
 

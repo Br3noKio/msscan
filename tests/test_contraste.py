@@ -38,7 +38,7 @@ def razao(a: tuple[float, ...], b: tuple[float, ...]) -> float:
 
 
 FUNDOS_BASE = ["preto-0", "preto-1", "preto-2"]
-TEXTOS = ["texto", "texto-sec", "azul-link", "ok", "alerta", "falha"]
+TEXTOS = ["texto", "texto-sec", "texto-3", "azul-link", "ok", "alerta", "falha", "nao-verificado", "na", "ia"]
 
 
 @pytest.mark.parametrize("fundo", FUNDOS_BASE)
@@ -48,7 +48,7 @@ def test_texto_sobre_fundos_solidos(texto, fundo):
 
 
 @pytest.mark.parametrize("fundo", FUNDOS_BASE)
-def test_texto_secundario_com_folga(fundo):
+def test_texto_secundario_com_folga(fundo):  # noqa: D103
     assert razao(rgb(variavel("texto-sec")), rgb(variavel(fundo))) >= 7
 
 
@@ -62,7 +62,7 @@ def test_texto_sobre_fundos_translucidos(texto, camada, base):
 
 
 def test_botao_primario_e_desabilitado():
-    assert razao(rgb(variavel("texto")), rgb(variavel("azul-2"))) >= 4.5
+    assert razao(rgb(variavel("sobre-acento")), rgb(variavel("azul-2"))) >= 4.5  # v3: texto escuro sobre o azul
     opacidade = float(variavel("opacidade-desabilitado"))
     for base in FUNDOS_BASE:
         fundo = rgb(variavel(base))

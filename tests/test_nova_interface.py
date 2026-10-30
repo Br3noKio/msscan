@@ -108,19 +108,17 @@ def test_sem_backdrop_filter_e_com_modo_leve():
     assert "body.leve .painel" in CSS and "prefers-reduced-motion" in CSS
 
 
-def test_papel_de_parede_pronto_e_leve():
-    for nome, limite in (("fundo.jpg", 400_000), ("fundo-desfocado.jpg", 150_000)):
-        assert 0 < (ESTATICOS / nome).stat().st_size < limite, nome
+def test_logo_e_fontes_locais_do_redesign():
+    """Redesign v3 (29/10/2026): logo oficial da MSServer e fontes Barlow servidas localmente (sem CDN), com a licença."""
+    from msscan.interface.servidor import ESTATICOS as LISTA
 
-
-@pytest.mark.parametrize("texto", ["texto", "texto-sec", "azul-link", "ok", "alerta", "falha"])
-def test_contraste_sobre_o_vidro_no_pior_ponto_do_fundo(texto):
-    pil = pytest.importorskip("PIL.Image")
-    for imagem, camada in (("fundo-desfocado.jpg", "vidro"), ("fundo.jpg", "vidro-pilula")):
-        pixels = pil.open(ESTATICOS / imagem).convert("RGB").getdata()
-        mais_claro = max(pixels, key=lambda c: 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2])
-        fundo = rgb(variavel(camada), tuple(float(c) for c in mais_claro))
-        assert razao(rgb(variavel(texto)), fundo) >= 4.5, (imagem, texto)
+    assert 0 < (ESTATICOS / "logo-msserver.png").stat().st_size < 100_000
+    for nome, tipo in LISTA.items():
+        assert (ESTATICOS / nome).is_file(), nome
+        if nome.startswith("fontes/"):
+            assert tipo == "font/ttf" and (ESTATICOS / nome).read_bytes()[:4] == b"\x00\x01\x00\x00", nome
+    assert "SIL OPEN FONT LICENSE" in (ESTATICOS / "fontes/OFL-Barlow.txt").read_text(encoding="utf-8").upper()
+    assert 'src="/estaticos/logo-msserver.png"' in HTML and 'data-t-alt="geral.logo_msserver"' in HTML
 
 
 def test_fontes_e_comando_na_iso():

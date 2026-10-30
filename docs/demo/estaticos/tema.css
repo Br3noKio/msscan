@@ -1,83 +1,100 @@
 /*
  * MSscan — tema (ÚNICO arquivo com cores da interface).
  *
- * Paleta baseada no Primer (sistema de design do GitHub, licença MIT,
- * https://primer.style), tema escuro, com os azuis da empresa.
- * Outros arquivos usam só as variáveis --ms-* abaixo; nunca cores literais.
+ * Identidade MSServer (redesign v3, 29/10/2026): tokens finais do handoff "MSscan Console" (design_handoff_msscan_redesign/
+ * tokens.css). Os nomes antigos (--ms-preto-*, --ms-azul-*...) continuam e apontam para os valores novos, para o resto da
+ * interface trocar de visual sem mudar de nome. Outros arquivos usam só as variáveis --ms-* abaixo; nunca cores literais.
+ * Fontes: Barlow e Barlow Condensed (SIL Open Font License 1.1) em estaticos/fontes/, JetBrains Mono do pacote Debian.
  */
+@font-face { font-family: "Barlow"; font-weight: 400; src: url("fontes/Barlow-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Barlow"; font-weight: 500; src: url("fontes/Barlow-Medium.ttf") format("truetype"); }
+@font-face { font-family: "Barlow"; font-weight: 600; src: url("fontes/Barlow-SemiBold.ttf") format("truetype"); }
+@font-face { font-family: "Barlow"; font-weight: 700; src: url("fontes/Barlow-Bold.ttf") format("truetype"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("fontes/BarlowCondensed-SemiBold.ttf") format("truetype"); }
+
 :root {
   color-scheme: dark;
 
-  /* Fundos (do mais escuro ao mais claro) */
-  --ms-preto-0: #010409;
-  --ms-preto-1: #0d1117;
-  --ms-preto-2: #161b22;
+  /* Superfícies */
+  --ms-preto-0: #050506; /* fundo da tela */
+  --ms-preto-1: #0e0e10; /* janelas, cabeçalho, barra lateral, diálogos */
+  --ms-preto-2: #16161a; /* campos, hover forte */
 
-  /* Bordas */
-  --ms-borda: #30363d;
-  --ms-borda-suave: #21262d;
+  /* Bordas (sólidas: o branco a 14 % e a 8 % sobre a superfície) */
+  --ms-borda: #2a2a2e;
+  --ms-borda-suave: #1b1b1e;
 
-  /* Texto */
-  --ms-texto: #e6edf3;
-  --ms-texto-sec: #b1bac4; /* 30/09/2026: #8b949e (5,9:1) era pouco legível em monitor de servidor; agora >= 7:1 */
+  /* Texto (contraste sobre #0e0e10) */
+  --ms-texto: #ededef;     /* ~16:1 */
+  --ms-texto-sec: #b4b4bb; /* ~9:1 */
+  --ms-texto-3: #8e8e97;   /* ~5,6:1 — mínimo para rótulos */
 
-  /* Azuis da empresa */
-  --ms-azul-0: #0a1a33;
-  --ms-azul-1: #0d2d62;
-  --ms-azul-2: #1760d2; /* botão primário: texto claro a 4,88:1 (WCAG AA) */
-  --ms-azul-link: #58a6ff;
+  /* Marca / ação */
+  --ms-azul-0: #0e0e10;
+  --ms-azul-1: #16161a;
+  --ms-azul-2: #7ab1fe;    /* ação primária, navegação ativa, seleção (texto escuro por cima: --ms-sobre-acento) */
+  --ms-azul-link: #7ab1fe;
+  --ms-sobre-acento: #0a0a0c;
+  --ms-ia: #8fa8ff;        /* exclusivo da análise por IA */
 
-  /* Status (sempre acompanhados de ícone e texto, nunca só a cor) */
-  --ms-ok: #3fb950;
-  --ms-alerta: #d29922;
-  --ms-falha: #f85149;
+  /* Situações (sempre com ícone e texto, nunca só a cor) */
+  --ms-ok: #34e39a;
+  --ms-alerta: #ffc53d;
+  --ms-falha: #ff5c72;
+  --ms-nao-verificado: #b4bdd6;
+  --ms-na: #8a93ad;
 
   /* Gradientes */
-  --ms-grad-preto: linear-gradient(180deg, #010409, #0d1117);
-  --ms-grad-azul: linear-gradient(135deg, #0a1a33, #0d2d62 55%, #1760d2); /* texto a >= 4,88:1 em todo o gradiente */
+  --ms-grad-preto: linear-gradient(180deg, #050506, #0e0e10);
+  --ms-grad-azul: radial-gradient(120% 160% at 0% 0%, rgba(122, 177, 254, 0.18), transparent 60%), #0e0e10;
+  --ms-grad-gravando: linear-gradient(90deg, #be123c, #e11d48 45%, #f43f5e);
 
-  /* Derivadas (transparências das cores acima, para fundos de etiquetas e hover) */
-  --ms-ok-fundo: rgba(63, 185, 80, 0.1);
-  --ms-alerta-fundo: rgba(210, 153, 34, 0.1);
-  --ms-falha-fundo: rgba(248, 81, 73, 0.1); /* 10%: texto de status a >= 4,5:1 sobre o fundo */
-  --ms-neutro-fundo: rgba(139, 148, 158, 0.15);
+  /* Derivadas: fundo = cor a 18 %, borda = cor a 60 % (etiquetas de situação) */
+  --ms-ok-fundo: rgba(52, 227, 154, 0.18);
+  --ms-alerta-fundo: rgba(255, 197, 61, 0.18);
+  --ms-falha-fundo: rgba(255, 92, 114, 0.18);
+  --ms-neutro-fundo: rgba(138, 147, 173, 0.18);
+  --ms-nao-verificado-fundo: rgba(180, 189, 214, 0.14);
+  --ms-ok-borda: rgba(52, 227, 154, 0.6);
+  --ms-alerta-borda: rgba(255, 197, 61, 0.6);
+  --ms-falha-borda: rgba(255, 92, 114, 0.6);
+  --ms-neutro-borda: rgba(138, 147, 173, 0.6);
   --ms-opacidade-desabilitado: 0.65; /* texto de botão/aba desabilitado ainda a >= 4,5:1 */
-  --ms-azul-fundo: rgba(31, 111, 235, 0.15);
-  --ms-hover: rgba(177, 186, 196, 0.12);
-  --ms-sombra: rgba(1, 4, 9, 0.85);
+  --ms-azul-fundo: rgba(122, 177, 254, 0.14);
+  --ms-azul-borda: rgba(122, 177, 254, 0.34); /* borda da janela em foco */
+  --ms-ativo-fundo: linear-gradient(90deg, rgba(122, 177, 254, 0.24), rgba(122, 177, 254, 0.16));
+  --ms-ativo-contorno: rgba(122, 177, 254, 0.4);
+  --ms-pastilha: rgba(255, 255, 255, 0.07);
+  --ms-secundario-fundo: rgba(255, 255, 255, 0.06);
+  --ms-secundario-borda: rgba(255, 255, 255, 0.14);
+  --ms-hover: rgba(255, 255, 255, 0.12);
+  --ms-sombra: rgba(0, 0, 0, 0.72);
 
-  /* Visual Hyprland (CLAUDE.md 15.4): painéis levemente translúcidos (cor sólida, sem blur) sobre o fundo com
-     brilho azul fixo; borda de destaque em gradiente azul no painel ativo. Nada disso é animado. */
-  --ms-painel: rgba(22, 27, 34, 0.88);
-  --ms-grad-fundo: radial-gradient(ellipse at 15% 0%, rgba(23, 96, 210, 0.16), transparent 55%),
-    radial-gradient(ellipse at 100% 100%, rgba(13, 45, 98, 0.35), transparent 60%), #0d1117;
-  --ms-grad-borda: linear-gradient(135deg, #1760d2, #58a6ff 50%, #0d2d62);
+  /* Janelas flutuantes sobre o fundo com brilho azul fixo (sem papel de parede, sem blur). */
+  --ms-painel: #0e0e10;
+  --ms-grad-fundo: radial-gradient(1400px 520px at 50% -18%, rgba(122, 177, 254, 0.16), transparent 70%), #050506;
+  --ms-grad-borda: linear-gradient(135deg, #7ab1fe, #8fa8ff);
   --ms-mascara: linear-gradient(#000 0 0); /* máscara da borda (recorta o miolo); não é cor exibida */
-
-  /* Nova interface (1.0.0, pedido de 09/10/2026): estética Hyprland em tema de datacenter. Painéis em vidro escuro sobre
-     o papel de parede JÁ DESFOCADO (imagem pronta, sem backdrop-filter); borda em gradiente azul a 45° no painel ativo.
-     O contraste do texto sobre o vidro é conferido contra o pixel mais claro do fundo desfocado (tests/test_contraste.py). */
-  --ms-fundo: url("fundo.jpg");
-  --ms-fundo-desfocado: url("fundo-desfocado.jpg");
-  --ms-escurecer: linear-gradient(rgba(1, 4, 9, 0.35), rgba(1, 4, 9, 0.6));
-  --ms-vidro: rgba(13, 17, 23, 0.8);
-  --ms-vidro-cartao: rgba(22, 27, 34, 0.66);
-  --ms-vidro-pilula: rgba(13, 17, 23, 0.9);
-  --ms-borda-painel: rgba(88, 166, 255, 0.16);
-  --ms-borda-ativa: linear-gradient(45deg, #1f6feb, #58a6ff);
-  --ms-sombra-painel: 0 8px 28px rgba(1, 4, 9, 0.5);
-  --ms-veu: rgba(1, 4, 9, 0.55); /* atrás da gaveta aberta (sem texto) */
-  --ms-grafico-temp: linear-gradient(0deg, #1760d2, #58a6ff);
-  --ms-grafico-vent: linear-gradient(0deg, #0d2d62, #79c0ff);
-  --ms-grafico-alerta: linear-gradient(0deg, #9e6a03, #d29922);
-  --ms-grafico-falha: linear-gradient(0deg, #8e1519, #f85149);
-  --ms-fonte: "Inter", system-ui, -apple-system, "Segoe UI", "Noto Sans", "DejaVu Sans", "Liberation Sans", Arial, sans-serif;
+  --ms-vidro: #0e0e10;
+  --ms-vidro-cartao: #121215;
+  --ms-vidro-pilula: #0e0e10;
+  --ms-borda-painel: rgba(255, 255, 255, 0.08);
+  --ms-borda-ativa: linear-gradient(45deg, rgba(122, 177, 254, 0.34), rgba(122, 177, 254, 0.34));
+  --ms-sombra-painel: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 16px 40px -24px rgba(0, 0, 0, 0.9);
+  --ms-sombra-dialogo: 0 30px 80px -24px rgba(0, 0, 0, 0.75);
+  --ms-veu: rgba(0, 0, 0, 0.55); /* atrás da gaveta aberta (sem texto) */
+  --ms-grafico-temp: #7ab1fe;
+  --ms-grafico-vent: #8fa8ff;
+  --ms-grafico-alerta: #ffc53d;
+  --ms-grafico-falha: #ff5c72;
+  --ms-fonte: "Barlow", system-ui, "Noto Sans", "DejaVu Sans", "Liberation Sans", Arial, sans-serif;
+  --ms-fonte-titulo: "Barlow Condensed", "Barlow", system-ui, sans-serif;
   --ms-fonte-mono: "JetBrains Mono", ui-monospace, "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace;
 
   /* Foco sempre visível */
-  --ms-foco: #1f6feb;
+  --ms-foco: #7ab1fe;
 
   /* QR Code: sempre escuro sobre claro (a câmera do celular lê mal o QR invertido) */
-  --ms-qr-escuro: #010409;
+  --ms-qr-escuro: #050506;
   --ms-qr-claro: #ffffff;
 }

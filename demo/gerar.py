@@ -149,7 +149,8 @@ def gerar(xterm: Path, three: Path = Path("/usr/share/javascript/three")) -> Non
     if DESTINO.exists():
         shutil.rmtree(DESTINO)
     (DESTINO / "estaticos" / "xterm").mkdir(parents=True)
-    for nome in ("tema.css", "app.css", "icones.js", "fundo.jpg", "fundo-desfocado.jpg"):
+    (DESTINO / "estaticos" / "fontes").mkdir(parents=True)
+    for nome in ("tema.css", "app.css", "icones.js", "logo-msserver.png", *(f.relative_to(ESTATICOS).as_posix() for f in (ESTATICOS / "fontes").iterdir())):
         shutil.copy(ESTATICOS / nome, DESTINO / "estaticos" / nome)
     from msscan import textos as textos_centrais
 
