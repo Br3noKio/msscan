@@ -164,7 +164,7 @@ def validar_download(url: str) -> str:
     return ""
 
 
-URL_BANCO_DADOS = "https://breno.tail5c3b10.ts.net/msscan/v1/coletas"
+URL_BANCO_DADOS = "https://msscan.tail5c3b10.ts.net/msscan/v1/coletas"
 """Banco de dados da MSServer (CLAUDE.md 33): recebe os relatórios anonimizados. URL fixa, só HTTPS (Tailscale Funnel)."""
 
 URL_IA = "https://api.anthropic.com/v1/messages"

@@ -11,6 +11,8 @@ Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 - **Licença:** de "código fechado" para "código-fonte disponível para consulta": o código pode ser lido e auditado; uso
   pela ISO oficial; redistribuir, modificar ou reaproveitar o código continua exigindo autorização.
 - Corrigida a data mínima do relógio, que tinha ficado com a data da 1.0.14 na 1.0.15.
+- Novo endereço do banco de dados: `https://msscan.tail5c3b10.ts.net/msscan`. As versões anteriores enviavam para o
+  endereço antigo, que foi desligado.
 
 ## 1.0.15 — 2026-11-06
 
