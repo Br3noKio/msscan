@@ -47,6 +47,7 @@
     "detectar_primeiro_utilizar_depois_so": "Somente os recursos confirmados neste equipamento aparecem como disponíveis.",
     "aguardando_a_deteccao": "Aguardando a detecção…",
     "iniciar_diagnostico": "Iniciar diagnóstico",
+    "aviso_envio_dados": "Com internet, o MSscan envia automaticamente ao banco de dados da MSServer uma cópia anonimizada de cada relatório (sem serial, service tag, MAC, IP, hostname, senhas ou chaves), para aprimorar as próximas versões.",
     "analise_por_ia_opcional": "Análise por IA (opcional)",
     "configurar_ia": "Configurar IA",
     "acesso_ao_idrac": "Acesso ao iDRAC",

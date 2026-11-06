@@ -2,6 +2,13 @@
 
 Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Datas no formato AAAA-MM-DD.
 
+## 1.0.15 — 2026-11-06
+
+- **Aviso do envio na tela Início:** o MSscan informa que, com internet, envia uma cópia anonimizada de cada relatório ao
+  banco de dados da MSServer.
+- **Envios que falharam não se perdem:** a cópia anonimizada fica no pendrive (`MSSCAN/envios_pendentes/`) e vai no
+  próximo envio que der certo, mesmo em outro boot.
+
 ## 1.0.14 — 2026-10-29
 
 - **Nova identidade visual (MSServer, redesign v3):** logotipo oficial, fontes Barlow e Barlow Condensed (locais), tokens de

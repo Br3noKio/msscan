@@ -29,7 +29,9 @@ Nunca há credencial fixa, padrão ou tentativa automática de senha.
   atualizações verificadas, instalação terminada) vai uma cópia anonimizada pela mesma sanitização da IA, por HTTPS, para
   uma URL fixa. Vão o modelo, as versões de firmware, as peças, o diagnóstico, as atualizações e o resultado da instalação;
   não vão serial, service tag, UUID, asset tag, MAC, IP, hostname, WWN, histórico de comandos, senhas, chaves nem dados dos
-  discos. O mesmo conteúdo não vai duas vezes; sem internet, vai quando a rede voltar. O relatório registra o envio só como
+  discos. O mesmo conteúdo não vai duas vezes; sem
+  internet, vai quando a rede voltar; se a sessão terminar antes, a cópia fica no pendrive (`MSSCAN/envios_pendentes/`)
+  e vai no próximo boot com internet. A tela Início avisa sobre o envio. O relatório registra o envio só como
   "POST <URL> (dados anonimizados omitidos)".
 - Nada mais sai do servidor.
 

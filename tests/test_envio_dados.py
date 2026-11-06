@@ -102,3 +102,24 @@ def test_receptor_limita_envios_por_origem(tmp_path):
     assert all(srv.permitido("1.2.3.4") for _ in range(receptor.LIMITE_POR_HORA))
     assert not srv.permitido("1.2.3.4") and srv.permitido("5.6.7.8")
     srv.server_close()
+
+
+def test_falha_fica_no_pendrive_e_vai_no_proximo_boot(tmp_path):
+    executor = ExecutorEnvio(status=None)
+    assert envio_dados.enviar(executor, RELATORIO, [], None, str(tmp_path)) == (None, "sem conexão")
+    fila = list((tmp_path / envio_dados.PASTA_PENDENTES).glob("*.json"))
+    assert len(fila) == 1 and "e4:43:4b:a0:f8:88" not in fila[0].read_text(encoding="utf-8")
+    assert envio_dados.reenviar_pendentes(executor, str(tmp_path)) == 0 and fila[0].exists()  # ainda sem rede
+    executor.status = 201  # outro boot, com internet: o relatório novo vai e a fila esvazia
+    outro = dict(RELATORIO, veredito="diagnosticado")
+    assert envio_dados.enviar(executor, outro, [], None, str(tmp_path))[1] == "enviado"
+    assert envio_dados.reenviar_pendentes(executor, str(tmp_path)) == 1 and not fila[0].exists()
+    assert [c["dados"]["veredito"] for c in executor.enviados[-2:]] == ["diagnosticado", RELATORIO["veredito"]]
+
+
+def test_envio_aceito_apaga_a_propria_copia_da_fila(tmp_path):
+    executor = ExecutorEnvio(status=500)
+    envio_dados.enviar(executor, RELATORIO, [], None, str(tmp_path))
+    executor.status = 201
+    assert envio_dados.enviar(executor, RELATORIO, [], None, str(tmp_path))[1] == "enviado"
+    assert not list((tmp_path / envio_dados.PASTA_PENDENTES).glob("*.json"))

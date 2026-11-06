@@ -519,7 +519,10 @@ class Sessao:
             try:
                 with self._trava:
                     ultima = self.envio_dados.get("impressao")
-                impressao, situacao = envio_dados.enviar(self.executor, relatorio, nomes_do_host(self.executor), ultima)
+                impressao, situacao = envio_dados.enviar(self.executor, relatorio, nomes_do_host(self.executor), ultima,
+                                                         self.pasta_dados)
+                if situacao in ("enviado", "ja_enviado"):
+                    envio_dados.reenviar_pendentes(self.executor, self.pasta_dados)  # os que falharam antes (outro boot)
                 with self._trava:
                     self.envio_dados = {"situacao": situacao, "impressao": impressao or ultima,
                                         "quando": time.strftime("%d/%m/%Y %H:%M:%S")}  # fmt: skip
