@@ -123,3 +123,16 @@ def test_envio_aceito_apaga_a_propria_copia_da_fila(tmp_path):
     executor.status = 201
     assert envio_dados.enviar(executor, RELATORIO, [], None, str(tmp_path))[1] == "enviado"
     assert not list((tmp_path / envio_dados.PASTA_PENDENTES).glob("*.json"))
+
+
+def test_previa_mostra_exatamente_o_que_vai_ao_banco():
+    previa = envio_dados.previa(RELATORIO, ["r640-lab"])
+    assert previa["dados"] == envio_dados.montar(RELATORIO, ["r640-lab"])
+    assert previa["removidos"] and "36ABC1234" not in json.dumps(previa, ensure_ascii=False)
+    sessao = Sessao(ExecutorReplay(R640), None, replay=True)
+    assert sessao.previa_envio() is None  # antes do diagnóstico
+    sessao.iniciar()
+    sessao.aguardar(30)
+    assert sessao.iniciar_diagnostico()
+    sessao.aguardar(30)
+    assert sessao.previa_envio()["dados"]["veredito"]

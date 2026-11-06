@@ -238,7 +238,7 @@ main:focus, main:focus-visible { outline: none; }
 }
 #bmc-cartao > :not(.cabeca-cartao) { margin-left: 16px; margin-right: 16px; }
 #bmc-cartao > :last-child { margin-bottom: 16px; }
-#ia-previa { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 360px; overflow-y: auto; background: var(--ms-preto-0); border: 1px solid var(--ms-borda); border-radius: var(--ms-raio); padding: 8px 16px; margin: 8px 0 0; }
+#ia-previa, #envio-previa { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 360px; overflow-y: auto; background: var(--ms-preto-0); border: 1px solid var(--ms-borda); border-radius: var(--ms-raio); padding: 8px 16px; margin: 8px 0 0; }
 #ia-mensagem:empty { display: none; }
 .ia-nao-confirmada { color: var(--ms-alerta); font-weight: 600; }
 .ia-evidencias { margin: 0; padding-left: 16px; }
@@ -852,3 +852,6 @@ h1, h2, h3, .titulo-cartao, .cabeca-cartao, .faixa-titulo, .titulo-detalhe, .dia
 .chat-msg { border-radius: var(--ms-raio-g); background: var(--ms-preto-2); }
 .st-ANDAMENTO, .st-INFO { border-color: var(--ms-azul-borda); }
 kbd { background: var(--ms-preto-2); border-color: var(--ms-secundario-borda); }
+.inicio-envio { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.inicio-envio > p { flex: 1 1 480px; margin: 0; }
+#envio-previa-area { flex-basis: 100%; }

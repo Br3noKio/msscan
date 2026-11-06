@@ -2,25 +2,29 @@ MSscan — Licença de uso (software proprietário)
 
 Copyright (C) 2026 Breno / MSServer. Todos os direitos reservados.
 
-O MSscan é software proprietário de código fechado. O código-fonte NÃO é distribuído. O que é disponibilizado para
-download é apenas a imagem ISO oficial, publicada pelo titular.
+O MSscan é software proprietário, de código-fonte disponível para consulta. O código está publicado em
+https://github.com/Br3noKio/msscan para que qualquer pessoa possa ler e auditar o que o programa faz, inclusive o que ele
+envia ao banco de dados; essa publicação não concede nenhuma licença sobre o código. O que é disponibilizado para uso é
+a imagem ISO oficial, publicada pelo titular.
 
 É permitido, sem custo:
 
 - baixar a imagem ISO oficial e gravá-la num pendrive ou usá-la como mídia virtual;
-- usar o MSscan para diagnosticar e atualizar servidores, próprios ou de clientes.
+- usar o MSscan para diagnosticar e atualizar servidores, próprios ou de clientes;
+- ler e auditar o código-fonte publicado.
 
 Sem autorização prévia e por escrito do titular, é proibido:
 
 - redistribuir, publicar, vender, alugar ou ceder a imagem ISO ou qualquer parte do MSscan (inclusive em sites de
   download ou espelhos);
 - modificar o MSscan, criar obras derivadas ou remover estes avisos;
-- descompilar, extrair ou fazer engenharia reversa do programa, exceto nos limites expressamente permitidos pela lei.
+- usar o código-fonte, no todo ou em parte, em outro software, ou compilar e distribuir versões próprias do MSscan.
 
 Coleta de dados técnicos: com internet, o MSscan envia automaticamente ao banco de dados da MSServer uma cópia
 ANONIMIZADA do relatório de cada servidor (modelo, versões de firmware, peças e resultado do diagnóstico), para melhorar
 as próximas versões. Antes do envio são removidos serial, service tag, UUID, asset tag, endereços MAC e IP, nomes de host
-e WWN; senhas, chaves, histórico de comandos e dados dos discos do cliente nunca são lidos nem enviados.
+e WWN; senhas, chaves, histórico de comandos e dados dos discos do cliente nunca são enviados. Detalhes em
+PRIVACIDADE.md.
 
 Componentes de terceiros incluídos na ISO (Debian, three.js, xterm.js, Firefox ESR, Lucide, fontes Barlow, JetBrains
 Mono e outros) continuam sob as suas próprias licenças, que esta licença não altera. O código-fonte dos componentes livres

@@ -1,6 +1,6 @@
 # Licenças e créditos de terceiros
 
-Licença do próprio MSscan: **proprietária, código fechado**; só a ISO é distribuída ([LICENSE](../LICENSE)).
+Licença do próprio MSscan: **proprietária, código-fonte disponível para consulta**; o código pode ser lido e auditado; o uso é pela ISO oficial. ([LICENSE](../LICENSE)).
 Os componentes abaixo continuam sob as suas próprias licenças.
 
 ## Usados pelo MSscan

@@ -139,7 +139,14 @@
       <div class="aviso aviso-alerta" id="inicio-aviso-pendrive" role="status" hidden></div>
       <div class="aviso aviso-alerta" id="inicio-aviso-relogio" role="status" hidden></div>
       <div class="aviso aviso-alerta" id="inicio-config-avisos" role="status" hidden></div>
-      <p class="texto-sec pequeno" id="inicio-aviso-envio" data-t="inicio.aviso_envio_dados"></p>
+      <div class="inicio-envio">
+        <p class="texto-sec pequeno" id="inicio-aviso-envio" data-t="inicio.aviso_envio_dados"></p>
+        <button type="button" class="botao botao-secundario botao-pequeno" id="envio-ver" aria-expanded="false" aria-controls="envio-previa-area"><span data-icone="search" aria-hidden="true"></span><span data-t="inicio.ver_o_que_e_enviado"></span></button>
+        <div id="envio-previa-area" hidden>
+          <p class="texto-sec pequeno" id="envio-removidos"></p>
+          <pre id="envio-previa" tabindex="0" data-t-aria-label="inicio.dados_enviados_ao_banco"></pre>
+        </div>
+      </div>
       <!-- Sensores ao vivo (nova interface): barras das temperaturas por sensor e da rotação das ventoinhas -->
       <section class="cartao widget-sensores" id="sensores-vivo" aria-labelledby="sensores-titulo" hidden>
         <h2 class="cabeca-cartao" id="sensores-titulo"><span data-icone="chart" aria-hidden="true"></span><span data-t="sensores.ao_vivo"></span><span class="sensores-quando" id="sensores-quando" role="status"></span></h2>

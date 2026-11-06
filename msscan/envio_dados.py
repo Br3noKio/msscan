@@ -27,15 +27,25 @@ PASTA_PENDENTES = "envios_pendentes"
 """Subpasta da pasta de dados (pendrive) com os envios que falharam, um JSON por conteúdo (nome = impressão)."""
 
 
-def montar(relatorio: dict[str, Any], nomes_host: list[str] | None = None) -> dict[str, Any]:
-    """Dados anonimizados do relatório. Função pura (sem data nem id: servem para a impressão digital)."""
+def _montar(relatorio: dict[str, Any], nomes_host: list[str] | None) -> tuple[dict[str, Any], dict[str, int]]:
     recorte = montar_dados_ia(relatorio)
     for chave in ("atualizacoes", "aplicacao", "configuracao"):
         if relatorio.get(chave):
             recorte[chave] = relatorio[chave]
     sanitizador = Sanitizador({nome: "HOSTNAME" for nome in nomes_host or []})
     sanitizador.coletar(recorte)
-    return sanitizador.dados(recorte)
+    return sanitizador.dados(recorte), sanitizador.contagem()
+
+
+def montar(relatorio: dict[str, Any], nomes_host: list[str] | None = None) -> dict[str, Any]:
+    """Dados anonimizados do relatório. Função pura (sem data nem id: servem para a impressão digital)."""
+    return _montar(relatorio, nomes_host)[0]
+
+
+def previa(relatorio: dict[str, Any], nomes_host: list[str] | None = None) -> dict[str, Any]:
+    """"Ver o que é enviado" (tela Início): os dados exatos que vão ao banco e a contagem do que foi removido."""
+    dados, removidos = _montar(relatorio, nomes_host)
+    return {"dados": dados, "removidos": removidos}
 
 
 def impressao(dados: dict[str, Any]) -> str:

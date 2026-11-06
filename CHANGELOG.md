@@ -2,6 +2,16 @@
 
 Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Datas no formato AAAA-MM-DD.
 
+## 1.0.16 — 2026-11-06
+
+- **"Ver o que é enviado" na tela Início:** mostra o conteúdo exato, já anonimizado, que vai ao banco de dados da MSServer
+  e quantos identificadores foram removidos.
+- **Privacidade:** página [PRIVACIDADE.md](PRIVACIDADE.md) com o que é enviado, o que nunca sai, por que, onde fica e
+  como pedir informações.
+- **Licença:** de "código fechado" para "código-fonte disponível para consulta": o código pode ser lido e auditado; uso
+  pela ISO oficial; redistribuir, modificar ou reaproveitar o código continua exigindo autorização.
+- Corrigida a data mínima do relógio, que tinha ficado com a data da 1.0.14 na 1.0.15.
+
 ## 1.0.15 — 2026-11-06
 
 - **Aviso do envio na tela Início:** o MSscan informa que, com internet, envia uma cópia anonimizada de cada relatório ao

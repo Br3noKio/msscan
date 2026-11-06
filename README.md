@@ -2,8 +2,10 @@
 
 **Diagnóstico de servidores físicos e atualização de firmware Dell, a partir de um pendrive.**
 
-> Software proprietário da MSServer, de código fechado. Só a imagem ISO oficial é distribuída, com uso livre;
-> redistribuir, modificar ou fazer engenharia reversa exige autorização ([LICENSE](LICENSE)).
+> Software proprietário da MSServer, de **código-fonte disponível para consulta**: o código está aqui para qualquer um
+> ler e auditar, e o uso é pela ISO oficial, livre e sem custo ([baixar](https://github.com/Br3noKio/msscan/releases/latest)).
+> Redistribuir, modificar ou reaproveitar o código exige autorização ([LICENSE](LICENSE)). Dados enviados:
+> [PRIVACIDADE.md](PRIVACIDADE.md).
 
 O MSscan é um sistema inicializável (Debian 13) que detecta o que o servidor oferece, diagnostica cada componente sem
 tocar nos dados do cliente, mostra onde está cada problema no chassi e, nos servidores Dell, instala as atualizações de
@@ -87,7 +89,8 @@ Histórico de versões: [CHANGELOG.md](CHANGELOG.md).
 **O MSscan envia dados para fora?** Com internet, envia sozinho uma cópia **anonimizada** de cada relatório para o banco
 de dados da MSServer (modelo, versões de firmware, peças e resultado do diagnóstico), para melhorar as próximas versões.
 Saem antes serial, service tag, UUID, asset tag, MAC, IP, nome do host e WWN; senhas, chaves e dados dos discos nunca.
-Detalhes em [Segurança](docs/seguranca.md#dados-enviados-para-fora).
+O botão "Ver o que é enviado", na tela Início, mostra o conteúdo exato. Detalhes em [PRIVACIDADE.md](PRIVACIDADE.md) e
+[Segurança](docs/seguranca.md#dados-enviados-para-fora).
 
 **A senha do iDRAC fica salva?** Não. Fica só na memória durante a execução.
 
@@ -99,8 +102,8 @@ do próprio fabricante.
 
 Copyright (C) 2026 Breno / MSServer. Todos os direitos reservados.
 
-Software proprietário, de **código fechado**: só a imagem ISO oficial é disponibilizada para download, e pode ser usada sem
-custo para diagnosticar e atualizar servidores. Redistribuir, modificar ou fazer engenharia reversa exige autorização por
-escrito. Termos completos em [LICENSE](LICENSE).
+Software proprietário, de **código-fonte disponível para consulta**: qualquer pessoa pode ler e auditar o código, e a
+imagem ISO oficial pode ser usada sem custo para diagnosticar e atualizar servidores. Redistribuir, modificar ou
+reaproveitar o código exige autorização por escrito. Termos completos em [LICENSE](LICENSE).
 
 Créditos e licenças de terceiros em [docs/licencas.md](docs/licencas.md).

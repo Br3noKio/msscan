@@ -223,6 +223,12 @@ class ManipuladorUI(BaseHTTPRequestHandler):
                 self._erro(HTTPStatus.CONFLICT, textos.t("py_servidor.analise_por_ia_indisponivel_agora"))
             else:
                 self._json(previa)
+        elif rota == "envio/previa":
+            previa = sessao.previa_envio()
+            if previa is None:
+                self._erro(HTTPStatus.CONFLICT, textos.t("py_servidor.envio_disponivel_depois_do_diagnostico"))
+            else:
+                self._json(previa)
         elif rota.startswith("componente/"):
             detalhes = sessao.componente(rota.removeprefix("componente/"))
             if detalhes is None:

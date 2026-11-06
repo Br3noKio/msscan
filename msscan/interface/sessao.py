@@ -681,6 +681,12 @@ class Sessao:
         dados, removidos = preparar_envio(relatorio, nomes_do_host(self.executor))
         return {"dados": dados, "removidos": removidos}
 
+    def previa_envio(self) -> dict[str, Any] | None:
+        """O que vai ao banco da MSServer (já anonimizado). ``None`` antes do primeiro relatório."""
+        with self._trava:
+            relatorio = self.relatorio
+        return None if relatorio is None else envio_dados.previa(relatorio, nomes_do_host(self.executor))
+
     def solicitar_ia(self) -> bool:
         """Botão "Enviar para análise": em segundo plano. ``False`` se indisponível ou ocupado."""
         with self._trava:

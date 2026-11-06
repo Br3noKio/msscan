@@ -914,6 +914,20 @@ async function verPreviaIA() {
   } catch (e) { anunciar(T("ver_previa_ia.nao_foi_possivel_montar_a", e.message)); }
 }
 
+async function verPreviaEnvio() {
+  const area = $("envio-previa-area");
+  if (!area.hidden) { area.hidden = true; $("envio-ver").setAttribute("aria-expanded", "false"); return; }
+  try {
+    const previa = await api("envio/previa");
+    const removidos = Object.entries(previa.removidos || {}).map(([k, v]) => v + " " + k).join(", ");
+    $("envio-removidos").textContent = T("ver_previa_ia.identificadores_removidos") + (removidos || "nenhum encontrado") + T("inicio.conteudo_enviado_ao_banco");
+    $("envio-previa").textContent = JSON.stringify(previa.dados, null, 1);
+    area.hidden = false;
+    $("envio-ver").setAttribute("aria-expanded", "true");
+    $("envio-previa").focus();
+  } catch (e) { anunciar(e.message); }
+}
+
 async function solicitarIA() {
   if (!$("ia-sim").checked) return;
   $("ia-solicitar").disabled = true;
@@ -3496,6 +3510,7 @@ function iniciar() {
   $("man-pasta-abrir").addEventListener("click", alternarPastaManual);
   for (const radio of document.querySelectorAll('input[name="atu-verificar"]')) radio.addEventListener("change", () => { if (ESTADO) renderizarAtualizacoes(ESTADO); });
   $("ia-ver").addEventListener("click", verPreviaIA);
+  $("envio-ver").addEventListener("click", verPreviaEnvio);
   $("ia-solicitar").addEventListener("click", solicitarIA);
   $("ia-tentar").addEventListener("click", tentarIA);
   $("chat-tentar").addEventListener("click", tentarChat);
