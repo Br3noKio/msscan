@@ -1730,6 +1730,18 @@ class ExecutorReal(Executor):
                             arquivo.write(bloco)
                         arquivo.flush()
                         os.fsync(arquivo.fileno())
+                    if tamanho == 0:
+                        # downloads.dell.com respondeu 200 com 0 bytes ao Catalog.xml.gz (19/11/2026): virava um catálogo
+                        # vazio no cache. Arquivo vazio nunca é um download válido.
+                        temporario.unlink(missing_ok=True)
+                        return RespostaDownload(url, resposta.status_code, erro_tipo="vazio",
+                                                erro="a Dell respondeu sem conteúdo (arquivo vazio)")  # fmt: skip
+                    esperado = resposta.headers.get("Content-Length", "")
+                    if esperado.isdigit() and not resposta.headers.get("Content-Encoding") and \
+                            tamanho - inicio_bytes < int(esperado):  # fmt: skip
+                        # Conexão fechada antes do fim sem erro do requests: o .parcial fica para retomar com Range.
+                        return RespostaDownload(url, None, erro_tipo="conexao",
+                                                erro=f"download incompleto: {tamanho - inicio_bytes} de {esperado} bytes")  # fmt: skip
                     os.replace(temporario, destino)
                     return RespostaDownload(url, 200, destino, tamanho, soma.hexdigest(), retomado_de=inicio_bytes)
             return RespostaDownload(url, None, erro_tipo="outro", erro="redirecionamentos demais")

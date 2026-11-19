@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from msscan.atualizacao.catalogo import URL_CATALOGO_DELL, VALIDADE_CACHE_S, caminho_cache, obter_catalogo
+from msscan.atualizacao.catalogo import URL_CATALOGO_DELL, URLS_CATALOGO_DELL, VALIDADE_CACHE_S, caminho_cache, obter_catalogo
 from msscan.atualizacao.inventario import coletar_inventario, inventario_redfish
 from msscan.atualizacao.verificacao import (
     MENSAGEM_FONTE_INCERTA,
@@ -120,6 +120,22 @@ class TestCatalogo:
         assert "não aparece no catálogo" in modelo_no_catalogo(catalogo, "SKU=0999;ModelName=X", "X")[1]
 
 
+class _BaixadorPorUrl(ExecutorFalso):
+    """Download simulado por URL; corpo vazio = a Dell respondeu 0 bytes (o executor real recusa: erro "vazio")."""
+
+    def __init__(self, corpos):
+        super().__init__()
+        self.corpos = corpos
+
+    def _baixar(self, url, destino, limite, timeout):
+        corpo = self.corpos.get(url)
+        if not corpo:
+            return RespostaDownload(url, 200 if corpo == b"" else None, erro_tipo="vazio", erro="a Dell respondeu sem conteúdo (arquivo vazio)")
+        Path(destino).parent.mkdir(parents=True, exist_ok=True)
+        Path(destino).write_bytes(corpo)
+        return RespostaDownload(url, 200, destino, len(corpo), "x")
+
+
 class TestDownloadECache:
     @pytest.mark.parametrize("url", ["http://downloads.dell.com/catalog/Catalog.xml.gz", "https://evil.example/Catalog.xml.gz",
                                      "https://downloads.dell.com.evil.example/x", "ftp://downloads.dell.com/x"])  # fmt: skip
@@ -166,6 +182,38 @@ class TestDownloadECache:
     def test_sem_internet_e_sem_cache(self, tmp_path):
         resultado = obter_catalogo(ExecutorFalso(), str(tmp_path))
         assert resultado.dados is None and "não foi possível baixar" in resultado.aviso
+
+    def test_cache_novo_vazio_e_descartado_e_baixado_de_novo(self, tmp_path):
+        """Pendrives com o catálogo vazio de 19/11/2026 (Dell respondeu 0 bytes): não pode esperar 7 dias."""
+        cache = caminho_cache(str(tmp_path))
+        cache.parent.mkdir(parents=True)
+        cache.write_bytes(b"")
+        executor = _BaixadorPorUrl({URL_CATALOGO_DELL: RECORTE.read_bytes()})
+        resultado = obter_catalogo(executor, str(tmp_path))
+        assert resultado.dados["versao"] == "26.09.17" and resultado.origem.startswith("baixado agora")
+        assert cache.read_bytes() == RECORTE.read_bytes()
+
+    def test_endereco_principal_vazio_usa_o_reserva(self, tmp_path):
+        executor = _BaixadorPorUrl({URL_CATALOGO_DELL: b"", URLS_CATALOGO_DELL[1]: RECORTE.read_bytes()})
+        resultado = obter_catalogo(executor, str(tmp_path))
+        assert resultado.dados is not None and URLS_CATALOGO_DELL[1] in resultado.origem
+        assert [e.comando[1] for e in executor.historico] == [URL_CATALOGO_DELL, URLS_CATALOGO_DELL[1]]
+        assert caminho_cache(str(tmp_path)).read_bytes() == RECORTE.read_bytes()
+
+    def test_download_invalido_nao_estraga_o_cache_vencido(self, tmp_path):
+        cache = caminho_cache(str(tmp_path))
+        cache.parent.mkdir(parents=True)
+        cache.write_bytes(RECORTE.read_bytes())
+        os.utime(cache, (time.time() - VALIDADE_CACHE_S - 10,) * 2)
+        executor = _BaixadorPorUrl({u: b"<html>manutencao</html>" for u in URLS_CATALOGO_DELL})
+        resultado = obter_catalogo(executor, str(tmp_path))
+        assert resultado.dados["versao"] == "26.09.17" and "cache vencido" in resultado.aviso
+        assert cache.read_bytes() == RECORTE.read_bytes() and len(executor.historico) == len(URLS_CATALOGO_DELL)
+
+    def test_todos_os_enderecos_vazios_e_sem_cache(self, tmp_path):
+        resultado = obter_catalogo(_BaixadorPorUrl({u: b"" for u in URLS_CATALOGO_DELL}), str(tmp_path))
+        assert resultado.dados is None and "não foi possível baixar" in resultado.aviso
+        assert not caminho_cache(str(tmp_path)).exists()
 
     def test_replay_de_download(self, tmp_path):
         pasta = tmp_path / "fixture"

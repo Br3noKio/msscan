@@ -2,6 +2,16 @@
 
 Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Datas no formato AAAA-MM-DD.
 
+## 1.0.18 — 2026-11-19
+
+- **Corrigido "catálogo Dell ilegível: no element found: line 1, column 0"** (R730 na bancada, afetava qualquer servidor):
+  o `downloads.dell.com/catalog/Catalog.xml.gz` passou a responder com o arquivo vazio, e o MSscan guardava esse vazio
+  como catálogo por 7 dias. Agora:
+  - download vazio ou menor que o tamanho anunciado nunca é aceito (o incompleto fica para retomar);
+  - o catálogo baixado é lido antes de substituir o guardado; vazio ou corrompido tenta o próximo endereço oficial
+    (`dl.dell.com` e o caminho em minúsculas) e nunca estraga um catálogo bom já guardado;
+  - catálogo guardado ilegível (o vazio que ficou nos pendrives) é descartado e baixado de novo na hora.
+
 ## 1.0.17 — 2026-11-19
 
 - **Banco de compatibilidade com 4 modelos novos**, vindos das coletas anonimizadas que chegaram ao banco de dados da

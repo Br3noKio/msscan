@@ -293,6 +293,27 @@ class TestDownloadComRange:
         resposta = ExecutorReal()._baixar(URL_CAT, destino, 9500, 30)
         assert resposta.erro_tipo == "tamanho" and not Path(destino + ".parcial").exists()
 
+    def test_resposta_vazia_nao_vira_arquivo(self, servidor, tmp_path):
+        """downloads.dell.com/catalog/Catalog.xml.gz respondeu 200 com Content-Length 0 (19/11/2026, R730): virava um
+        catálogo vazio no cache ("no element found: line 1, column 0") por 7 dias."""
+        destino = str(tmp_path / "Catalog.xml.gz")
+        servidor["respostas"] = [lambda h: RespostaFalsa(200, b"", {"Content-Length": "0"})]
+        resposta = ExecutorReal()._baixar(URL_CAT, destino, 10**6, 30)
+        assert not resposta.ok and resposta.erro_tipo == "vazio" and "vazio" in resposta.erro
+        assert not Path(destino).exists() and not Path(destino + ".parcial").exists()
+
+    def test_menor_que_o_content_length_nao_vira_arquivo(self, servidor, tmp_path):
+        destino = str(tmp_path / "c.gz")
+        servidor["respostas"] = [lambda h: RespostaFalsa(200, CONTEUDO[:5000], {"Content-Length": str(len(CONTEUDO))})]
+        resposta = ExecutorReal()._baixar(URL_CAT, destino, 10**6, 30)
+        assert resposta.erro_tipo == "conexao" and "incompleto" in resposta.erro and not Path(destino).exists()
+        assert Path(destino + ".parcial").stat().st_size == 5000  # fica para retomar com Range
+
+    def test_content_length_certo_baixa(self, servidor, tmp_path):
+        destino = str(tmp_path / "c.gz")
+        servidor["respostas"] = [lambda h: RespostaFalsa(200, CONTEUDO, {"Content-Length": str(len(CONTEUDO))})]
+        assert ExecutorReal()._baixar(URL_CAT, destino, 10**6, 30).ok and Path(destino).read_bytes() == CONTEUDO
+
 
 # --- IA espera a rede ---------------------------------------------------------------------------
 

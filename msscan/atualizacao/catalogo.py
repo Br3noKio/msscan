@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,6 +23,11 @@ URL_CATALOGO_LINUX = "https://downloads.dell.com/catalog/Catalog.gz"
 o MESMO release ID e a mesma versão do ``.EXE`` (conferido em 21/10/2026, 26.10.15: 838 ``.BIN``, 834 com SHA-256; da 14ª
 geração em diante). Usado só no caminho f, sem iDRAC acessível (pedido de 21/10/2026)."""
 ARQUIVO_LINUX = "Catalog_linux.gz"
+URLS_CATALOGO_DELL = (URL_CATALOGO_DELL, "https://dl.dell.com/catalog/Catalog.xml.gz",
+                      "https://downloads.dell.com/catalog/catalog.xml.gz")  # fmt: skip
+"""Endereços oficiais do MESMO catálogo, na ordem. Em 19/11/2026 o ``downloads.dell.com/catalog/Catalog.xml.gz`` respondia
+200 com 0 bytes enquanto o ``dl.dell.com`` e o caminho em minúsculas entregavam o catálogo inteiro (R730 na bancada)."""
+URLS_CATALOGO_LINUX = (URL_CATALOGO_LINUX, "https://dl.dell.com/catalog/Catalog.gz")
 
 
 ARQUIVO_LEGADOS = Path(__file__).with_name("catalogos_dell.yaml")
@@ -56,7 +62,7 @@ def pacotes_linux(dados: dict[str, Any] | None) -> list[dict[str, Any]]:
 
 def obter_pacotes_linux(executor: Executor, pasta_dados: str | None, monitor=None, avisar=None) -> tuple[list[dict[str, Any]], str]:
     """``(pacotes .BIN, aviso)`` do ``URL_CATALOGO_LINUX`` (mesmo cache de 7 dias). Nunca levanta exceção."""
-    linux = _obter_atual(executor, pasta_dados, None, monitor, avisar, URL_CATALOGO_LINUX, ARQUIVO_LINUX)
+    linux = _obter_atual(executor, pasta_dados, None, monitor, avisar, URLS_CATALOGO_LINUX, ARQUIVO_LINUX)
     return pacotes_linux(linux.dados), linux.aviso
 
 
@@ -173,30 +179,47 @@ def obter_catalogo(executor: Executor, pasta_dados: str | None, agora: float | N
 
 
 def _obter_atual(executor: Executor, pasta_dados: str | None, agora: float | None = None, monitor=None,
-                 avisar=None, url: str = URL_CATALOGO_DELL, arquivo: str = ARQUIVO_CACHE) -> Catalogo:  # fmt: skip
+                 avisar=None, urls: tuple[str, ...] = URLS_CATALOGO_DELL, arquivo: str = ARQUIVO_CACHE) -> Catalogo:  # fmt: skip
     """Usa o cache se tiver menos de 7 dias; senão baixa. Nunca levanta exceção.
 
-    Sem download possível e com cache vencido: usa o cache COM aviso (modo informativo). Com ``monitor``
+    O catálogo baixado é lido ANTES de substituir o cache: vazio ou corrompido tenta o próximo endereço oficial e nunca
+    estraga um cache bom. Cache ilegível (ex.: o vazio de 19/11/2026) é descartado e baixado de novo na hora, sem esperar
+    os 7 dias. Sem download possível e com cache vencido válido: usa o cache COM aviso (modo informativo). Com ``monitor``
     (rede contínua), queda de rede no meio do download espera a rede voltar e continua de onde parou.
     """
     agora = time.time() if agora is None else agora
     cache = caminho_cache(pasta_dados, arquivo)
-    idade = agora - cache.stat().st_mtime if cache.is_file() else None
-    aviso = ""
-    if idade is None or idade > VALIDADE_CACHE_S:
-        resposta = baixar_retomando(executor, url, str(cache), LIMITE_CATALOGO, timeout=180,
+    guardado, idade, descartado = None, None, ""
+    if cache.is_file():
+        idade = agora - cache.stat().st_mtime
+        try:
+            guardado = parse_catalogo_dell(cache.read_bytes())
+        except (OSError, ErroParser) as erro:
+            descartado = f"catálogo guardado ilegível descartado ({erro})"
+            cache.unlink(missing_ok=True)
+    if guardado is not None and idade is not None and idade <= VALIDADE_CACHE_S:
+        return Catalogo(guardado, f"cache de {idade / 3600:.0f} hora(s) ({cache})")
+    novo = cache.with_name(cache.name + ".novo")
+    falhas = []
+    for url in urls:
+        resposta = baixar_retomando(executor, url, str(novo), LIMITE_CATALOGO, timeout=180,
                                     monitor=monitor, avisar=avisar)  # fmt: skip
-        if resposta.ok:
-            origem = f"baixado agora de {url}"
-        elif idade is not None:
-            origem = f"cache de {idade / 86400:.0f} dia(s) ({cache})"
-            aviso = f"não foi possível baixar o catálogo novo ({resposta.erro}); usando o cache vencido"
-        else:
-            return Catalogo(None, "", f"não foi possível baixar o catálogo da Dell: {resposta.erro}")
-    else:
-        origem = f"cache de {idade / 3600:.0f} hora(s) ({cache})"
-    try:
-        dados = parse_catalogo_dell(cache.read_bytes())
-    except (OSError, ErroParser) as erro:
-        return Catalogo(None, origem, f"catálogo inválido: {erro}")
-    return Catalogo(dados, origem, aviso)
+        if not resposta.ok:
+            falhas.append(f"{url}: {resposta.erro}")
+            continue
+        try:
+            dados = parse_catalogo_dell(novo.read_bytes())
+        except (OSError, ErroParser) as erro:
+            falhas.append(f"{url}: catálogo inválido ({erro})")
+            novo.unlink(missing_ok=True)
+            continue
+        try:
+            os.replace(novo, cache)
+        except OSError as erro:  # sem gravar no pendrive: usa o que baixou, avisando
+            return Catalogo(dados, f"baixado agora de {url}", f"não foi possível guardar o catálogo ({erro})")
+        return Catalogo(dados, f"baixado agora de {url}", "; ".join([descartado] if descartado else []))
+    motivo = "; ".join(([descartado] if descartado else []) + falhas)
+    if guardado is not None:
+        return Catalogo(guardado, f"cache de {idade / 86400:.0f} dia(s) ({cache})",
+                        f"não foi possível baixar o catálogo novo ({motivo}); usando o cache vencido")  # fmt: skip
+    return Catalogo(None, "", f"não foi possível baixar o catálogo da Dell: {motivo}")
