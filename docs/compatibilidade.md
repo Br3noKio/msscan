@@ -33,6 +33,9 @@ OpenSSL reduzido → TLS 1.0/1.1, só para o iDRAC, nunca para a internet), raca
 | R620 (12ª, iDRAC7) | Boot, internet, diagnóstico, credenciais, RAID pelo Redfish e pelo BMC, atualização do iDRAC (1.40 → 2.65.65.65), usuário temporário criado e desfeito |
 | T620 (12ª), R530 e R430 (13ª, iDRAC8) | Boot, interface, internet e diagnóstico; racadm local no R530 |
 
+Com diagnóstico real enviado ao banco de dados (MSscan 1.0.16) e entrada no banco de compatibilidade desde a 1.0.17:
+R630 e R730 (13ª, iDRAC8), R740xd (14ª, iDRAC9, Redfish com credenciais) e T420 (12ª, iDRAC7).
+
 O restante foi testado com coletas reais gravadas, simuladores e mockups, mas não em hardware.
 
 ## Limitações conhecidas

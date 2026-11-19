@@ -137,3 +137,98 @@ modelos:
       observacoes:
         - "Sem Redfish: atualização automática só por DUP para Linux, a confirmar na fase 11 (compatibilidade dos DUPs com o Debian 13)."
       bloqueios: []
+
+  # Modelos abaixo (19/11/2026): vindos das coletas anonimizadas do banco de dados da MSServer (MSscan 1.0.16,
+  # 06/11 a 19/11/2026). Só o que foi MEDIDO nessas coletas + a geração/iDRAC da tabela de docs/compatibilidade.md.
+  # Sem regras de montagem, mapa ou modelo 3D conferidos no manual: o MSscan continua usando o genérico ("aproximado").
+  # Controladoras: só as vistas nas coletas (outra controladora vira divergência no relatório, que é o desejado).
+  - match: "PowerEdge R630"
+    nome: "Dell PowerEdge R630"
+    geracao: "13ª geração (13G)"
+    bmc: "iDRAC8"
+    ipmi: "2.0"
+    redfish: "a partir do iDRAC8 2.40.40.40 (não confirmado nas coletas)"
+    smart: "discos atrás da PERC: smartctl -d megaraid,N; HBA/AHCI: direto"
+    controladoras: []
+    ferramentas:
+      - racadm
+    sensores: "BMC por IPMI (Redfish só com iDRAC8 2.40.40.40 ou mais novo)"
+    comandos: {}
+    limitacoes:
+      - "Nas 6 coletas (BIOS 2.19.0) o Redfish não foi confirmado e os discos ficaram sem verificar: sem credenciais do iDRAC, discos atrás da PERC dependem do racadm local."
+    atualizacao:
+      metodo_preferido: redfish
+      fallbacks: [dup_linux]
+      ordem_recomendada: []
+      observacoes:
+        - "Atualização em iDRAC8 ainda sem validação física de BIOS e placas de rede (docs/compatibilidade.md)."
+      bloqueios: []
+
+  - match: "PowerEdge R730"
+    nome: "Dell PowerEdge R730"
+    geracao: "13ª geração (13G)"
+    bmc: "iDRAC8"
+    ipmi: "2.0"
+    redfish: "a partir do iDRAC8 2.40.40.40 (não confirmado na coleta)"
+    smart: "discos atrás da PERC: smartctl -d megaraid,N; HBA/AHCI: direto"
+    controladoras: []
+    ferramentas:
+      - racadm
+    sensores: "BMC por IPMI (Redfish só com iDRAC8 2.40.40.40 ou mais novo)"
+    comandos: {}
+    limitacoes:
+      - "Na coleta (BIOS 2.19.0) o Redfish não foi confirmado e os discos ficaram sem verificar: sem credenciais do iDRAC, discos atrás da PERC dependem do racadm local."
+    atualizacao:
+      metodo_preferido: redfish
+      fallbacks: [dup_linux]
+      ordem_recomendada: []
+      observacoes:
+        - "Atualização em iDRAC8 ainda sem validação física de BIOS e placas de rede (docs/compatibilidade.md)."
+      bloqueios: []
+
+  - match: "PowerEdge R740xd"
+    nome: "Dell PowerEdge R740xd"
+    geracao: "14ª geração (14G)"
+    bmc: "iDRAC9"
+    ipmi: "2.0"
+    redfish: true
+    smart: "discos atrás da PERC: smartctl -d megaraid,N; HBA/AHCI: direto"
+    controladoras:
+      - "PERC H730"
+    ferramentas:
+      - perccli64
+    sensores: "BMC (Redfish e IPMI)"
+    comandos: {}
+    limitacoes:
+      - "Sem credenciais do iDRAC, o RAID (PERC) fica sem verificar; com credenciais vem pelo Redfish (Storage), conferido em 2 das 6 coletas."
+    atualizacao:
+      metodo_preferido: redfish
+      fallbacks: [dup_linux, perccli]
+      ordem_recomendada: []
+      observacoes:
+        - "Mesmo caminho de atualização do R640 (iDRAC9, Redfish 1.17.0 nas coletas), ainda sem validação física neste modelo."
+      bloqueios: []
+
+  - match: "PowerEdge T420"
+    nome: "Dell PowerEdge T420"
+    geracao: "12ª geração (12G)"
+    bmc: "iDRAC7"
+    ipmi: "2.0"
+    redfish: "a partir do iDRAC7 2.40.40.40 (não confirmado nas coletas)"
+    smart: "discos atrás da PERC: smartctl -d megaraid,N; HBA/AHCI: direto"
+    controladoras:
+      - "PERC H710"
+    ferramentas:
+      - racadm
+    sensores: "BMC por IPMI"
+    comandos: {}
+    limitacoes:
+      - "Nas 3 coletas (BIOS 2.9.0) discos e RAID ficaram sem verificar: sem credenciais do iDRAC, a PERC H710 depende do racadm local."
+      - "Fim da manutenção de firmware na Dell (02/2020): pode não haver firmware novo no catálogo."
+    atualizacao:
+      metodo_preferido: redfish
+      fallbacks: [dup_linux]
+      ordem_recomendada: []
+      observacoes:
+        - "Atualização em iDRAC7 validada só para o iDRAC (R620); BIOS e placas de rede sem validação física."
+      bloqueios: []

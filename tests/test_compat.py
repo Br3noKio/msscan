@@ -30,6 +30,19 @@ class TestBanco:
         assert r410["bmc"] == "iDRAC6" and r410["redfish"] is False
         assert "perccli64" in r640["ferramentas"] and "MegaCli64" in r410["ferramentas"]
 
+    @pytest.mark.parametrize(("modelo", "bmc", "redfish"), [
+        ("PowerEdge R630", "iDRAC8", None), ("PowerEdge R730", "iDRAC8", None),
+        ("PowerEdge R740xd", "iDRAC9", True), ("PowerEdge T420", "iDRAC7", None),
+    ])  # fmt: skip
+    def test_modelos_das_coletas_do_banco(self, banco, modelo, bmc, redfish):
+        """Modelos vindos das coletas do banco de dados (19/11/2026): só o medido; sem mapa/3D conferido (genérico)."""
+        entrada, arquivo = consultar(banco, "Dell Inc.", modelo)
+        assert arquivo == "dell.yaml" and entrada["bmc"] == bmc and "modelo3d" not in entrada
+        if redfish is True:
+            assert entrada["redfish"] is True
+        else:
+            assert entrada["redfish"] not in (True, False)  # depende do firmware do iDRAC: sem divergência automática
+
     @pytest.mark.parametrize(("fabricante", "modelo"), [
         ("Dell Inc.", "PowerEdge R6400"), ("Dell Inc.", "PowerEdge R640 XL"), ("HPE", "PowerEdge R640"),
         (None, "PowerEdge R640"), ("Dell Inc.", None),

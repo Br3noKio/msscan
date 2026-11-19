@@ -2,6 +2,13 @@
 
 Formato inspirado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Datas no formato AAAA-MM-DD.
 
+## 1.0.17 — 2026-11-19
+
+- **Banco de compatibilidade com 4 modelos novos**, vindos das coletas anonimizadas que chegaram ao banco de dados da
+  MSServer (18 relatórios de 06/11 a 19/11/2026): Dell PowerEdge **R630** e **R730** (13ª, iDRAC8), **R740xd** (14ª,
+  iDRAC9) e **T420** (12ª, iDRAC7). Só o que foi medido: BMC, IPMI, Redfish, controladoras vistas e limitações. Mapa,
+  modelo 3D e regras de montagem continuam genéricos ("posições aproximadas") nesses modelos.
+
 ## 1.0.16 — 2026-11-06
 
 - **"Ver o que é enviado" na tela Início:** mostra o conteúdo exato, já anonimizado, que vai ao banco de dados da MSServer
